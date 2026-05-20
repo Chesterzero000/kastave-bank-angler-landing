@@ -3,15 +3,18 @@ import {
   ANNOUNCEMENT,
   BANK_PAIN_POINTS,
   FAQS,
+  FEATURE_VISUALS,
   FEATURE_GROUPS,
   HERO,
   HIGHLIGHT_CAROUSEL,
   LANDING_PAIN_POINTS,
   OFFER_ITEMS,
+  PAYMENT_AFTER_STEPS,
+  PAYPAL_PAYMENT_NOTE,
   PRIVACY_POINTS,
   PRODUCT_HIGHLIGHTS,
+  RESERVATION_OFFER,
   SITE,
-  VALUE_STEPS,
 } from "./content.js";
 import {
   initAnalytics,
@@ -31,6 +34,12 @@ import {
 import heroImage from "../assets/kastave-new-hero.png";
 import processImage from "../assets/kastave-new-process.png";
 import recognitionImage from "../assets/kastave-new-recognition.png";
+import terrainFeatureImage from "../assets/kastave-feature-3d-terrain.png";
+import fishFeatureImage from "../assets/kastave-feature-fish-activity.png";
+import waterFeatureImage from "../assets/kastave-feature-water-conditions.png";
+import strategyFeatureImage from "../assets/kastave-feature-ai-strategy.png";
+
+const featureImages = [terrainFeatureImage, fishFeatureImage, waterFeatureImage, strategyFeatureImage];
 
 function App() {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -173,7 +182,7 @@ function App() {
   };
 
   if (isThanksPage) {
-    return <ThanksPage />;
+    return <ThanksPage onSubscribe={(email) => subscribe(email, "thanks")} message={signupMessage} />;
   }
 
   return (
@@ -187,7 +196,6 @@ function App() {
           message={signupMessage}
         />
         <PainSection />
-        <ValueSection />
         <FeaturesSection />
         <PrivacySection />
         <ReservationSection
@@ -211,7 +219,7 @@ function AnnouncementBar() {
 
 function SiteNav({ onWaitlist, onReserve }) {
   const [open, setOpen] = useState(false);
-  const navItems = ["Pain", "Plan", "Features", "Privacy", "FAQ"];
+  const navItems = ["Pain", "Features", "Privacy", "FAQ"];
 
   return (
     <header className="site-nav">
@@ -257,7 +265,6 @@ function SiteNav({ onWaitlist, onReserve }) {
 function navHref(item) {
   const hrefs = {
     Pain: "#pain",
-    Plan: "#plan",
     Features: "#features",
     Privacy: "#privacy",
     FAQ: "#faq",
@@ -281,6 +288,19 @@ function Hero({ onSubscribe, onReserve, message }) {
         <p className="eyebrow">{HERO.eyebrow}</p>
         <h1 id="hero-title">{HERO.title}</h1>
         <p className="hero-copy">{HERO.body}</p>
+        <div className="hero-offer-card" aria-label={`${RESERVATION_OFFER.depositAmount} reservation credit offer`}>
+          <div className="hero-offer-icon" aria-hidden="true">
+            <span className="ticket-cut ticket-cut-left" />
+            <span className="ticket-cut ticket-cut-right" />
+            <span>{RESERVATION_OFFER.depositAmount}</span>
+          </div>
+          <div className="hero-offer-copy">
+            <strong>{RESERVATION_OFFER.title}</strong>
+            <span>
+              {RESERVATION_OFFER.creditAmount} launch credit toward the {RESERVATION_OFFER.productPrice} Kastave Scout.
+            </span>
+          </div>
+        </div>
         <div className="hero-actions" id="reserve">
           <EmailForm id="hero-email" source="hero" onSubscribe={onSubscribe} buttonLabel="Join Early Access" />
           <button className="secondary-link hero-reserve-button" type="button" onClick={onReserve}>
@@ -315,37 +335,19 @@ function PainSection() {
   );
 }
 
-function ValueSection() {
-  return (
-    <section className="value-section" id="plan" aria-labelledby="plan-title">
-      <div className="section-inner value-layout">
-        <div className="value-copy">
-          <p className="section-kicker">Product value</p>
-          <h2 id="plan-title">From shoreline scan to fishing plan.</h2>
-          <p>
-            Kastave is built for the moment before your first cast: read the water, identify the
-            structure, and turn unknown bank access into a practical plan.
-          </p>
-        </div>
-        <div className="value-media">
-          <img src={processImage} alt="Kastave scan workflow showing underwater structure and fishing plan" />
-          <div className="value-media-label">Scan route + structure readout</div>
-        </div>
-      </div>
-      <div className="section-inner value-steps">
-        {VALUE_STEPS.map((step) => (
-          <article className="value-step" key={step.label}>
-            <span>{step.label}</span>
-            <h3>{step.title}</h3>
-            <p>{step.body}</p>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-}
-
 function FeaturesSection() {
+  const [activeFeatureIndex, setActiveFeatureIndex] = useState(0);
+  const activeFeature = FEATURE_VISUALS[activeFeatureIndex];
+  const activeFeatureImage = featureImages[activeFeatureIndex];
+
+  const showPreviousFeature = () => {
+    setActiveFeatureIndex((index) => (index === 0 ? FEATURE_VISUALS.length - 1 : index - 1));
+  };
+
+  const showNextFeature = () => {
+    setActiveFeatureIndex((index) => (index + 1) % FEATURE_VISUALS.length);
+  };
+
   return (
     <section className="features-section" id="features" aria-labelledby="features-title">
       <div className="section-inner">
@@ -353,7 +355,45 @@ function FeaturesSection() {
           <p className="section-kicker">Core capabilities</p>
           <h2 id="features-title">Built to find structure, fish zones, and a first-cast plan.</h2>
         </div>
-        <div className="feature-grid">
+        <div className="feature-carousel" aria-label="Kastave core capability carousel">
+          <article className="feature-carousel-stage">
+            <div className="feature-carousel-media">
+              <img src={activeFeatureImage} alt={`${activeFeature.title} product feature visual`} />
+              <span>{activeFeature.title}</span>
+            </div>
+            <div className="feature-carousel-copy">
+              <p className="carousel-count">
+                {String(activeFeatureIndex + 1).padStart(2, "0")} / {String(FEATURE_VISUALS.length).padStart(2, "0")}
+              </p>
+              <h3>{activeFeature.title}</h3>
+              <p>{activeFeature.body}</p>
+              <div className="feature-carousel-controls" aria-label="Feature carousel controls">
+                <button type="button" onClick={showPreviousFeature} aria-label="Previous feature">
+                  Prev
+                </button>
+                <button type="button" onClick={showNextFeature} aria-label="Next feature">
+                  Next
+                </button>
+              </div>
+            </div>
+          </article>
+          <div className="feature-carousel-tabs" role="tablist" aria-label="Select capability">
+            {FEATURE_VISUALS.map((feature, index) => (
+              <button
+                aria-selected={activeFeatureIndex === index}
+                className={activeFeatureIndex === index ? "is-active" : ""}
+                key={feature.title}
+                role="tab"
+                type="button"
+                onClick={() => setActiveFeatureIndex(index)}
+              >
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                {feature.title}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="feature-detail-grid" aria-label="Additional capability details">
           {FEATURE_GROUPS.map((group) => (
             <article className="feature-group" key={group.title}>
               <h3>{group.title}</h3>
@@ -427,6 +467,7 @@ function ReservationSection({ onSubscribe, onWaitlist, onPaypal, message }) {
           <button className="checkout-button" type="button" onClick={onPaypal}>
             Reserve for $1
           </button>
+          <p className="payment-after-note">{PAYPAL_PAYMENT_NOTE}</p>
         </article>
       </div>
       <div className="section-inner reservation-secondary">
@@ -902,7 +943,7 @@ function Footer() {
   );
 }
 
-function ThanksPage() {
+function ThanksPage({ onSubscribe, message }) {
   return (
     <main className="thanks-page">
       <section className="thanks-card">
@@ -913,9 +954,23 @@ function ThanksPage() {
         <p className="section-kicker">Reservation received</p>
         <h1>You're in the Kastave Bank Angler Scout Program.</h1>
         <p>
-          Thanks for backing the production-in-progress launch. We will use the early signal to
-          prioritize field testing, launch timing, and reservation updates.
+          Your $1 reservation is received. Your $100 launch credit will be applied toward your
+          first Kastave when early units become available.
         </p>
+        <div className="thanks-next-steps">
+          <h2>What happens after payment?</h2>
+          <ol>
+            {PAYMENT_AFTER_STEPS.map((step) => (
+              <li key={step}>{step}</li>
+            ))}
+          </ol>
+        </div>
+        <div className="thanks-email-card">
+          <h2>Make sure we can contact you.</h2>
+          <p>PayPal may not share the best product-update email with Kastave.</p>
+          <EmailForm id="thanks-email" source="thanks" onSubscribe={onSubscribe} buttonLabel="Join Early Access" />
+          <p className="form-message">{message}</p>
+        </div>
         <a className="text-link" href="/">
           Back to Kastave
         </a>

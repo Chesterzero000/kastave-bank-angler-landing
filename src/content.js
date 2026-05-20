@@ -3,8 +3,10 @@ export const SITE = {
   programName: "Kastave Bank Angler Scout Program",
   domain: "https://kastave.com",
   contactEmail: "Kastave@proton.me",
-  priceRange: "$600-$800 target product range",
-  paypalPaymentLink: import.meta.env.VITE_PAYPAL_PAYMENT_LINK || "",
+  priceRange: "$899 target product price",
+  productPrice: "$899",
+  paypalPaymentLink:
+    import.meta.env.VITE_PAYPAL_PAYMENT_LINK || "https://www.paypal.com/ncp/payment/6W9PTBNB267ZW",
   beehiivFormUrl: import.meta.env.VITE_BEEHIIV_FORM_URL || "",
   surveyUrl: import.meta.env.VITE_SURVEY_URL || "",
 };
@@ -16,7 +18,15 @@ export const HERO = {
   eyebrow: "Kastave Bank Angler Scout Program",
   title: "Scan before you cast.",
   body: "A smarter way for serious bank anglers to read unknown water, find structure, and make the first cast with a plan.",
-  note: "Join early access for product updates, test invites, and launch pricing.",
+  note: "Estimated product price: $899. Early reservations help prioritize the first production run.",
+};
+
+export const RESERVATION_OFFER = {
+  depositAmount: "$1",
+  creditAmount: "$100",
+  productPrice: "$899",
+  title: "Pay $1 today. Get $100 off Kastave.",
+  body: "Your non-refundable early reservation is applied as a launch credit toward your first Kastave.",
 };
 
 export const BANK_PAIN_POINTS = [
@@ -32,24 +42,6 @@ export const LANDING_PAIN_POINTS = [
   "Bank anglers do not have boat electronics",
   "Structure matters, but it is hard to read from shore",
   "Sonar data is useful only if you know what it means",
-];
-
-export const VALUE_STEPS = [
-  {
-    label: "01",
-    title: "Scan the bank spot",
-    body: "Launch the scout from shore and run a quick pass across the water you cannot read by sight.",
-  },
-  {
-    label: "02",
-    title: "See structure and fish zones",
-    body: "Turn depth, bottom transitions, cover, bait signals, and activity clues into a readable map.",
-  },
-  {
-    label: "03",
-    title: "Get an AI-assisted first cast plan",
-    body: "Use plain fishing language to decide where to cast, how deep to fish, what to try, and when to move.",
-  },
 ];
 
 export const FEATURE_GROUPS = [
@@ -136,30 +128,9 @@ export const PRODUCTS = [
   {
     name: "Kastave Scout",
     label: "Waitlist open",
-    originalPrice: "$699",
-    price: "Early access",
-    sub: "$1 reservation available below",
-  },
-  {
-    name: "Kastave Scout Pro",
-    label: "Planned",
-    originalPrice: "$799",
-    price: "$749 est.",
-    sub: "Longer range package",
-  },
-  {
-    name: "Kastave Starter",
-    label: "Planned",
-    originalPrice: "$599",
-    price: "$599 est.",
-    sub: "Core sonar scout",
-  },
-  {
-    name: "Kastave App Premium",
-    label: "Software",
-    originalPrice: "$9.99",
-    price: "$0.99 trial",
-    sub: "Maps and AI strategy",
+    originalPrice: "",
+    price: "$899",
+    sub: "$1 reservation unlocks a $100 launch credit",
   },
 ];
 
@@ -242,6 +213,25 @@ export const CAPABILITIES = [
   },
 ];
 
+export const FEATURE_VISUALS = [
+  {
+    title: "3D Terrain",
+    body: "Rebuild drop-offs, brush, rocks, grass edges, and bottom transitions from the bank.",
+  },
+  {
+    title: "Fish Activity",
+    body: "Read bait movement, fish position, and activity clues before choosing your first cast.",
+  },
+  {
+    title: "Water Conditions",
+    body: "Bring temperature, clarity, depth, oxygen, pressure, and local water clues into one view.",
+  },
+  {
+    title: "AI Strategy",
+    body: "Turn scan data into target zones, cast direction, and a practical next move.",
+  },
+];
+
 export const PRODUCT_HIGHLIGHTS = [
   {
     title: "Portable",
@@ -290,9 +280,19 @@ export const HIGHLIGHT_CAROUSEL = [
 
 export const OFFER_ITEMS = [
   "$100 launch credit toward your first Kastave",
+  "$899 estimated product price",
   "Production progress and field-test updates",
   "Priority access when early units become available",
   "Production-in-progress: not a finished-unit shipping claim",
+];
+
+export const PAYPAL_PAYMENT_NOTE =
+  "After PayPal payment, PayPal sends your receipt. If PayPal does not redirect automatically, return to Kastave and join the email list so we can match updates to you.";
+
+export const PAYMENT_AFTER_STEPS = [
+  "PayPal sends your payment receipt.",
+  "Kastave records your $1 reservation.",
+  "Join the early access email list so we can send product progress and launch-credit updates.",
 ];
 
 export const FAQS = [
@@ -325,5 +325,10 @@ export const FAQS = [
     question: "When will early access start?",
     answer:
       "Kastave is production-in-progress. Join early access or reserve for $1 to get test invites, product updates, and launch pricing details as they open.",
+  },
+  {
+    question: "What if PayPal does not redirect after payment?",
+    answer:
+      "Your PayPal receipt is the first confirmation. Kastave also records valid $1 PayPal reservation events in the backend. If PayPal leaves you on its page, return to kastave.com/thanks and join the email list so we can contact you with product updates.",
   },
 ];

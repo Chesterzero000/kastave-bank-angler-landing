@@ -12,6 +12,7 @@ coverage/
 output/
 preview/
 .codex/
+.playwright-cli/
 
 # Environment files
 .env
