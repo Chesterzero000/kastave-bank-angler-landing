@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   ANNOUNCEMENT,
   BANK_PAIN_POINTS,
+  DEFAULT_PAYMENT_METHOD,
   FAQS,
   FEATURE_VISUALS,
   FEATURE_GROUPS,
@@ -10,11 +11,13 @@ import {
   LANDING_PAIN_POINTS,
   OFFER_ITEMS,
   PAYMENT_AFTER_STEPS,
-  PAYPAL_PAYMENT_NOTE,
+  PAYMENT_METHODS,
+  PAYMENT_NOTE,
   PRIVACY_POINTS,
   PRODUCT_HIGHLIGHTS,
   RESERVATION_OFFER,
   SITE,
+  getPaymentMethodLabel,
 } from "./content.js";
 import {
   initAnalytics,
@@ -41,6 +44,11 @@ import strategyFeatureImage from "../assets/kastave-feature-ai-strategy.png";
 
 const featureImages = [terrainFeatureImage, fishFeatureImage, waterFeatureImage, strategyFeatureImage];
 
+function getThanksPaymentProvider() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("provider") || (params.has("session_id") ? "stripe" : DEFAULT_PAYMENT_METHOD.key);
+}
+
 function App() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [painCtaOpen, setPainCtaOpen] = useState(false);
@@ -59,12 +67,13 @@ function App() {
       }
       sessionStorage.setItem(purchaseKey, "true");
       const eventId = `purchase_${Date.now()}`;
+      const provider = getThanksPaymentProvider();
       trackPurchase({
         event_id: eventId,
         value: 1,
         currency: "USD",
         amount_cents: 100,
-        provider: "paypal",
+        provider,
         source: "thanks_page",
         content_name: "Kastave $1 early reservation",
       });
@@ -72,7 +81,7 @@ function App() {
         eventId,
         amountCents: 100,
         currency: "USD",
-        provider: "paypal",
+        provider,
         source: "thanks_page",
       });
     }
@@ -92,7 +101,19 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  const reserveWithPaypal = (source = "unknown") => {
+  const showReservationOptions = (source = "unknown") => {
+    trackLeadIntent({ cta: "reserve_options", cta_location: source, source });
+    const reservationSection = document.getElementById("special-offers");
+    if (reservationSection) {
+      reservationSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
+  const reserveWithPayment = (providerKey = DEFAULT_PAYMENT_METHOD.key, source = "unknown") => {
+    const paymentMethod = PAYMENT_METHODS.find((method) => method.key === providerKey) || DEFAULT_PAYMENT_METHOD;
+    const provider = paymentMethod.key;
+    const paymentLink = paymentMethod.paymentLink;
+
     trackLeadIntent({ cta: "reserve_for_1", cta_location: source, source });
     trackInitiateCheckout({
       cta: "reserve_for_1",
@@ -101,27 +122,27 @@ function App() {
       value: 1,
       currency: "USD",
       amount_cents: 100,
-      provider: "paypal",
+      provider,
       content_name: "Kastave $1 early reservation",
     });
-    trackEvent("outbound_click", { link: "paypal", source, href: SITE.paypalPaymentLink });
+    trackEvent("outbound_click", { link: provider, source, href: paymentLink });
     recordReservationIntent({
       amountCents: 100,
       refundable: false,
-      provider: "paypal",
+      provider,
       source,
-      paymentLink: SITE.paypalPaymentLink,
+      paymentLink,
     });
 
-    if (SITE.paypalPaymentLink) {
-      window.location.href = withUtm(SITE.paypalPaymentLink);
+    if (paymentLink) {
+      window.location.href = withUtm(paymentLink);
       return;
     }
 
     trackEvent("payment_failed", {
       reason: "missing_payment_link",
       source,
-      provider: "paypal",
+      provider,
       value: 1,
       currency: "USD",
     });
@@ -188,11 +209,11 @@ function App() {
   return (
     <>
       <AnnouncementBar />
-      <SiteNav onWaitlist={() => focusWaitlist("nav")} onReserve={() => reserveWithPaypal("nav")} />
+      <SiteNav onWaitlist={() => focusWaitlist("nav")} onReserve={() => showReservationOptions("nav")} />
       <main>
         <Hero
           onSubscribe={(email) => subscribe(email, "hero")}
-          onReserve={() => reserveWithPaypal("hero")}
+          onReserve={() => showReservationOptions("hero")}
           message={signupMessage}
         />
         <PainSection />
@@ -201,7 +222,7 @@ function App() {
         <ReservationSection
           onSubscribe={(email) => subscribe(email, "reservation")}
           onWaitlist={() => focusWaitlist("reservation")}
-          onPaypal={() => reserveWithPaypal("reservation")}
+          onPayment={(providerKey) => reserveWithPayment(providerKey, "reservation")}
           message={signupMessage}
         />
         <FAQ />
@@ -432,7 +453,7 @@ function PrivacySection() {
   );
 }
 
-function ReservationSection({ onSubscribe, onWaitlist, onPaypal, message }) {
+function ReservationSection({ onSubscribe, onWaitlist, onPayment, message }) {
   return (
     <section className="reservation-section" id="special-offers" aria-labelledby="reservation-title">
       <div className="section-inner reservation-heading">
@@ -454,8 +475,12 @@ function ReservationSection({ onSubscribe, onWaitlist, onPaypal, message }) {
         </article>
         <article className="reservation-card payment-card">
           <span className="option-label">Option B</span>
-          <div className="paypal-logo-row" aria-label="PayPal payment">
-            <span className="paypal-wordmark">PayPal</span>
+          <div className="payment-logo-row" aria-label="Stripe and PayPal payment options">
+            {PAYMENT_METHODS.map((method) => (
+              <span className={`payment-wordmark payment-provider-${method.key}`} key={method.key}>
+                {method.label}
+              </span>
+            ))}
           </div>
           <h3>Reserve early for $1</h3>
           <p>Get first access updates plus early-bird pricing as the scout program opens.</p>
@@ -464,10 +489,19 @@ function ReservationSection({ onSubscribe, onWaitlist, onPaypal, message }) {
               <li key={item}>{item}</li>
             ))}
           </ul>
-          <button className="checkout-button" type="button" onClick={onPaypal}>
-            Reserve for $1
-          </button>
-          <p className="payment-after-note">{PAYPAL_PAYMENT_NOTE}</p>
+          <div className="payment-choice-grid" aria-label="Choose payment method">
+            {PAYMENT_METHODS.map((method) => (
+              <button
+                className={`checkout-button payment-choice payment-choice-${method.key}`}
+                type="button"
+                onClick={() => onPayment(method.key)}
+                key={method.key}
+              >
+                Pay with {method.label}
+              </button>
+            ))}
+          </div>
+          <p className="payment-after-note">{PAYMENT_NOTE}</p>
         </article>
       </div>
       <div className="section-inner reservation-secondary">
@@ -836,7 +870,7 @@ function Accessories() {
   );
 }
 
-function Offer({ onPaypal, message }) {
+function Offer({ onPayment, message }) {
   return (
     <section className="offer" id="special-offers">
       <div className="offer-copy">
@@ -850,8 +884,12 @@ function Offer({ onPaypal, message }) {
       </div>
 
       <div className="checkout-panel" aria-live="polite">
-        <div className="paypal-logo-row" aria-label="PayPal payment">
-          <span className="paypal-wordmark">PayPal</span>
+        <div className="payment-logo-row" aria-label="Stripe and PayPal payment options">
+          {PAYMENT_METHODS.map((method) => (
+            <span className={`payment-wordmark payment-provider-${method.key}`} key={method.key}>
+              {method.label}
+            </span>
+          ))}
         </div>
         <div className="price-row">
           <span>$1</span>
@@ -862,9 +900,18 @@ function Offer({ onPaypal, message }) {
             <li key={item}>{item}</li>
           ))}
         </ul>
-        <button className="checkout-button" type="button" onClick={onPaypal}>
-          Reserve with PayPal
-        </button>
+        <div className="payment-choice-grid" aria-label="Choose payment method">
+          {PAYMENT_METHODS.map((method) => (
+            <button
+              className={`checkout-button payment-choice payment-choice-${method.key}`}
+              type="button"
+              onClick={() => onPayment(method.key)}
+              key={method.key}
+            >
+              Pay with {method.label}
+            </button>
+          ))}
+        </div>
         <p className="form-message">{message}</p>
       </div>
     </section>
@@ -944,6 +991,8 @@ function Footer() {
 }
 
 function ThanksPage({ onSubscribe, message }) {
+  const providerLabel = getPaymentMethodLabel(getThanksPaymentProvider());
+
   return (
     <main className="thanks-page">
       <section className="thanks-card">
@@ -967,7 +1016,7 @@ function ThanksPage({ onSubscribe, message }) {
         </div>
         <div className="thanks-email-card">
           <h2>Make sure we can contact you.</h2>
-          <p>PayPal may not share the best product-update email with Kastave.</p>
+          <p>{providerLabel} may not share the best product-update email with Kastave.</p>
           <EmailForm id="thanks-email" source="thanks" onSubscribe={onSubscribe} buttonLabel="Join Early Access" />
           <p className="form-message">{message}</p>
         </div>
@@ -1064,7 +1113,7 @@ function CheckoutDialog({ open, onClose }) {
         <p className="section-kicker">Link needed</p>
         <h2 id="checkout-title">Add your live tools when accounts are ready.</h2>
         <p>
-          Set the Vite environment variables for PayPal, Beehiiv, and the survey URL. The
+          Set the Vite environment variables for Stripe, PayPal, Beehiiv, and the survey URL. The
           page already has the correct buttons and event tracking hooks.
         </p>
         <button className="primary-button dialog-action" type="button" onClick={onClose}>

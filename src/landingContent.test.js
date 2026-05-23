@@ -6,8 +6,8 @@ const content = readFileSync(new URL("./content.js", import.meta.url), "utf8");
 const app = readFileSync(new URL("./App.jsx", import.meta.url), "utf8");
 const styles = readFileSync(new URL("./styles.css", import.meta.url), "utf8");
 
-test("landing page presents the $1 to $100 credit offer and $899 product price", () => {
-  assert.match(content, /productPrice:\s*"\$899"/);
+test("landing page presents the $1 to $100 credit offer and $600-$1,000 product price range", () => {
+  assert.match(content, /productPrice:\s*"\$600-\$1,000"/);
   assert.match(content, /creditAmount:\s*"\$100"/);
   assert.match(content, /depositAmount:\s*"\$1"/);
   assert.match(app, /hero-offer-card/);
@@ -36,18 +36,27 @@ test("landing page imports every image referenced by carousel image mapping", ()
   assert.match(app, /process:\s*processImage/);
 });
 
-test("landing page has a working default PayPal checkout link", () => {
+test("landing page exposes Stripe and PayPal checkout options", () => {
   assert.match(
     content,
-    /paypalPaymentLink:\s*import\.meta\.env\.VITE_PAYPAL_PAYMENT_LINK\s*\|\|\s*"https:\/\/www\.paypal\.com\/ncp\/payment\/6W9PTBNB267ZW"/,
+    /const STRIPE_PAYMENT_LINK =\s*import\.meta\.env\.VITE_STRIPE_PAYMENT_LINK\s*\|\|\s*"https:\/\/buy\.stripe\.com\/9B69AVbpieTIcPx9rBd7q00"/,
   );
-  assert.match(app, /window\.location\.href = withUtm\(SITE\.paypalPaymentLink\)/);
+  assert.match(
+    content,
+    /const PAYPAL_PAYMENT_LINK =\s*import\.meta\.env\.VITE_PAYPAL_PAYMENT_LINK\s*\|\|\s*"https:\/\/www\.paypal\.com\/ncp\/payment\/6W9PTBNB267ZW"/,
+  );
+  assert.match(content, /PAYMENT_METHODS/);
+  assert.match(content, /paypalPaymentLink:\s*PAYPAL_PAYMENT_LINK/);
+  assert.match(content, /reservationPaymentLink:\s*DEFAULT_PAYMENT_METHOD\.paymentLink/);
+  assert.match(app, /PAYMENT_METHODS\.map/);
+  assert.match(app, /Pay with \{method\.label\}/);
+  assert.match(app, /window\.location\.href = withUtm\(paymentLink\)/);
 });
 
-test("landing page explains the post-PayPal payment path", () => {
-  assert.match(content, /PAYPAL_PAYMENT_NOTE/);
-  assert.match(content, /After PayPal payment/);
-  assert.match(content, /What if PayPal does not redirect after payment\?/);
+test("landing page explains the dual payment provider path", () => {
+  assert.match(content, /PAYMENT_NOTE/);
+  assert.match(content, /Choose Stripe or PayPal/);
+  assert.match(content, /What if Stripe or PayPal does not redirect after payment\?/);
   assert.match(app, /payment-after-note/);
   assert.match(app, /What happens after payment\?/);
   assert.match(app, /thanks-next-steps/);

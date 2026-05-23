@@ -782,8 +782,11 @@ h3 {
   color: rgba(255, 255, 255, 0.72);
 }
 
-.payment-card .checkout-button {
+.payment-card .payment-choice-grid {
   margin-top: 24px;
+}
+
+.payment-card .checkout-button {
   color: var(--charcoal);
   background: white;
 }
@@ -1396,19 +1399,32 @@ h3 {
   background: white;
 }
 
+.payment-logo-row,
 .paypal-logo-row {
   display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
   justify-content: flex-end;
   margin-bottom: 14px;
 }
 
+.payment-wordmark,
 .paypal-wordmark {
-  color: #003087;
   font-size: 1.35rem;
   font-weight: 900;
   letter-spacing: 0;
 }
 
+.payment-provider-stripe {
+  color: #635bff;
+}
+
+.payment-provider-paypal,
+.paypal-wordmark {
+  color: #003087;
+}
+
+.payment-provider-paypal::first-letter,
 .paypal-wordmark::first-letter {
   color: #009cde;
 }
@@ -1439,6 +1455,12 @@ h3 {
   line-height: 1.9;
 }
 
+.payment-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
 .checkout-button,
 .paypal-button {
   width: 100%;
@@ -1449,6 +1471,22 @@ h3 {
 .checkout-button {
   color: white;
   background: var(--charcoal);
+}
+
+.payment-choice {
+  margin-top: 0;
+}
+
+.payment-choice-paypal {
+  color: var(--charcoal);
+  background: white;
+  border: 1px solid var(--line);
+}
+
+.payment-card .payment-choice-paypal {
+  color: white;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.36);
 }
 
 .paypal-button {
@@ -1945,6 +1983,10 @@ details p {
   .email-form input,
   .email-form button {
     min-height: 54px;
+  }
+
+  .payment-choice-grid {
+    grid-template-columns: 1fr;
   }
 
   .hotspot span {

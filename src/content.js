@@ -1,12 +1,53 @@
+const STRIPE_PAYMENT_LINK =
+  import.meta.env.VITE_STRIPE_PAYMENT_LINK || "https://buy.stripe.com/9B69AVbpieTIcPx9rBd7q00";
+const PAYPAL_PAYMENT_LINK =
+  import.meta.env.VITE_PAYPAL_PAYMENT_LINK || "https://www.paypal.com/ncp/payment/6W9PTBNB267ZW";
+
+export const PAYMENT_METHODS = [
+  STRIPE_PAYMENT_LINK
+    ? {
+        key: "stripe",
+        label: "Stripe",
+        paymentLink: STRIPE_PAYMENT_LINK,
+        receiptNote:
+          "After Stripe payment, Stripe sends your receipt. If Stripe does not redirect automatically, return to Kastave and join the email list so we can match updates to you.",
+      }
+    : null,
+  PAYPAL_PAYMENT_LINK
+    ? {
+        key: "paypal",
+        label: "PayPal",
+        paymentLink: PAYPAL_PAYMENT_LINK,
+        receiptNote:
+          "After PayPal payment, PayPal sends your receipt. If PayPal does not redirect automatically, return to Kastave and join the email list so we can match updates to you.",
+      }
+    : null,
+].filter(Boolean);
+
+export const DEFAULT_PAYMENT_METHOD = PAYMENT_METHODS[0] || {
+  key: "payment",
+  label: "Payment",
+  paymentLink: "",
+  receiptNote: "Choose a payment method to reserve your early access spot.",
+};
+
+export const PAYMENT_PROVIDER = DEFAULT_PAYMENT_METHOD;
+
+export function getPaymentMethodLabel(providerKey) {
+  return PAYMENT_METHODS.find((method) => method.key === providerKey)?.label || DEFAULT_PAYMENT_METHOD.label;
+}
+
 export const SITE = {
   name: "Kastave",
   programName: "Kastave Bank Angler Scout Program",
   domain: "https://kastave.com",
   contactEmail: "Kastave@proton.me",
-  priceRange: "$899 target product price",
-  productPrice: "$899",
-  paypalPaymentLink:
-    import.meta.env.VITE_PAYPAL_PAYMENT_LINK || "https://www.paypal.com/ncp/payment/6W9PTBNB267ZW",
+  priceRange: "$600-$1,000 target product price",
+  productPrice: "$600-$1,000",
+  stripePaymentLink: STRIPE_PAYMENT_LINK,
+  paypalPaymentLink: PAYPAL_PAYMENT_LINK,
+  reservationPaymentLink: DEFAULT_PAYMENT_METHOD.paymentLink,
+  paymentProvider: DEFAULT_PAYMENT_METHOD.key,
   beehiivFormUrl: import.meta.env.VITE_BEEHIIV_FORM_URL || "",
   surveyUrl: import.meta.env.VITE_SURVEY_URL || "",
 };
@@ -18,13 +59,13 @@ export const HERO = {
   eyebrow: "Kastave Bank Angler Scout Program",
   title: "Scan before you cast.",
   body: "A smarter way for serious bank anglers to read unknown water, find structure, and make the first cast with a plan.",
-  note: "Estimated product price: $899. Early reservations help prioritize the first production run.",
+  note: "Estimated product price: $600-$1,000. Early reservations help prioritize the first production run.",
 };
 
 export const RESERVATION_OFFER = {
   depositAmount: "$1",
   creditAmount: "$100",
-  productPrice: "$899",
+  productPrice: "$600-$1,000",
   title: "Pay $1 today. Get $100 off Kastave.",
   body: "Your non-refundable early reservation is applied as a launch credit toward your first Kastave.",
 };
@@ -129,7 +170,7 @@ export const PRODUCTS = [
     name: "Kastave Scout",
     label: "Waitlist open",
     originalPrice: "",
-    price: "$899",
+    price: "$600-$1,000",
     sub: "$1 reservation unlocks a $100 launch credit",
   },
 ];
@@ -280,17 +321,17 @@ export const HIGHLIGHT_CAROUSEL = [
 
 export const OFFER_ITEMS = [
   "$100 launch credit toward your first Kastave",
-  "$899 estimated product price",
+  "$600-$1,000 estimated product price",
   "Production progress and field-test updates",
   "Priority access when early units become available",
   "Production-in-progress: not a finished-unit shipping claim",
 ];
 
-export const PAYPAL_PAYMENT_NOTE =
-  "After PayPal payment, PayPal sends your receipt. If PayPal does not redirect automatically, return to Kastave and join the email list so we can match updates to you.";
+export const PAYMENT_NOTE =
+  "Choose Stripe or PayPal. After payment, your receipt is the first confirmation; return to Kastave if the payment page does not redirect automatically.";
 
 export const PAYMENT_AFTER_STEPS = [
-  "PayPal sends your payment receipt.",
+  "Stripe or PayPal sends your payment receipt.",
   "Kastave records your $1 reservation.",
   "Join the early access email list so we can send product progress and launch-credit updates.",
 ];
@@ -327,8 +368,8 @@ export const FAQS = [
       "Kastave is production-in-progress. Join early access or reserve for $1 to get test invites, product updates, and launch pricing details as they open.",
   },
   {
-    question: "What if PayPal does not redirect after payment?",
+    question: "What if Stripe or PayPal does not redirect after payment?",
     answer:
-      "Your PayPal receipt is the first confirmation. Kastave also records valid $1 PayPal reservation events in the backend. If PayPal leaves you on its page, return to kastave.com/thanks and join the email list so we can contact you with product updates.",
+      "Your Stripe or PayPal receipt is the first confirmation. Kastave also records valid $1 reservation events in the backend. If the payment page leaves you there, return to kastave.com/thanks and join the email list so we can contact you with product updates.",
   },
 ];
