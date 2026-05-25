@@ -15,10 +15,10 @@ test("landing page presents the $1 to $100 credit offer and $600-$1,000 product 
 
 test("landing page defines one product feature image for each core capability", () => {
   assert.match(content, /FEATURE_VISUALS/);
+  assert.match(content, /"Auto Scan"/);
   assert.match(content, /"3D Terrain"/);
-  assert.match(content, /"Fish Activity"/);
   assert.match(content, /"Water Conditions"/);
-  assert.match(content, /"AI Strategy"/);
+  assert.match(content, /"AI Cast Choices"/);
   assert.match(app, /feature-carousel/);
   assert.match(app, /feature-carousel-stage/);
   assert.match(app, /setActiveFeatureIndex/);

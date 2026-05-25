@@ -35,14 +35,45 @@ import {
   recordWaitlistSignup,
 } from "./supabaseBackend.js";
 import heroImage from "../assets/kastave-new-hero.png";
+import logoImage from "../assets/kastave-logo-wordmark.png";
 import processImage from "../assets/kastave-new-process.png";
 import recognitionImage from "../assets/kastave-new-recognition.png";
+import redditPondHasFishImage from "../assets/reddit-proof-pond-has-fish.png";
+import redditSnagFrustrationImage from "../assets/reddit-proof-snag-frustration.png";
+import redditStockedPondImage from "../assets/reddit-proof-stocked-pond.png";
+import redditTrebleWeedsImage from "../assets/reddit-proof-treble-weeds.png";
 import terrainFeatureImage from "../assets/kastave-feature-3d-terrain.png";
-import fishFeatureImage from "../assets/kastave-feature-fish-activity.png";
 import waterFeatureImage from "../assets/kastave-feature-water-conditions.png";
 import strategyFeatureImage from "../assets/kastave-feature-ai-strategy.png";
 
-const featureImages = [terrainFeatureImage, fishFeatureImage, waterFeatureImage, strategyFeatureImage];
+const featureImages = [processImage, terrainFeatureImage, waterFeatureImage, strategyFeatureImage];
+
+const REDDIT_PAIN_PROOFS = [
+  {
+    title: "Unknown pond",
+    image: redditPondHasFishImage,
+    source: "https://www.reddit.com/r/FishingForBeginners/comments/1erghut/how_do_i_know_if_a_pond_has_fish/",
+    alt: "Reddit post asking how to know if a pond has fish.",
+  },
+  {
+    title: "Pressured stocked pond",
+    image: redditStockedPondImage,
+    source: "https://www.reddit.com/r/FishingForBeginners/comments/1emb79p/cant_catch_anything_on_stocked_pond/",
+    alt: "Reddit post about not catching anything on a stocked pond.",
+  },
+  {
+    title: "Weeds and treble hooks",
+    image: redditTrebleWeedsImage,
+    source: "https://www.reddit.com/r/FishingForBeginners/comments/1nwpaq3/how_would_you_fish_this/",
+    alt: "Reddit comment about tall vegetation and not being able to run a trebled lure through it.",
+  },
+  {
+    title: "Snags and lost lures",
+    image: redditSnagFrustrationImage,
+    source: "https://www.reddit.com/r/FishingForBeginners/comments/1mwkcd3/yeah_ive_about_had_it/",
+    alt: "Reddit post about snapping a rod, losing lures, and feeling discouraged.",
+  },
+];
 
 function getThanksPaymentProvider() {
   const params = new URLSearchParams(window.location.search);
@@ -250,8 +281,7 @@ function SiteNav({ onWaitlist, onReserve }) {
         aria-label="Kastave home"
         onClick={() => trackEvent("link_click", { link: "brand", source: "nav", href: SITE.domain })}
       >
-        <span className="brand-mark">K</span>
-        <span>{SITE.name}</span>
+        <img className="brand-logo" src={logoImage} alt={SITE.name} />
       </a>
       <button className="hamburger" type="button" onClick={() => setOpen((value) => !value)} aria-label="Open menu">
         <span />
@@ -336,6 +366,16 @@ function Hero({ onSubscribe, onReserve, message }) {
 }
 
 function PainSection() {
+  const [activeProof, setActiveProof] = useState(null);
+
+  const openProof = (proof, painPoint) => {
+    setActiveProof({ ...proof, painPoint });
+    trackEvent("pain_reddit_proof_open", {
+      proof: proof.title.toLowerCase().replace(/\s+/g, "_"),
+      href: proof.source,
+    });
+  };
+
   return (
     <section className="pain-section" id="pain" aria-labelledby="pain-title">
       <div className="section-inner pain-grid">
@@ -343,16 +383,89 @@ function PainSection() {
           <p className="section-kicker">Bank angler problem</p>
           <h2 id="pain-title">Stop guessing where to start.</h2>
         </div>
-        <div className="pain-list">
-          {LANDING_PAIN_POINTS.map((point) => (
-            <div className="pain-item" key={point}>
-              <span />
-              <p>{point}</p>
-            </div>
+        <div className="pain-card-grid" aria-label="Reddit-backed pain point cards">
+          {REDDIT_PAIN_PROOFS.map((proof, index) => (
+            <button
+              className="pain-evidence-card"
+              key={proof.title}
+              type="button"
+              onClick={() => openProof(proof, LANDING_PAIN_POINTS[index])}
+            >
+              <div className="pain-evidence-copy">
+                <span>Reddit proof</span>
+                <p>{LANDING_PAIN_POINTS[index]}</p>
+              </div>
+              <div className="pain-proof-preview">
+                <img src={proof.image} alt={proof.alt} />
+              </div>
+              <span className="pain-proof-action">View comment detail</span>
+            </button>
           ))}
         </div>
       </div>
+      <PainEvidenceDialog proof={activeProof} onClose={() => setActiveProof(null)} />
     </section>
+  );
+}
+
+function PainEvidenceDialog({ proof, onClose }) {
+  useEffect(() => {
+    if (!proof) {
+      return undefined;
+    }
+
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [proof, onClose]);
+
+  if (!proof) {
+    return null;
+  }
+
+  const linkName = proof.title.toLowerCase().replace(/\s+/g, "_");
+
+  return (
+    <div className="dialog-backdrop pain-proof-dialog-backdrop" role="presentation" onMouseDown={onClose}>
+      <section
+        className="pain-proof-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="pain-proof-dialog-title"
+        onMouseDown={(event) => event.stopPropagation()}
+      >
+        <button className="icon-button" type="button" onClick={onClose} aria-label="Close Reddit proof detail">
+          x
+        </button>
+        <div className="pain-proof-dialog-copy">
+          <p className="section-kicker">Reddit proof</p>
+          <h3 id="pain-proof-dialog-title">{proof.painPoint}</h3>
+          <a
+            className="text-link"
+            href={proof.source}
+            target="_blank"
+            rel="noreferrer"
+            onClick={() =>
+              trackEvent("link_click", {
+                link: linkName,
+                source: "pain_reddit_detail",
+                href: proof.source,
+              })
+            }
+          >
+            Open original Reddit thread
+          </a>
+        </div>
+        <div className="pain-proof-dialog-image">
+          <img src={proof.image} alt={proof.alt} />
+        </div>
+      </section>
+    </div>
   );
 }
 
@@ -374,7 +487,7 @@ function FeaturesSection() {
       <div className="section-inner">
         <div className="section-heading compact-heading">
           <p className="section-kicker">Core capabilities</p>
-          <h2 id="features-title">Built to find structure, fish zones, and a first-cast plan.</h2>
+          <h2 id="features-title">Built to scan, model, and choose the first 3 casts.</h2>
         </div>
         <div className="feature-carousel" aria-label="Kastave core capability carousel">
           <article className="feature-carousel-stage">
@@ -439,8 +552,8 @@ function PrivacySection() {
           <p className="section-kicker">Private maps</p>
           <h2 id="privacy-title">Your spots stay yours.</h2>
           <p>
-            Save private waypoints and build your own fishing log. Nothing is shared unless you
-            choose to share it.
+            Save private waypoints and build your own exploration log. Kastave is not a public spot
+            feed, and we do not sell your spots. Sharing is your choice.
           </p>
         </div>
         <div className="privacy-points">
@@ -464,7 +577,7 @@ function ReservationSection({ onSubscribe, onWaitlist, onPayment, message }) {
         <article className="reservation-card email-card">
           <span className="option-label">Option A</span>
           <h3>Email waitlist</h3>
-          <p>Join early access and get product updates, test invites, and launch pricing.</p>
+          <p>Join early access for field-test updates, co-creation polls, and launch pricing.</p>
           <EmailForm
             id="reservation-email"
             source="reservation"
@@ -483,7 +596,7 @@ function ReservationSection({ onSubscribe, onWaitlist, onPayment, message }) {
             ))}
           </div>
           <h3>Reserve early for $1</h3>
-          <p>Get first access updates plus early-bird pricing as the scout program opens.</p>
+          <p>Help shape the first run and unlock your $100 launch credit.</p>
           <ul>
             {OFFER_ITEMS.slice(0, 3).map((item) => (
               <li key={item}>{item}</li>
@@ -595,7 +708,7 @@ function ScenarioSelector({ selected, onSelect }) {
       <div className="section-inner">
         <div className="scenario-heading">
           <p className="section-kicker">Scout program fit</p>
-          <h2 id="scenario-title">Where do you fish from the bank?</h2>
+          <h2 id="scenario-title">Real bank-fishing moments this is built for.</h2>
           <p>
             Pick the water you care about most. The program is built around real shoreline
             scouting problems, not generic boat electronics.
@@ -627,7 +740,7 @@ function ProductGrid({ onWaitlist }) {
     <section className="shop-section" id="products">
       <div className="section-heading">
         <p className="section-kicker">Flagship product</p>
-        <h2>Best AI fish finders for bank water.</h2>
+        <h2>The portable scout for unknown bank water.</h2>
       </div>
       <div className="product-card-grid">
         {PRODUCTS.map((product, index) => (
@@ -828,7 +941,7 @@ function ProductHighlights({ onReserve }) {
         </div>
         <div>
           <p className="section-kicker">Product highlights</p>
-          <h2>Portable scouting for bank anglers.</h2>
+          <h2>Auto-scan, 3D model, then choose your cast.</h2>
           <div className="capability-list">
             {PRODUCT_HIGHLIGHTS.map((capability) => (
               <button
@@ -875,11 +988,11 @@ function Offer({ onPayment, message }) {
     <section className="offer" id="special-offers">
       <div className="offer-copy">
         <p className="section-kicker">Special offer</p>
-        <h2>Reserve your scout program spot for $1.</h2>
+        <h2>Back the co-creation program for $1.</h2>
         <p>
-          This is a real non-refundable early reservation deposit for bank anglers who want
-          Kastave to exist. It helps prioritize production decisions and includes a $100
-          launch credit when early units become available.
+          This is a real non-refundable founder reservation for bank anglers who want Kastave to
+          exist. It helps prioritize field tests, app decisions, accessories, and the first
+          production run, and includes a $100 launch credit when early units become available.
         </p>
       </div>
 
@@ -953,12 +1066,10 @@ function Footer() {
     <footer className="site-footer">
       <div>
         <a className="brand" href="/" onClick={() => trackFooterLink("brand", "/")}>
-          <span className="brand-mark">K</span>
-          <span>{SITE.name}</span>
+          <img className="brand-logo" src={logoImage} alt={SITE.name} />
         </a>
         <p>
-          {SITE.programName}: early access for serious bank anglers learning how to scan before
-          they cast.
+          {SITE.programName}: early access for bank anglers scouting unknown water before they cast.
         </p>
       </div>
       <div className="footer-links">
@@ -997,8 +1108,7 @@ function ThanksPage({ onSubscribe, message }) {
     <main className="thanks-page">
       <section className="thanks-card">
         <a className="brand thanks-brand" href="/">
-          <span className="brand-mark">K</span>
-          <span>{SITE.name}</span>
+          <img className="brand-logo" src={logoImage} alt={SITE.name} />
         </a>
         <p className="section-kicker">Reservation received</p>
         <h1>You're in the Kastave Bank Angler Scout Program.</h1>

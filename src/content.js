@@ -39,7 +39,7 @@ export function getPaymentMethodLabel(providerKey) {
 
 export const SITE = {
   name: "Kastave",
-  programName: "Kastave Bank Angler Scout Program",
+  programName: "Kastave Bank Fishing Scout Co-Creation Program",
   domain: "https://kastave.com",
   contactEmail: "Kastave@proton.me",
   priceRange: "$600-$1,000 target product price",
@@ -53,62 +53,67 @@ export const SITE = {
 };
 
 export const ANNOUNCEMENT =
-  "Early access for serious bank anglers: join updates or reserve a $1 spot.";
+  "Crowdfunding early access: help build the scout for exploratory bank anglers.";
 
 export const HERO = {
-  eyebrow: "Kastave Bank Angler Scout Program",
-  title: "Scan before you cast.",
-  body: "A smarter way for serious bank anglers to read unknown water, find structure, and make the first cast with a plan.",
-  note: "Estimated product price: $600-$1,000. Early reservations help prioritize the first production run.",
+  eyebrow: "Crowdfunding for exploratory bank anglers",
+  title: "Scout unknown water before you cast.",
+  body: "Kastave auto-scans reachable water from shore, builds a 3D underwater terrain view, reads water-condition clues, and turns the scan into 3 cast choices: safe, structure, and high-risk, high-reward.",
+  note: "Estimated product price: $600-$1,000. Founder reservations help decide field-test priorities, accessories, and the first production run.",
 };
 
 export const RESERVATION_OFFER = {
   depositAmount: "$1",
   creditAmount: "$100",
   productPrice: "$600-$1,000",
-  title: "Pay $1 today. Get $100 off Kastave.",
-  body: "Your non-refundable early reservation is applied as a launch credit toward your first Kastave.",
+  title: "Back the first run for $1.",
+  body: "Your non-refundable founder reservation is applied as a launch credit toward your first Kastave.",
 };
 
 export const BANK_PAIN_POINTS = [
-  "Unknown water takes too long to figure out",
-  "I cannot read structure from shore",
-  "I do not know where fish are holding",
-  "Sonar data is hard to turn into a fishing plan",
-  "My first cast is mostly guessing",
+  "After-work pond sessions are too short for blind searching",
+  "Public ponds are pressured, but I do not know if I should move",
+  "Grass and snag risk make treble hooks feel like a gamble",
+  "Without a boat, I only care about water I can actually reach",
+  "My first cast needs a reason, not just a hunch",
 ];
 
 export const LANDING_PAIN_POINTS = [
-  "Unknown water takes time to figure out",
-  "Bank anglers do not have boat electronics",
-  "Structure matters, but it is hard to read from shore",
-  "Sonar data is useful only if you know what it means",
+  "Unknown bank water burns the first half of a short session",
+  "Public ponds get hammered, and the bank gives few clues",
+  "Weeds, ledges, channels, rocks, and hard bottom change the lure choice",
+  "Most sonar data still needs to become a first-cast decision",
 ];
 
 export const FEATURE_GROUPS = [
   {
-    title: "Find structure",
-    items: ["water depth", "drop-off", "weed edge", "brush pile", "hard bottom", "soft bottom"],
+    title: "Auto scan",
+    items: ["reachable bank water", "quick shoreline route", "hands-off sweep", "repeatable scan path"],
   },
   {
-    title: "Find fish zones",
-    items: ["fish layer", "active zones", "baitfish signals"],
+    title: "3D terrain model",
+    items: ["depth change", "drop-off", "ledge", "channel", "rock pile", "hard or soft bottom"],
   },
   {
-    title: "Get a plan",
-    items: ["where to cast", "how deep to fish", "what bait type to try", "when to move"],
+    title: "Water-condition clues",
+    items: ["water temperature", "clarity cues", "weed edge", "muck", "snag risk", "reachable depth"],
   },
   {
-    title: "Save private map",
-    items: ["private waypoints", "fishing log", "personal notes"],
+    title: "3 AI cast choices",
+    items: ["safe point", "structure point", "high-risk, high-reward point"],
   },
   {
-    title: "Learn faster",
-    items: ["AI explains sonar in plain fishing language"],
+    title: "Private exploration map",
+    items: ["auto spot log", "private waypoints", "trip notes", "no public spot feed"],
   },
 ];
 
-export const PRIVACY_POINTS = ["Private by default", "No public spot burning", "User controls sharing"];
+export const PRIVACY_POINTS = [
+  "Private by default",
+  "No public spot burning",
+  "We do not sell your spots",
+  "Your exploration map stays yours",
+];
 
 export const TRUST = {
   rating: "4.3 / 5 target launch benchmark",
@@ -117,51 +122,47 @@ export const TRUST = {
 
 export const SCENARIOS = [
   {
-    label: "Ponds",
-    detail: "Scout shallow shelves, soft bottom, and small cover before you commit your first cast.",
+    label: "40-minute pond run",
+    detail: "After work, scan the reachable bank first so the session starts with a safe cast, a structure cast, and one high-risk shot instead of twenty minutes of guessing.",
   },
   {
-    label: "Reservoir Banks",
-    detail: "Find contour changes, hard transitions, and high-probability stretches from shore.",
+    label: "Quick stop with kids",
+    detail: "When the rods are in the car during a grocery run or family errand, carry a small scout, check one shoreline pocket, and leave with a saved private note.",
   },
   {
-    label: "Riprap",
-    detail: "Read depth breaks and rock edges instead of guessing where bait and bass are holding.",
+    label: "Pressured public pond",
+    detail: "If the obvious bank has been hammered all week, use the scan to decide whether to stay, change angle, or walk before you burn the whole window.",
   },
   {
-    label: "Grass Edges",
-    detail: "Map the outside edge, openings, and pockets before working a long bank blind.",
+    label: "Grass and snag risk",
+    detail: "See weed edges, muck, rocks, and drop-offs before throwing a treble hook into water that may cost you two lures in ten minutes.",
   },
   {
-    label: "Docks & Laydowns",
-    detail: "Inspect shade, limbs, posts, and nearby depth so your first cast has a reason.",
-  },
-  {
-    label: "Unknown Public Access",
-    detail: "Scout unfamiliar water quickly and decide whether the spot deserves more time.",
+    label: "No boat, reachable water",
+    detail: "Focus on the water your bank cast can actually reach: the first shelf, the channel swing, the outside weed edge, or the rock transition in range.",
   },
 ];
 
 export const COMPARISON_ROWS = [
   {
-    factor: "Depth",
+    factor: "Reachable water",
     blind: "Guess from bank slope and visible clues",
-    scout: "Build a shoreline scan plan before casting",
+    scout: "Auto-scan the water you can actually cast to",
   },
   {
-    factor: "Cover",
+    factor: "Structure",
     blind: "Fish what you can see above the surface",
-    scout: "Map structure targets below the surface",
+    scout: "Build a 3D model of ledges, channels, rocks, and weed edges",
   },
   {
-    factor: "Fish Activity",
-    blind: "Rely on timing, luck, and second-hand reports",
-    scout: "Watch for activity signals that shape the route",
+    factor: "Lure risk",
+    blind: "Find grass, muck, and snags after losing time or tackle",
+    scout: "Read water-condition clues before choosing trebles, single hooks, or a safer lane",
   },
   {
-    factor: "First Cast",
+    factor: "Cast plan",
     blind: "Start with instinct and adjust after misses",
-    scout: "Choose a higher-confidence target first",
+    scout: "Choose between safe, structure, and high-risk, high-reward targets",
   },
 ];
 
@@ -219,110 +220,115 @@ export const HOTSPOTS = [
 
 export const PROCESS_STEPS = [
   {
-    label: "Search",
-    title: "Scout the shoreline route.",
-    body: "Run a smart search path around grass edges, riprap, docks, and laydowns before you commit to a pattern.",
+    label: "Scan",
+    title: "Auto-scan the reachable bank water.",
+    body: "Run a repeatable sweep across the water you can actually fish from shore, even when the surface tells you almost nothing.",
   },
   {
-    label: "Understand",
-    title: "Read the water below.",
-    body: "Build a usable picture of depth changes, hard cover, bait, fish activity, and water-condition clues.",
+    label: "Model",
+    title: "Build the 3D underwater picture.",
+    body: "Turn depth, ledges, channels, rocks, weeds, and bottom hardness into a practical terrain view for the spot in front of you.",
   },
   {
-    label: "Cast",
-    title: "Choose the highest-probability target.",
-    body: "Turn the scan into a practical cast zone, presentation direction, and next move.",
+    label: "Choose",
+    title: "Pick 1 of 3 cast choices.",
+    body: "Start with a safe point, a structure point, or a high-risk, high-reward target based on terrain, depth, conditions, and your history.",
   },
 ];
 
 export const CAPABILITIES = [
   {
-    title: "3D Terrain Maps",
-    body: "Rebuild drops, humps, grass edges, brush, rocks, and bank transitions.",
+    title: "Auto Scan",
+    body: "Run a quick shoreline sweep across the water a bank angler can actually reach.",
   },
   {
-    title: "Fish Activity",
-    body: "Spot bait movement, fish position, and activity clues that shape the first cast.",
+    title: "3D Terrain Model",
+    body: "Rebuild drops, ledges, channels, rock piles, weed edges, and bottom transitions.",
   },
   {
     title: "Water Conditions",
-    body: "Combine temperature, clarity, oxygen, pressure, and local water clues.",
+    body: "Turn depth, temperature, clarity cues, weeds, muck, and snag risk into fishing context.",
   },
   {
-    title: "AI Strategy",
-    body: "Translate structure and conditions into target zones and cast recommendations.",
+    title: "AI Cast Choices",
+    body: "Translate the scan into a safe point, a structure point, and a high-risk, high-reward point.",
   },
 ];
 
 export const FEATURE_VISUALS = [
   {
-    title: "3D Terrain",
-    body: "Rebuild drop-offs, brush, rocks, grass edges, and bottom transitions from the bank.",
+    title: "Auto Scan",
+    body: "Start a quick sweep from shore and cover the water you can actually cast to.",
   },
   {
-    title: "Fish Activity",
-    body: "Read bait movement, fish position, and activity clues before choosing your first cast.",
+    title: "3D Terrain",
+    body: "Rebuild drop-offs, ledges, channels, rocks, weed edges, and bottom transitions from the bank.",
   },
   {
     title: "Water Conditions",
-    body: "Bring temperature, clarity, depth, oxygen, pressure, and local water clues into one view.",
+    body: "Bring depth, temperature, clarity cues, weeds, muck, and snag risk into one view.",
   },
   {
-    title: "AI Strategy",
-    body: "Turn scan data into target zones, cast direction, and a practical next move.",
+    title: "AI Cast Choices",
+    body: "Turn scan data into 3 practical options: safe point, structure point, and high-risk, high-reward point.",
   },
 ];
 
 export const PRODUCT_HIGHLIGHTS = [
   {
-    title: "Portable",
-    body: "Fits inside a fishing tackle box so bank anglers can carry it with normal shore gear.",
+    title: "Auto scan",
+    body: "Set a quick shoreline sweep and let Kastave map the bank water before your first real cast.",
   },
   {
-    title: "Bank-side control",
-    body: "Deploy and control the unmanned scout boat from the shoreline instead of needing a full-size boat.",
+    title: "3D underwater terrain",
+    body: "Rebuild ledges, channels, rocks, weed edges, hard bottom, and soft bottom into a usable 3D view.",
   },
   {
-    title: "3D underwater reconstruction",
-    body: "Scan terrain in about 5 seconds and rebuild the underwater shape into a usable 3D view.",
+    title: "Water-condition information",
+    body: "Read depth, temperature, clarity cues, weeds, muck, and snag risk before choosing your lure path.",
   },
   {
-    title: "AI spot marking",
-    body: "Identify 3D terrain features and mark likely fish-holding spots before you commit the first cast.",
+    title: "3 AI cast choices",
+    body: "Get a safe point, a structure point, and a high-risk, high-reward point for the water in front of you.",
+  },
+  {
+    title: "Private spot record",
+    body: "Every exploration can leave a private spot log. It is not a public spot, and it is not sold to other anglers.",
   },
 ];
 
 export const HIGHLIGHT_CAROUSEL = [
   {
     step: "01",
-    image: "recognition",
-    title: "Pack it in your tackle box",
-    body: "Carry the scout with the gear you already bring to the bank, without adding a full boat setup.",
+    image: "process",
+    title: "Auto-scan the bank water",
+    body: "Launch a quick 360-style sweep around the reachable water instead of reading the pond only from the surface.",
   },
   {
     step: "02",
     image: "hero",
-    title: "Launch from the bank",
-    body: "Control the unmanned scout boat from shore and inspect water you cannot read by sight.",
+    title: "Build a 3D terrain view",
+    body: "See ledges, channels, rocks, hard bottom, soft bottom, and weed edges as a fishing map, not a raw sonar puzzle.",
   },
   {
     step: "03",
-    image: "process",
-    title: "Scan 3D terrain in seconds",
-    body: "Run a quick scan and turn the underwater shape into a 3D view before choosing a cast lane.",
+    image: "recognition",
+    title: "Choose the first 3 casts",
+    body: "AI labels one safe point, one structure point, and one high-risk, high-reward shot for the spot you are standing on.",
   },
   {
     step: "04",
     image: "recognition",
-    title: "AI marks likely holding spots",
-    body: "Use terrain recognition to flag likely cover, breaks, and fish-holding points before your first cast.",
+    title: "Save a private spot log",
+    body: "Each scan can become your own exploration record. Kastave is not a public spot feed, and it does not sell your fishing map.",
   },
 ];
 
 export const OFFER_ITEMS = [
   "$100 launch credit toward your first Kastave",
   "$600-$1,000 estimated product price",
-  "Production progress and field-test updates",
+  "Founder feedback on scan paths, cast-choice labels, and private spot logs",
+  "Production progress, field-test updates, and co-creation polls",
   "Priority access when early units become available",
   "Production-in-progress: not a finished-unit shipping claim",
 ];
@@ -345,7 +351,7 @@ export const FAQS = [
   {
     question: "Does it publicly share my fishing spots?",
     answer:
-      "No. Spots are private by default. You can save waypoints and notes without publishing your locations.",
+      "No. Spots are private by default. Kastave is not a public spot feed, and it does not sell your locations. You can save waypoints, scan history, and notes as your own exploration map.",
   },
   {
     question: "Does it guarantee I will catch fish?",
@@ -361,6 +367,16 @@ export const FAQS = [
     question: "What species is it designed for?",
     answer:
       "Early access is focused on bass fishing and exploratory bank-fishing scenarios first.",
+  },
+  {
+    question: "Is this a crowdfunding product?",
+    answer:
+      "Yes. Kastave is a crowdfunding-style co-creation program, not a finished-unit shipping claim. Founder reservations help us prioritize field tests, accessories, app workflow, and the first production run.",
+  },
+  {
+    question: "How do founders help shape the product?",
+    answer:
+      "We will ask early users to react to scan behavior, 3D map readability, the 3 cast-choice labels, private log fields, carrying kit ideas, and real bank-fishing scenarios.",
   },
   {
     question: "When will early access start?",
