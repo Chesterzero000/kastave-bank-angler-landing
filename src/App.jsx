@@ -2,16 +2,22 @@ import React, { useEffect, useState } from "react";
 import {
   ANNOUNCEMENT,
   BANK_PAIN_POINTS,
+  DEFAULT_PAYMENT_METHOD,
   FAQS,
+  FEATURE_VISUALS,
   FEATURE_GROUPS,
   HERO,
   HIGHLIGHT_CAROUSEL,
   LANDING_PAIN_POINTS,
   OFFER_ITEMS,
+  PAYMENT_AFTER_STEPS,
+  PAYMENT_METHODS,
+  PAYMENT_NOTE,
   PRIVACY_POINTS,
   PRODUCT_HIGHLIGHTS,
+  RESERVATION_OFFER,
   SITE,
-  VALUE_STEPS,
+  getPaymentMethodLabel,
 } from "./content.js";
 import {
   initAnalytics,
@@ -29,8 +35,50 @@ import {
   recordWaitlistSignup,
 } from "./supabaseBackend.js";
 import heroImage from "../assets/kastave-new-hero.png";
+import logoImage from "../assets/kastave-logo-wordmark.png";
 import processImage from "../assets/kastave-new-process.png";
 import recognitionImage from "../assets/kastave-new-recognition.png";
+import redditPondHasFishImage from "../assets/reddit-proof-pond-has-fish.png";
+import redditSnagFrustrationImage from "../assets/reddit-proof-snag-frustration.png";
+import redditStockedPondImage from "../assets/reddit-proof-stocked-pond.png";
+import redditTrebleWeedsImage from "../assets/reddit-proof-treble-weeds.png";
+import terrainFeatureImage from "../assets/kastave-feature-3d-terrain.png";
+import waterFeatureImage from "../assets/kastave-feature-water-conditions.png";
+import strategyFeatureImage from "../assets/kastave-feature-ai-strategy.png";
+
+const featureImages = [processImage, terrainFeatureImage, waterFeatureImage, strategyFeatureImage];
+
+const REDDIT_PAIN_PROOFS = [
+  {
+    title: "Unknown pond",
+    image: redditPondHasFishImage,
+    source: "https://www.reddit.com/r/FishingForBeginners/comments/1erghut/how_do_i_know_if_a_pond_has_fish/",
+    alt: "Reddit post asking how to know if a pond has fish.",
+  },
+  {
+    title: "Pressured stocked pond",
+    image: redditStockedPondImage,
+    source: "https://www.reddit.com/r/FishingForBeginners/comments/1emb79p/cant_catch_anything_on_stocked_pond/",
+    alt: "Reddit post about not catching anything on a stocked pond.",
+  },
+  {
+    title: "Weeds and treble hooks",
+    image: redditTrebleWeedsImage,
+    source: "https://www.reddit.com/r/FishingForBeginners/comments/1nwpaq3/how_would_you_fish_this/",
+    alt: "Reddit comment about tall vegetation and not being able to run a trebled lure through it.",
+  },
+  {
+    title: "Snags and lost lures",
+    image: redditSnagFrustrationImage,
+    source: "https://www.reddit.com/r/FishingForBeginners/comments/1mwkcd3/yeah_ive_about_had_it/",
+    alt: "Reddit post about snapping a rod, losing lures, and feeling discouraged.",
+  },
+];
+
+function getThanksPaymentProvider() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("provider") || (params.has("session_id") ? "stripe" : DEFAULT_PAYMENT_METHOD.key);
+}
 
 function App() {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -50,12 +98,13 @@ function App() {
       }
       sessionStorage.setItem(purchaseKey, "true");
       const eventId = `purchase_${Date.now()}`;
+      const provider = getThanksPaymentProvider();
       trackPurchase({
         event_id: eventId,
         value: 1,
         currency: "USD",
         amount_cents: 100,
-        provider: "paypal",
+        provider,
         source: "thanks_page",
         content_name: "Kastave $1 early reservation",
       });
@@ -63,7 +112,7 @@ function App() {
         eventId,
         amountCents: 100,
         currency: "USD",
-        provider: "paypal",
+        provider,
         source: "thanks_page",
       });
     }
@@ -83,7 +132,19 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  const reserveWithPaypal = (source = "unknown") => {
+  const showReservationOptions = (source = "unknown") => {
+    trackLeadIntent({ cta: "reserve_options", cta_location: source, source });
+    const reservationSection = document.getElementById("special-offers");
+    if (reservationSection) {
+      reservationSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
+  const reserveWithPayment = (providerKey = DEFAULT_PAYMENT_METHOD.key, source = "unknown") => {
+    const paymentMethod = PAYMENT_METHODS.find((method) => method.key === providerKey) || DEFAULT_PAYMENT_METHOD;
+    const provider = paymentMethod.key;
+    const paymentLink = paymentMethod.paymentLink;
+
     trackLeadIntent({ cta: "reserve_for_1", cta_location: source, source });
     trackInitiateCheckout({
       cta: "reserve_for_1",
@@ -92,27 +153,27 @@ function App() {
       value: 1,
       currency: "USD",
       amount_cents: 100,
-      provider: "paypal",
+      provider,
       content_name: "Kastave $1 early reservation",
     });
-    trackEvent("outbound_click", { link: "paypal", source, href: SITE.paypalPaymentLink });
+    trackEvent("outbound_click", { link: provider, source, href: paymentLink });
     recordReservationIntent({
       amountCents: 100,
       refundable: false,
-      provider: "paypal",
+      provider,
       source,
-      paymentLink: SITE.paypalPaymentLink,
+      paymentLink,
     });
 
-    if (SITE.paypalPaymentLink) {
-      window.location.href = withUtm(SITE.paypalPaymentLink);
+    if (paymentLink) {
+      window.location.href = withUtm(paymentLink);
       return;
     }
 
     trackEvent("payment_failed", {
       reason: "missing_payment_link",
       source,
-      provider: "paypal",
+      provider,
       value: 1,
       currency: "USD",
     });
@@ -173,27 +234,26 @@ function App() {
   };
 
   if (isThanksPage) {
-    return <ThanksPage />;
+    return <ThanksPage onSubscribe={(email) => subscribe(email, "thanks")} message={signupMessage} />;
   }
 
   return (
     <>
       <AnnouncementBar />
-      <SiteNav onWaitlist={() => focusWaitlist("nav")} onReserve={() => reserveWithPaypal("nav")} />
+      <SiteNav onWaitlist={() => focusWaitlist("nav")} onReserve={() => showReservationOptions("nav")} />
       <main>
         <Hero
           onSubscribe={(email) => subscribe(email, "hero")}
-          onReserve={() => reserveWithPaypal("hero")}
+          onReserve={() => showReservationOptions("hero")}
           message={signupMessage}
         />
         <PainSection />
-        <ValueSection />
         <FeaturesSection />
         <PrivacySection />
         <ReservationSection
           onSubscribe={(email) => subscribe(email, "reservation")}
           onWaitlist={() => focusWaitlist("reservation")}
-          onPaypal={() => reserveWithPaypal("reservation")}
+          onPayment={(providerKey) => reserveWithPayment(providerKey, "reservation")}
           message={signupMessage}
         />
         <FAQ />
@@ -211,7 +271,7 @@ function AnnouncementBar() {
 
 function SiteNav({ onWaitlist, onReserve }) {
   const [open, setOpen] = useState(false);
-  const navItems = ["Pain", "Plan", "Features", "Privacy", "FAQ"];
+  const navItems = ["Pain", "Features", "Privacy", "FAQ"];
 
   return (
     <header className="site-nav">
@@ -221,8 +281,7 @@ function SiteNav({ onWaitlist, onReserve }) {
         aria-label="Kastave home"
         onClick={() => trackEvent("link_click", { link: "brand", source: "nav", href: SITE.domain })}
       >
-        <span className="brand-mark">K</span>
-        <span>{SITE.name}</span>
+        <img className="brand-logo" src={logoImage} alt={SITE.name} />
       </a>
       <button className="hamburger" type="button" onClick={() => setOpen((value) => !value)} aria-label="Open menu">
         <span />
@@ -257,7 +316,6 @@ function SiteNav({ onWaitlist, onReserve }) {
 function navHref(item) {
   const hrefs = {
     Pain: "#pain",
-    Plan: "#plan",
     Features: "#features",
     Privacy: "#privacy",
     FAQ: "#faq",
@@ -281,6 +339,19 @@ function Hero({ onSubscribe, onReserve, message }) {
         <p className="eyebrow">{HERO.eyebrow}</p>
         <h1 id="hero-title">{HERO.title}</h1>
         <p className="hero-copy">{HERO.body}</p>
+        <div className="hero-offer-card" aria-label={`${RESERVATION_OFFER.depositAmount} reservation credit offer`}>
+          <div className="hero-offer-icon" aria-hidden="true">
+            <span className="ticket-cut ticket-cut-left" />
+            <span className="ticket-cut ticket-cut-right" />
+            <span>{RESERVATION_OFFER.depositAmount}</span>
+          </div>
+          <div className="hero-offer-copy">
+            <strong>{RESERVATION_OFFER.title}</strong>
+            <span>
+              {RESERVATION_OFFER.creditAmount} launch credit toward the {RESERVATION_OFFER.productPrice} Kastave Scout.
+            </span>
+          </div>
+        </div>
         <div className="hero-actions" id="reserve">
           <EmailForm id="hero-email" source="hero" onSubscribe={onSubscribe} buttonLabel="Join Early Access" />
           <button className="secondary-link hero-reserve-button" type="button" onClick={onReserve}>
@@ -295,6 +366,16 @@ function Hero({ onSubscribe, onReserve, message }) {
 }
 
 function PainSection() {
+  const [activeProof, setActiveProof] = useState(null);
+
+  const openProof = (proof, painPoint) => {
+    setActiveProof({ ...proof, painPoint });
+    trackEvent("pain_reddit_proof_open", {
+      proof: proof.title.toLowerCase().replace(/\s+/g, "_"),
+      href: proof.source,
+    });
+  };
+
   return (
     <section className="pain-section" id="pain" aria-labelledby="pain-title">
       <div className="section-inner pain-grid">
@@ -302,58 +383,151 @@ function PainSection() {
           <p className="section-kicker">Bank angler problem</p>
           <h2 id="pain-title">Stop guessing where to start.</h2>
         </div>
-        <div className="pain-list">
-          {LANDING_PAIN_POINTS.map((point) => (
-            <div className="pain-item" key={point}>
-              <span />
-              <p>{point}</p>
-            </div>
+        <div className="pain-card-grid" aria-label="Reddit-backed pain point cards">
+          {REDDIT_PAIN_PROOFS.map((proof, index) => (
+            <button
+              className="pain-evidence-card"
+              key={proof.title}
+              type="button"
+              onClick={() => openProof(proof, LANDING_PAIN_POINTS[index])}
+            >
+              <div className="pain-evidence-copy">
+                <span>Reddit proof</span>
+                <p>{LANDING_PAIN_POINTS[index]}</p>
+              </div>
+              <div className="pain-proof-preview">
+                <img src={proof.image} alt={proof.alt} />
+              </div>
+              <span className="pain-proof-action">View comment detail</span>
+            </button>
           ))}
         </div>
       </div>
+      <PainEvidenceDialog proof={activeProof} onClose={() => setActiveProof(null)} />
     </section>
   );
 }
 
-function ValueSection() {
+function PainEvidenceDialog({ proof, onClose }) {
+  useEffect(() => {
+    if (!proof) {
+      return undefined;
+    }
+
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [proof, onClose]);
+
+  if (!proof) {
+    return null;
+  }
+
+  const linkName = proof.title.toLowerCase().replace(/\s+/g, "_");
+
   return (
-    <section className="value-section" id="plan" aria-labelledby="plan-title">
-      <div className="section-inner value-layout">
-        <div className="value-copy">
-          <p className="section-kicker">Product value</p>
-          <h2 id="plan-title">From shoreline scan to fishing plan.</h2>
-          <p>
-            Kastave is built for the moment before your first cast: read the water, identify the
-            structure, and turn unknown bank access into a practical plan.
-          </p>
+    <div className="dialog-backdrop pain-proof-dialog-backdrop" role="presentation" onMouseDown={onClose}>
+      <section
+        className="pain-proof-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="pain-proof-dialog-title"
+        onMouseDown={(event) => event.stopPropagation()}
+      >
+        <button className="icon-button" type="button" onClick={onClose} aria-label="Close Reddit proof detail">
+          x
+        </button>
+        <div className="pain-proof-dialog-copy">
+          <p className="section-kicker">Reddit proof</p>
+          <h3 id="pain-proof-dialog-title">{proof.painPoint}</h3>
+          <a
+            className="text-link"
+            href={proof.source}
+            target="_blank"
+            rel="noreferrer"
+            onClick={() =>
+              trackEvent("link_click", {
+                link: linkName,
+                source: "pain_reddit_detail",
+                href: proof.source,
+              })
+            }
+          >
+            Open original Reddit thread
+          </a>
         </div>
-        <div className="value-media">
-          <img src={processImage} alt="Kastave scan workflow showing underwater structure and fishing plan" />
-          <div className="value-media-label">Scan route + structure readout</div>
+        <div className="pain-proof-dialog-image">
+          <img src={proof.image} alt={proof.alt} />
         </div>
-      </div>
-      <div className="section-inner value-steps">
-        {VALUE_STEPS.map((step) => (
-          <article className="value-step" key={step.label}>
-            <span>{step.label}</span>
-            <h3>{step.title}</h3>
-            <p>{step.body}</p>
-          </article>
-        ))}
-      </div>
-    </section>
+      </section>
+    </div>
   );
 }
 
 function FeaturesSection() {
+  const [activeFeatureIndex, setActiveFeatureIndex] = useState(0);
+  const activeFeature = FEATURE_VISUALS[activeFeatureIndex];
+  const activeFeatureImage = featureImages[activeFeatureIndex];
+
+  const showPreviousFeature = () => {
+    setActiveFeatureIndex((index) => (index === 0 ? FEATURE_VISUALS.length - 1 : index - 1));
+  };
+
+  const showNextFeature = () => {
+    setActiveFeatureIndex((index) => (index + 1) % FEATURE_VISUALS.length);
+  };
+
   return (
     <section className="features-section" id="features" aria-labelledby="features-title">
       <div className="section-inner">
         <div className="section-heading compact-heading">
           <p className="section-kicker">Core capabilities</p>
-          <h2 id="features-title">Built to find structure, fish zones, and a first-cast plan.</h2>
+          <h2 id="features-title">Built to scan, model, and choose the first 3 casts.</h2>
         </div>
-        <div className="feature-grid">
+        <div className="feature-carousel" aria-label="Kastave core capability carousel">
+          <article className="feature-carousel-stage">
+            <div className="feature-carousel-media">
+              <img src={activeFeatureImage} alt={`${activeFeature.title} product feature visual`} />
+              <span>{activeFeature.title}</span>
+            </div>
+            <div className="feature-carousel-copy">
+              <p className="carousel-count">
+                {String(activeFeatureIndex + 1).padStart(2, "0")} / {String(FEATURE_VISUALS.length).padStart(2, "0")}
+              </p>
+              <h3>{activeFeature.title}</h3>
+              <p>{activeFeature.body}</p>
+              <div className="feature-carousel-controls" aria-label="Feature carousel controls">
+                <button type="button" onClick={showPreviousFeature} aria-label="Previous feature">
+                  Prev
+                </button>
+                <button type="button" onClick={showNextFeature} aria-label="Next feature">
+                  Next
+                </button>
+              </div>
+            </div>
+          </article>
+          <div className="feature-carousel-tabs" role="tablist" aria-label="Select capability">
+            {FEATURE_VISUALS.map((feature, index) => (
+              <button
+                aria-selected={activeFeatureIndex === index}
+                className={activeFeatureIndex === index ? "is-active" : ""}
+                key={feature.title}
+                role="tab"
+                type="button"
+                onClick={() => setActiveFeatureIndex(index)}
+              >
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                {feature.title}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="feature-detail-grid" aria-label="Additional capability details">
           {FEATURE_GROUPS.map((group) => (
             <article className="feature-group" key={group.title}>
               <h3>{group.title}</h3>
@@ -378,8 +552,8 @@ function PrivacySection() {
           <p className="section-kicker">Private maps</p>
           <h2 id="privacy-title">Your spots stay yours.</h2>
           <p>
-            Save private waypoints and build your own fishing log. Nothing is shared unless you
-            choose to share it.
+            Save private waypoints and build your own exploration log. Kastave is not a public spot
+            feed, and we do not sell your spots. Sharing is your choice.
           </p>
         </div>
         <div className="privacy-points">
@@ -392,7 +566,7 @@ function PrivacySection() {
   );
 }
 
-function ReservationSection({ onSubscribe, onWaitlist, onPaypal, message }) {
+function ReservationSection({ onSubscribe, onWaitlist, onPayment, message }) {
   return (
     <section className="reservation-section" id="special-offers" aria-labelledby="reservation-title">
       <div className="section-inner reservation-heading">
@@ -403,7 +577,7 @@ function ReservationSection({ onSubscribe, onWaitlist, onPaypal, message }) {
         <article className="reservation-card email-card">
           <span className="option-label">Option A</span>
           <h3>Email waitlist</h3>
-          <p>Join early access and get product updates, test invites, and launch pricing.</p>
+          <p>Join early access for field-test updates, co-creation polls, and launch pricing.</p>
           <EmailForm
             id="reservation-email"
             source="reservation"
@@ -414,19 +588,33 @@ function ReservationSection({ onSubscribe, onWaitlist, onPaypal, message }) {
         </article>
         <article className="reservation-card payment-card">
           <span className="option-label">Option B</span>
-          <div className="paypal-logo-row" aria-label="PayPal payment">
-            <span className="paypal-wordmark">PayPal</span>
+          <div className="payment-logo-row" aria-label="Stripe and PayPal payment options">
+            {PAYMENT_METHODS.map((method) => (
+              <span className={`payment-wordmark payment-provider-${method.key}`} key={method.key}>
+                {method.label}
+              </span>
+            ))}
           </div>
           <h3>Reserve early for $1</h3>
-          <p>Get first access updates plus early-bird pricing as the scout program opens.</p>
+          <p>Help shape the first run and unlock your $100 launch credit.</p>
           <ul>
             {OFFER_ITEMS.slice(0, 3).map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>
-          <button className="checkout-button" type="button" onClick={onPaypal}>
-            Reserve for $1
-          </button>
+          <div className="payment-choice-grid" aria-label="Choose payment method">
+            {PAYMENT_METHODS.map((method) => (
+              <button
+                className={`checkout-button payment-choice payment-choice-${method.key}`}
+                type="button"
+                onClick={() => onPayment(method.key)}
+                key={method.key}
+              >
+                Pay with {method.label}
+              </button>
+            ))}
+          </div>
+          <p className="payment-after-note">{PAYMENT_NOTE}</p>
         </article>
       </div>
       <div className="section-inner reservation-secondary">
@@ -520,7 +708,7 @@ function ScenarioSelector({ selected, onSelect }) {
       <div className="section-inner">
         <div className="scenario-heading">
           <p className="section-kicker">Scout program fit</p>
-          <h2 id="scenario-title">Where do you fish from the bank?</h2>
+          <h2 id="scenario-title">Real bank-fishing moments this is built for.</h2>
           <p>
             Pick the water you care about most. The program is built around real shoreline
             scouting problems, not generic boat electronics.
@@ -552,7 +740,7 @@ function ProductGrid({ onWaitlist }) {
     <section className="shop-section" id="products">
       <div className="section-heading">
         <p className="section-kicker">Flagship product</p>
-        <h2>Best AI fish finders for bank water.</h2>
+        <h2>The portable scout for unknown bank water.</h2>
       </div>
       <div className="product-card-grid">
         {PRODUCTS.map((product, index) => (
@@ -753,7 +941,7 @@ function ProductHighlights({ onReserve }) {
         </div>
         <div>
           <p className="section-kicker">Product highlights</p>
-          <h2>Portable scouting for bank anglers.</h2>
+          <h2>Auto-scan, 3D model, then choose your cast.</h2>
           <div className="capability-list">
             {PRODUCT_HIGHLIGHTS.map((capability) => (
               <button
@@ -795,22 +983,26 @@ function Accessories() {
   );
 }
 
-function Offer({ onPaypal, message }) {
+function Offer({ onPayment, message }) {
   return (
     <section className="offer" id="special-offers">
       <div className="offer-copy">
         <p className="section-kicker">Special offer</p>
-        <h2>Reserve your scout program spot for $1.</h2>
+        <h2>Back the co-creation program for $1.</h2>
         <p>
-          This is a real non-refundable early reservation deposit for bank anglers who want
-          Kastave to exist. It helps prioritize production decisions and includes a $100
-          launch credit when early units become available.
+          This is a real non-refundable founder reservation for bank anglers who want Kastave to
+          exist. It helps prioritize field tests, app decisions, accessories, and the first
+          production run, and includes a $100 launch credit when early units become available.
         </p>
       </div>
 
       <div className="checkout-panel" aria-live="polite">
-        <div className="paypal-logo-row" aria-label="PayPal payment">
-          <span className="paypal-wordmark">PayPal</span>
+        <div className="payment-logo-row" aria-label="Stripe and PayPal payment options">
+          {PAYMENT_METHODS.map((method) => (
+            <span className={`payment-wordmark payment-provider-${method.key}`} key={method.key}>
+              {method.label}
+            </span>
+          ))}
         </div>
         <div className="price-row">
           <span>$1</span>
@@ -821,9 +1013,18 @@ function Offer({ onPaypal, message }) {
             <li key={item}>{item}</li>
           ))}
         </ul>
-        <button className="checkout-button" type="button" onClick={onPaypal}>
-          Reserve with PayPal
-        </button>
+        <div className="payment-choice-grid" aria-label="Choose payment method">
+          {PAYMENT_METHODS.map((method) => (
+            <button
+              className={`checkout-button payment-choice payment-choice-${method.key}`}
+              type="button"
+              onClick={() => onPayment(method.key)}
+              key={method.key}
+            >
+              Pay with {method.label}
+            </button>
+          ))}
+        </div>
         <p className="form-message">{message}</p>
       </div>
     </section>
@@ -865,12 +1066,10 @@ function Footer() {
     <footer className="site-footer">
       <div>
         <a className="brand" href="/" onClick={() => trackFooterLink("brand", "/")}>
-          <span className="brand-mark">K</span>
-          <span>{SITE.name}</span>
+          <img className="brand-logo" src={logoImage} alt={SITE.name} />
         </a>
         <p>
-          {SITE.programName}: early access for serious bank anglers learning how to scan before
-          they cast.
+          {SITE.programName}: early access for bank anglers scouting unknown water before they cast.
         </p>
       </div>
       <div className="footer-links">
@@ -902,20 +1101,35 @@ function Footer() {
   );
 }
 
-function ThanksPage() {
+function ThanksPage({ onSubscribe, message }) {
+  const providerLabel = getPaymentMethodLabel(getThanksPaymentProvider());
+
   return (
     <main className="thanks-page">
       <section className="thanks-card">
         <a className="brand thanks-brand" href="/">
-          <span className="brand-mark">K</span>
-          <span>{SITE.name}</span>
+          <img className="brand-logo" src={logoImage} alt={SITE.name} />
         </a>
         <p className="section-kicker">Reservation received</p>
         <h1>You're in the Kastave Bank Angler Scout Program.</h1>
         <p>
-          Thanks for backing the production-in-progress launch. We will use the early signal to
-          prioritize field testing, launch timing, and reservation updates.
+          Your $1 reservation is received. Your $100 launch credit will be applied toward your
+          first Kastave when early units become available.
         </p>
+        <div className="thanks-next-steps">
+          <h2>What happens after payment?</h2>
+          <ol>
+            {PAYMENT_AFTER_STEPS.map((step) => (
+              <li key={step}>{step}</li>
+            ))}
+          </ol>
+        </div>
+        <div className="thanks-email-card">
+          <h2>Make sure we can contact you.</h2>
+          <p>{providerLabel} may not share the best product-update email with Kastave.</p>
+          <EmailForm id="thanks-email" source="thanks" onSubscribe={onSubscribe} buttonLabel="Join Early Access" />
+          <p className="form-message">{message}</p>
+        </div>
         <a className="text-link" href="/">
           Back to Kastave
         </a>
@@ -1009,7 +1223,7 @@ function CheckoutDialog({ open, onClose }) {
         <p className="section-kicker">Link needed</p>
         <h2 id="checkout-title">Add your live tools when accounts are ready.</h2>
         <p>
-          Set the Vite environment variables for PayPal, Beehiiv, and the survey URL. The
+          Set the Vite environment variables for Stripe, PayPal, Beehiiv, and the survey URL. The
           page already has the correct buttons and event tracking hooks.
         </p>
         <button className="primary-button dialog-action" type="button" onClick={onClose}>

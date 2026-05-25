@@ -14,6 +14,7 @@
 ## 核心目录
 
 - `src/`：React 页面、内容、样式、追踪与 Supabase 写入逻辑
+- `api/`：Vercel serverless webhook endpoints
 - `assets/`：落地页、产品图、社媒广告素材
 - `public/`：公开静态资源、域名和 favicon
 - `supabase/migrations/`：Supabase 数据库迁移 SQL
@@ -41,9 +42,17 @@ Vercel 输出目录：`dist`。
 复制 `.env.example` 为 `.env.local`，本地测试后再同步到 Vercel。
 
 ```bash
+VITE_STRIPE_PAYMENT_LINK=https://buy.stripe.com/9B69AVbpieTIcPx9rBd7q00
+STRIPE_WEBHOOK_SECRET=
 VITE_PAYPAL_PAYMENT_LINK=
+PAYPAL_CLIENT_ID=
+PAYPAL_CLIENT_SECRET=
+PAYPAL_WEBHOOK_ID=
+PAYPAL_ENV=live
 VITE_SUPABASE_URL=
 VITE_SUPABASE_ANON_KEY=
+SUPABASE_URL=
+SUPABASE_SERVICE_ROLE_KEY=
 VITE_BEEHIIV_FORM_URL=
 VITE_GA_MEASUREMENT_ID=
 VITE_META_PIXEL_ID=
@@ -52,17 +61,111 @@ VITE_PLAUSIBLE_DOMAIN=kastave.com
 VITE_SURVEY_URL=
 ```
 
-## 数据与转化
+Recommended first production links:
 
-Supabase 迁移会创建：
+- Stripe: `$1` payment link for `Kastave Bank Angler Scout Program`
+- PayPal: second `$1` payment channel for `Kastave Bank Angler Scout Program`
+- Supabase: project URL and anon key for landing-page metrics storage
+- Beehiiv: public subscribe form URL
+- Survey: Tally or Google Form URL
 
-- `landing_events`：页面访问、CTA、邮箱提交、PayPal 点击、弹窗事件
-- `waitlist_signups`：邮箱报名
-- `pain_point_answers`：岸钓痛点回答
-- `reservation_intents`：PayPal 预约按钮点击
-- `landing_metric_summary`：A/B 版本维度的数据汇总
+Payment copy should stay clear: the `$1` is a non-refundable early reservation deposit and unlocks a `$100` launch credit.
 
-PayPal 完成支付仍需要 PayPal 后台导出或 webhook 服务端确认。
+## Stripe Payment
+
+Production payment link:
+
+```txt
+https://buy.stripe.com/9B69AVbpieTIcPx9rBd7q00
+```
+
+Set this Vercel environment variable so every reservation CTA opens the live Stripe checkout:
+
+```txt
+VITE_STRIPE_PAYMENT_LINK=https://buy.stripe.com/9B69AVbpieTIcPx9rBd7q00
+```
+
+In Stripe Payment Links, set the post-payment redirect to:
+
+```txt
+https://kastave.com/thanks?provider=stripe
+```
+
+## Stripe Webhook
+
+Production webhook endpoint:
+
+```txt
+https://kastave.com/api/stripe-webhook
+```
+
+Configure this endpoint in the Stripe Dashboard and subscribe to:
+
+- `checkout.session.completed`
+- `checkout.session.async_payment_succeeded`
+- `checkout.session.async_payment_failed`
+
+Set these Vercel environment variables:
+
+```txt
+STRIPE_WEBHOOK_SECRET=whsec_your-live-webhook-secret
+SUPABASE_URL=your-supabase-url
+SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
+```
+
+Do not commit Stripe secrets to this repository. If a webhook secret is shared in chat or copied into a file by mistake, rotate it in the Stripe Dashboard before using it in production.
+
+## PayPal Webhook
+
+Production webhook endpoint:
+
+```txt
+https://kastave.com/api/paypal-webhook
+```
+
+Configure this endpoint in the PayPal Developer Dashboard for the Live app and subscribe to:
+
+- `PAYMENT.CAPTURE.COMPLETED`
+- `PAYMENT.CAPTURE.DENIED`
+- `PAYMENT.CAPTURE.REFUNDED`
+- `PAYMENT.CAPTURE.REVERSED`
+
+Set these Vercel environment variables:
+
+```txt
+PAYPAL_CLIENT_ID=your-live-client-id
+PAYPAL_CLIENT_SECRET=your-live-client-secret
+PAYPAL_WEBHOOK_ID=the-webhook-id-from-paypal
+PAYPAL_ENV=live
+SUPABASE_URL=your-supabase-url
+SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
+```
+
+Do not commit PayPal secrets to this repository. If a client secret is shared in chat or copied into a file by mistake, rotate it in PayPal Developer Dashboard before using it in production.
+
+## Supabase Backend
+
+Run the SQL files in `supabase/migrations/` in order in your Supabase project SQL editor.
+
+It creates:
+
+- `landing_events`: page views, CTA clicks, email submits, payment clicks, and popup events
+- `waitlist_signups`: normalized email signups
+- `pain_point_answers`: bank-fishing pain point responses
+- `reservation_intents`: Stripe or PayPal reservation button clicks, not completed payment confirmations
+- `purchase_events`: completed Stripe or PayPal `$1` reservation payments from the webhook
+- `landing_metric_summary`: authenticated-only summary view by A/B variant
+
+The frontend writes to Supabase only when `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are set. The Stripe and PayPal webhooks write completed payments from Vercel serverless endpoints when `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are set.
+
+`landing_metric_summary` includes:
+
+- Landing Page View / Link Click ratio
+- Average time on page from `page_engagement`
+- CTA click rate
+- Email Lead conversion rate
+- `$1` reservation click conversion rate
+- FAQ expand rate
 
 ## 中文命名
 
