@@ -11,6 +11,35 @@ test("landing page presents the $1 to $100 credit offer and $600-$1,000 product 
   assert.match(content, /creditAmount:\s*"\$100"/);
   assert.match(content, /depositAmount:\s*"\$1"/);
   assert.match(app, /hero-offer-card/);
+  assert.match(content, /not a finished-unit purchase/);
+  assert.match(app, /reservation-clarity/);
+});
+
+test("landing page supports the three paid-ad hook variants", () => {
+  assert.match(content, /HOOK_VARIANTS/);
+  assert.match(content, /The obvious cast is not always the right cast/);
+  assert.match(content, /Stop casting your fish finder/);
+  assert.match(content, /Safe Cast\. Structure Cast\. Risk \/ Reward Cast/);
+  assert.match(app, /getLandingHookVariant/);
+  assert.match(app, /landing_hook_variant_view/);
+  assert.match(styles, /hero-hook-card/);
+});
+
+test("landing page promotes the three branded cast choices", () => {
+  assert.match(content, /CAST_OPTIONS/);
+  assert.match(content, /Safe Cast/);
+  assert.match(content, /Structure Cast/);
+  assert.match(content, /Risk \/ Reward Cast/);
+  assert.match(app, /CastOptionsSection/);
+  assert.match(styles, /cast-options-section/);
+});
+
+test("landing page includes a castable sonar workflow comparison", () => {
+  assert.match(content, /CASTABLE_WORKFLOW/);
+  assert.match(content, /Castable sonar workflow/);
+  assert.match(content, /Kastave workflow/);
+  assert.match(app, /CastableComparisonSection/);
+  assert.match(styles, /workflow-grid/);
 });
 
 test("landing page defines one product feature image for each core capability", () => {

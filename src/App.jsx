@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import {
   ANNOUNCEMENT,
   BANK_PAIN_POINTS,
+  CAST_OPTIONS,
+  CASTABLE_WORKFLOW,
   DEFAULT_PAYMENT_METHOD,
   FAQS,
   FEATURE_VISUALS,
   FEATURE_GROUPS,
-  HERO,
+  HOOK_VARIANTS,
   HIGHLIGHT_CAROUSEL,
   LANDING_PAIN_POINTS,
   OFFER_ITEMS,
@@ -14,6 +16,7 @@ import {
   PAYMENT_METHODS,
   PAYMENT_NOTE,
   PRIVACY_POINTS,
+  PROCESS_STEPS,
   PRODUCT_HIGHLIGHTS,
   RESERVATION_OFFER,
   SITE,
@@ -75,6 +78,34 @@ const REDDIT_PAIN_PROOFS = [
   },
 ];
 
+function getLandingHookVariant() {
+  const params = new URLSearchParams(window.location.search);
+  const rawHook =
+    params.get("hook") || params.get("variant") || params.get("creative_hook") || params.get("utm_content") || "";
+  const normalizedHook = rawHook.toLowerCase().replaceAll("_", "-");
+
+  if (normalizedHook.includes("obvious") || normalizedHook.includes("wrong-cast")) {
+    return HOOK_VARIANTS["obvious-cast"];
+  }
+  if (
+    normalizedHook.includes("castable") ||
+    normalizedHook.includes("sonar") ||
+    normalizedHook.includes("fish-finder")
+  ) {
+    return HOOK_VARIANTS["castable-sonar"];
+  }
+  if (
+    normalizedHook.includes("three-cast") ||
+    normalizedHook.includes("3-cast") ||
+    normalizedHook.includes("safe-structure") ||
+    normalizedHook.includes("risk-reward")
+  ) {
+    return HOOK_VARIANTS["three-casts"];
+  }
+
+  return HOOK_VARIANTS.default;
+}
+
 function getThanksPaymentProvider() {
   const params = new URLSearchParams(window.location.search);
   return params.get("provider") || (params.has("session_id") ? "stripe" : DEFAULT_PAYMENT_METHOD.key);
@@ -84,11 +115,19 @@ function App() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [painCtaOpen, setPainCtaOpen] = useState(false);
   const [signupMessage, setSignupMessage] = useState("");
+  const hookVariant = getLandingHookVariant();
   const isThanksPage = window.location.pathname === "/thanks";
 
   useEffect(() => {
     initAnalytics();
   }, []);
+
+  useEffect(() => {
+    trackEvent("landing_hook_variant_view", {
+      hook_variant: hookVariant.key,
+      hook_title: hookVariant.title,
+    });
+  }, [hookVariant.key, hookVariant.title]);
 
   useEffect(() => {
     if (isThanksPage) {
@@ -202,7 +241,7 @@ function App() {
       localStorage.setItem("kastave_subscribers", JSON.stringify(subscribers));
     }
 
-    setSignupMessage("You're on the Kastave Bank Angler Scout Program list.");
+    setSignupMessage("You're on the Kastave Bank Fishing Scout Co-Creation list.");
   };
 
   const focusWaitlist = (source = "unknown") => {
@@ -243,12 +282,16 @@ function App() {
       <SiteNav onWaitlist={() => focusWaitlist("nav")} onReserve={() => showReservationOptions("nav")} />
       <main>
         <Hero
+          hookVariant={hookVariant}
           onSubscribe={(email) => subscribe(email, "hero")}
           onReserve={() => showReservationOptions("hero")}
           message={signupMessage}
         />
-        <PainSection />
+        <CastOptionsSection />
+        <HowItWorksSection />
+        <CastableComparisonSection />
         <FeaturesSection />
+        <PainSection />
         <PrivacySection />
         <ReservationSection
           onSubscribe={(email) => subscribe(email, "reservation")}
@@ -271,7 +314,7 @@ function AnnouncementBar() {
 
 function SiteNav({ onWaitlist, onReserve }) {
   const [open, setOpen] = useState(false);
-  const navItems = ["Pain", "Features", "Privacy", "FAQ"];
+  const navItems = ["Casts", "Compare", "Proof", "Privacy", "FAQ"];
 
   return (
     <header className="site-nav">
@@ -315,7 +358,9 @@ function SiteNav({ onWaitlist, onReserve }) {
 
 function navHref(item) {
   const hrefs = {
-    Pain: "#pain",
+    Casts: "#cast-options",
+    Compare: "#castable-comparison",
+    Proof: "#pain",
     Features: "#features",
     Privacy: "#privacy",
     FAQ: "#faq",
@@ -324,7 +369,7 @@ function navHref(item) {
   return hrefs[item] || `#${item.toLowerCase().replaceAll(" ", "-")}`;
 }
 
-function Hero({ onSubscribe, onReserve, message }) {
+function Hero({ hookVariant, onSubscribe, onReserve, message }) {
   return (
     <section className="hero commerce-hero" aria-labelledby="hero-title">
       <img className="hero-image" src={heroImage} alt="Kastave fish finder boat scanning a shoreline" />
@@ -336,9 +381,13 @@ function Hero({ onSubscribe, onReserve, message }) {
         <span className="scan-pin scan-pin-cover">weed edge</span>
       </div>
       <div className="hero-content hero-centered">
-        <p className="eyebrow">{HERO.eyebrow}</p>
-        <h1 id="hero-title">{HERO.title}</h1>
-        <p className="hero-copy">{HERO.body}</p>
+        <p className="eyebrow">{hookVariant.eyebrow}</p>
+        <h1 id="hero-title">{hookVariant.title}</h1>
+        <p className="hero-copy">{hookVariant.body}</p>
+        <div className={`hero-hook-card hero-hook-${hookVariant.key}`} aria-label="Ad hook continuity">
+          <span>{hookVariant.sceneLabel}</span>
+          <strong>{hookVariant.sceneCopy}</strong>
+        </div>
         <div className="hero-offer-card" aria-label={`${RESERVATION_OFFER.depositAmount} reservation credit offer`}>
           <div className="hero-offer-icon" aria-hidden="true">
             <span className="ticket-cut ticket-cut-left" />
@@ -362,6 +411,102 @@ function Hero({ onSubscribe, onReserve, message }) {
         <p className="microcopy">{HERO.note}</p>
       </div>
     </section>
+  );
+}
+
+function CastOptionsSection() {
+  return (
+    <section className="cast-options-section" id="cast-options" aria-labelledby="cast-options-title">
+      <div className="section-inner cast-options-layout">
+        <div className="cast-options-copy">
+          <p className="section-kicker">Three cast options</p>
+          <h2 id="cast-options-title">Three cast options. One decision.</h2>
+          <p>
+            Kastave does not just show data. It helps turn a shoreline scan into choices you can
+            act on before wasting the first 20 minutes of a short session.
+          </p>
+        </div>
+        <div className="cast-map-panel" aria-label="Safe, Structure, and Risk Reward cast map">
+          <div className="cast-map-grid" aria-hidden="true" />
+          <span className="bank-line">bank</span>
+          {CAST_OPTIONS.map((option, index) => (
+            <article className={`cast-option-card cast-option-${option.color}`} key={option.title}>
+              <span className="cast-option-dot" aria-hidden="true" />
+              <small>{option.label}</small>
+              <h3>{option.title}</h3>
+              <p>{option.body}</p>
+              <span
+                className="cast-option-marker"
+                style={{
+                  "--marker-x": `${28 + index * 24}%`,
+                  "--marker-y": `${30 + index * 14}%`,
+                }}
+                aria-hidden="true"
+              />
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HowItWorksSection() {
+  return (
+    <section className="how-section" id="how-it-works" aria-labelledby="how-title">
+      <div className="section-inner how-layout">
+        <div className="how-media">
+          <img src={processImage} alt="Kastave workflow from bank scan to cast choice" />
+          <div className="how-media-label">Deploy -> Scan -> 3D Read -> Choose Cast</div>
+        </div>
+        <div className="how-copy">
+          <p className="section-kicker">How it works</p>
+          <h2 id="how-title">From unknown bank water to a first-cast plan.</h2>
+          <div className="how-steps">
+            {PROCESS_STEPS.map((step) => (
+              <article className="how-step" key={step.label}>
+                <span>{step.label}</span>
+                <h3>{step.title}</h3>
+                <p>{step.body}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CastableComparisonSection() {
+  return (
+    <section
+      className="castable-comparison-section"
+      id="castable-comparison"
+      aria-labelledby="castable-comparison-title"
+    >
+      <div className="section-inner castable-heading">
+        <p className="section-kicker">Workflow comparison</p>
+        <h2 id="castable-comparison-title">{CASTABLE_WORKFLOW.title}</h2>
+        <p>{CASTABLE_WORKFLOW.body}</p>
+      </div>
+      <div className="section-inner workflow-grid">
+        <WorkflowCard tone="castable" workflow={CASTABLE_WORKFLOW.castable} />
+        <WorkflowCard tone="kastave" workflow={CASTABLE_WORKFLOW.kastave} />
+      </div>
+    </section>
+  );
+}
+
+function WorkflowCard({ tone, workflow }) {
+  return (
+    <article className={`workflow-card workflow-card-${tone}`}>
+      <h3>{workflow.title}</h3>
+      <ol>
+        {workflow.steps.map((step) => (
+          <li key={step}>{step}</li>
+        ))}
+      </ol>
+    </article>
   );
 }
 
@@ -597,6 +742,7 @@ function ReservationSection({ onSubscribe, onWaitlist, onPayment, message }) {
           </div>
           <h3>Reserve early for $1</h3>
           <p>Help shape the first run and unlock your $100 launch credit.</p>
+          <p className="reservation-clarity">{RESERVATION_OFFER.body}</p>
           <ul>
             {OFFER_ITEMS.slice(0, 3).map((item) => (
               <li key={item}>{item}</li>
@@ -621,7 +767,7 @@ function ReservationSection({ onSubscribe, onWaitlist, onPayment, message }) {
         <button className="text-link" type="button" onClick={onWaitlist}>
           Not ready to reserve? Join Early Access instead
         </button>
-        <small>Production-in-progress. No finished-unit shipping claim yet.</small>
+        <small>Production-in-progress. This is not a finished-unit purchase or shipping claim yet.</small>
       </div>
     </section>
   );
@@ -1073,8 +1219,14 @@ function Footer() {
         </p>
       </div>
       <div className="footer-links">
-        <a href="#pain" onClick={() => trackFooterLink("pain", "#pain")}>
-          Pain
+        <a href="#cast-options" onClick={() => trackFooterLink("cast_options", "#cast-options")}>
+          Casts
+        </a>
+        <a href="#castable-comparison" onClick={() => trackFooterLink("comparison", "#castable-comparison")}>
+          Compare
+        </a>
+        <a href="#pain" onClick={() => trackFooterLink("proof", "#pain")}>
+          Proof
         </a>
         <a href="#features" onClick={() => trackFooterLink("features", "#features")}>
           Features
@@ -1111,7 +1263,7 @@ function ThanksPage({ onSubscribe, message }) {
           <img className="brand-logo" src={logoImage} alt={SITE.name} />
         </a>
         <p className="section-kicker">Reservation received</p>
-        <h1>You're in the Kastave Bank Angler Scout Program.</h1>
+        <h1>You're in the Kastave Bank Fishing Scout Co-Creation Program.</h1>
         <p>
           Your $1 reservation is received. Your $100 launch credit will be applied toward your
           first Kastave when early units become available.

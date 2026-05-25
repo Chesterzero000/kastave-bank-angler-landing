@@ -57,9 +57,44 @@ export const ANNOUNCEMENT =
 
 export const HERO = {
   eyebrow: "Crowdfunding for exploratory bank anglers",
-  title: "Scout unknown water before you cast.",
-  body: "Kastave auto-scans reachable water from shore, builds a 3D underwater terrain view, reads water-condition clues, and turns the scan into 3 cast choices: safe, structure, and high-risk, high-reward.",
+  title: "Scan before you cast. Then choose your risk.",
+  body: "Kastave helps serious bank anglers auto-scan reachable water, build a 3D underwater read, and choose between Safe, Structure, and Risk / Reward cast options.",
   note: "Estimated product price: $600-$1,000. Founder reservations help decide field-test priorities, accessories, and the first production run.",
+};
+
+export const HOOK_VARIANTS = {
+  default: {
+    key: "default",
+    eyebrow: "Crowdfunding for exploratory bank anglers",
+    title: HERO.title,
+    body: HERO.body,
+    sceneLabel: "Default",
+    sceneCopy: "Scan reachable water, read the structure, then choose the cast that matches your risk.",
+  },
+  "obvious-cast": {
+    key: "obvious-cast",
+    eyebrow: "Wrong cast problem",
+    title: "The obvious cast is not always the right cast.",
+    body: "That grass line may look perfect from shore. The real drop-off could be 15 feet left. Kastave helps you scan before you commit the first cast.",
+    sceneLabel: "Ad hook 01",
+    sceneCopy: "Visible grass line: tempting. Real break: 15 feet left.",
+  },
+  "castable-sonar": {
+    key: "castable-sonar",
+    eyebrow: "Castable sonar workflow",
+    title: "Stop casting your fish finder.",
+    body: "Castable sonar can be useful, but from the bank it often means an extra rod, repeated casts, slow retrieves, and still having to turn data into a plan.",
+    sceneLabel: "Ad hook 02",
+    sceneCopy: "Less cast-retrieve-repeat. More scan, read, choose, cast.",
+  },
+  "three-casts": {
+    key: "three-casts",
+    eyebrow: "3 AI cast choices",
+    title: "Safe Cast. Structure Cast. Risk / Reward Cast.",
+    body: "Kastave is built to turn the scan into three practical options so you can decide whether to play safe, fish the structure, or take the high-risk shot.",
+    sceneLabel: "Ad hook 03",
+    sceneCopy: "Green, blue, or red: choose the cast before you waste the bank.",
+  },
 };
 
 export const RESERVATION_OFFER = {
@@ -67,7 +102,7 @@ export const RESERVATION_OFFER = {
   creditAmount: "$100",
   productPrice: "$600-$1,000",
   title: "Back the first run for $1.",
-  body: "Your non-refundable founder reservation is applied as a launch credit toward your first Kastave.",
+  body: "This is not a finished-unit purchase. It is a non-refundable founder reservation that unlocks a launch credit toward your first Kastave if you buy at launch.",
 };
 
 export const BANK_PAIN_POINTS = [
@@ -107,6 +142,52 @@ export const FEATURE_GROUPS = [
     items: ["auto spot log", "private waypoints", "trip notes", "no public spot feed"],
   },
 ];
+
+export const CAST_OPTIONS = [
+  {
+    color: "green",
+    label: "Green",
+    title: "Safe Cast",
+    body: "A lower-risk lane when you want a clean first cast, fewer snags, and a quick read on the spot.",
+  },
+  {
+    color: "blue",
+    label: "Blue",
+    title: "Structure Cast",
+    body: "The cast aimed at the strongest readable structure: drop-off, ledge, weed edge, rock, channel, or hard bottom.",
+  },
+  {
+    color: "red",
+    label: "Red",
+    title: "Risk / Reward Cast",
+    body: "A higher-upside target near cover, edges, or snag risk when the structure looks worth the gamble.",
+  },
+];
+
+export const CASTABLE_WORKFLOW = {
+  title: "Stop casting your fish finder.",
+  body: "Castable sonar can be useful. The problem is the bank workflow: you may spend the first part of the session casting the tool instead of fishing the water.",
+  castable: {
+    title: "Castable sonar workflow",
+    steps: [
+      "Bring an extra rod or swap rigs",
+      "Cast the sonar ball",
+      "Retrieve slowly while watching the phone",
+      "Repeat from another angle",
+      "Still decide where to actually fish",
+    ],
+  },
+  kastave: {
+    title: "Kastave workflow",
+    steps: [
+      "Deploy from shore",
+      "Auto-scan reachable water",
+      "Build a 3D terrain read",
+      "Compare Safe / Structure / Risk-Reward",
+      "Then make the cast",
+    ],
+  },
+};
 
 export const PRIVACY_POINTS = [
   "Private by default",
