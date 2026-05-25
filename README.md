@@ -66,6 +66,6 @@ PayPal 完成支付仍需要 PayPal 后台导出或 webhook 服务端确认。
 
 ## 中文命名
 
-当前 GitHub 仓库名：`ai-`  
-建议仓库 slug：`kastave-bank-angler-landing`  
+当前 GitHub 仓库名：`kastave-bank-angler-landing`  
+原仓库名：`ai-`  
 中文项目名：`Kastave 岸钓侦察员落地页`
