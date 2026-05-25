@@ -1,25 +1,42 @@
-# Kastave Bank Angler Scout Program Landing Page
+# Kastave 岸钓侦察员落地页
 
-React/Vite landing page for validating the Kastave Bank Angler Scout Program with US bass bank anglers.
+这是用于验证 **Kastave Bank Angler Scout Program** 的 React/Vite 落地页项目，目标用户是美国 bass bank anglers / bank fishing / shore fishing 人群。
 
-## Local
+项目重点验证：用户是否愿意为“岸钓找鱼效率提升、陌生水域结构判断、便携式 fish finder / castable sonar 替代方案”留下邮箱、填写痛点、点击预约或支付 `$1` 早鸟订金。
+
+## 文档目录
+
+- [项目结构](docs/项目结构.md)
+- [运行与部署](docs/运行与部署.md)
+
+## 核心目录
+
+- `src/`：React 页面、内容、样式、追踪与 Supabase 写入逻辑
+- `assets/`：落地页、产品图、社媒广告素材
+- `public/`：公开静态资源、域名和 favicon
+- `supabase/migrations/`：Supabase 数据库迁移 SQL
+- `skills/american-bass-angler-copy/`：美国岸钓用户文案 skill 和语言参考
+- `.github/workflows/`：GitHub Pages 自动部署配置
+- `scripts/`：构建后处理脚本
+
+## 本地运行
 
 ```bash
 npm install
 npm run dev
 ```
 
-## Build
+## 构建
 
 ```bash
 npm run build
 ```
 
-Vercel output directory: `dist`.
+Vercel 输出目录：`dist`。
 
-## Environment Variables
+## 环境变量
 
-Copy `.env.example` to `.env.local` for local testing, then add the same keys in Vercel.
+复制 `.env.example` 为 `.env.local`，本地测试后再同步到 Vercel。
 
 ```bash
 VITE_PAYPAL_PAYMENT_LINK=
@@ -33,34 +50,20 @@ VITE_PLAUSIBLE_DOMAIN=kastave.com
 VITE_SURVEY_URL=
 ```
 
-Recommended first production links:
+## 数据与转化
 
-- PayPal: `$1` business payment link for `Kastave Bank Angler Scout Program`
-- Supabase: project URL and anon key for landing-page metrics storage
-- Beehiiv: public subscribe form URL
-- Survey: Tally or Google Form URL
+Supabase 迁移会创建：
 
-Payment copy should stay clear: the `$1` is a non-refundable early reservation deposit and unlocks a `$100` launch credit.
+- `landing_events`：页面访问、CTA、邮箱提交、PayPal 点击、弹窗事件
+- `waitlist_signups`：邮箱报名
+- `pain_point_answers`：岸钓痛点回答
+- `reservation_intents`：PayPal 预约按钮点击
+- `landing_metric_summary`：A/B 版本维度的数据汇总
 
-## Supabase Backend
+PayPal 完成支付仍需要 PayPal 后台导出或 webhook 服务端确认。
 
-Run the SQL files in `supabase/migrations/` in order in your Supabase project SQL editor.
+## 中文命名
 
-It creates:
-
-- `landing_events`: page views, CTA clicks, email submits, PayPal clicks, and popup events
-- `waitlist_signups`: normalized email signups
-- `pain_point_answers`: bank-fishing pain point responses
-- `reservation_intents`: PayPal reservation button clicks, not completed payment confirmations
-- `landing_metric_summary`: authenticated-only summary view by A/B variant
-
-The frontend writes to Supabase only when `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are set. PayPal completed payments still need PayPal dashboard export or a webhook-backed server endpoint.
-
-`landing_metric_summary` includes:
-
-- Landing Page View / Link Click ratio
-- Average time on page from `page_engagement`
-- CTA click rate
-- Email Lead conversion rate
-- `$1` reservation click conversion rate
-- FAQ expand rate
+当前 GitHub 仓库名：`ai-`  
+建议仓库 slug：`kastave-bank-angler-landing`  
+中文项目名：`Kastave 岸钓侦察员落地页`
