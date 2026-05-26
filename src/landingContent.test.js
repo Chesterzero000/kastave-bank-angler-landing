@@ -82,6 +82,15 @@ test("landing page exposes Stripe and PayPal checkout options", () => {
   assert.match(app, /window\.location\.href = withUtm\(paymentLink\)/);
 });
 
+test("top reservation CTA opens a payment choice dialog", () => {
+  assert.match(app, /openPaymentDialog/);
+  assert.match(app, /setPaymentDialogOpen\(true\)/);
+  assert.match(app, /Reserve your spot for \$1/);
+  assert.match(app, /Credit card/);
+  assert.match(app, /onPayment\(method\.key\)/);
+  assert.match(styles, /dialog-payment-methods/);
+});
+
 test("landing page explains the dual payment provider path", () => {
   assert.match(content, /PAYMENT_NOTE/);
   assert.match(content, /Choose Stripe or PayPal/);

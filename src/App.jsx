@@ -112,7 +112,9 @@ function getThanksPaymentProvider() {
 }
 
 function App() {
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
+  const [paymentDialogSource, setPaymentDialogSource] = useState("unknown");
+  const [setupDialogOpen, setSetupDialogOpen] = useState(false);
   const [painCtaOpen, setPainCtaOpen] = useState(false);
   const [signupMessage, setSignupMessage] = useState("");
   const hookVariant = getLandingHookVariant();
@@ -171,12 +173,10 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  const showReservationOptions = (source = "unknown") => {
+  const openPaymentDialog = (source = "unknown") => {
     trackLeadIntent({ cta: "reserve_options", cta_location: source, source });
-    const reservationSection = document.getElementById("special-offers");
-    if (reservationSection) {
-      reservationSection.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    setPaymentDialogSource(source);
+    setPaymentDialogOpen(true);
   };
 
   const reserveWithPayment = (providerKey = DEFAULT_PAYMENT_METHOD.key, source = "unknown") => {
@@ -216,7 +216,7 @@ function App() {
       value: 1,
       currency: "USD",
     });
-    setDialogOpen(true);
+    setSetupDialogOpen(true);
   };
 
   const subscribe = (email, source = "inline_form") => {
@@ -279,12 +279,12 @@ function App() {
   return (
     <>
       <AnnouncementBar />
-      <SiteNav onWaitlist={() => focusWaitlist("nav")} onReserve={() => showReservationOptions("nav")} />
+      <SiteNav onWaitlist={() => focusWaitlist("nav")} onReserve={() => openPaymentDialog("nav")} />
       <main>
         <Hero
           hookVariant={hookVariant}
           onSubscribe={(email) => subscribe(email, "hero")}
-          onReserve={() => showReservationOptions("hero")}
+          onReserve={() => openPaymentDialog("hero")}
           message={signupMessage}
         />
         <CastOptionsSection />
@@ -302,7 +302,15 @@ function App() {
         <FAQ />
       </main>
       <Footer />
-      <CheckoutDialog open={dialogOpen} onClose={() => setDialogOpen(false)} />
+      <CheckoutDialog
+        open={paymentDialogOpen}
+        onClose={() => setPaymentDialogOpen(false)}
+        onPayment={(providerKey) => {
+          setPaymentDialogOpen(false);
+          reserveWithPayment(providerKey, paymentDialogSource);
+        }}
+      />
+      <SetupDialog open={setupDialogOpen} onClose={() => setSetupDialogOpen(false)} />
       <PainPointCta open={painCtaOpen} onClose={closePainCta} onSubmit={submitPainPoint} />
     </>
   );
@@ -1355,7 +1363,7 @@ function PainPointCta({ open, onClose, onSubmit }) {
   );
 }
 
-function CheckoutDialog({ open, onClose }) {
+function CheckoutDialog({ open, onClose, onPayment }) {
   if (!open) {
     return null;
   }
@@ -1372,11 +1380,59 @@ function CheckoutDialog({ open, onClose }) {
         <button className="icon-button" type="button" onClick={onClose} aria-label="Close dialog">
           x
         </button>
+        <p className="section-kicker">Founder reservation</p>
+        <h2 id="checkout-title">Reserve your spot for $1.</h2>
+        <div className="dialog-reservation-summary">
+          <span>{RESERVATION_OFFER.depositAmount}</span>
+          <div>
+            <strong>{RESERVATION_OFFER.title}</strong>
+            <p>
+              {RESERVATION_OFFER.creditAmount} launch credit toward the {RESERVATION_OFFER.productPrice} Kastave
+              Scout.
+            </p>
+          </div>
+        </div>
+        <div className="dialog-payment-methods" aria-label="Choose payment method">
+          {PAYMENT_METHODS.map((method) => (
+            <button
+              className={`dialog-payment-button payment-choice-${method.key}`}
+              type="button"
+              onClick={() => onPayment(method.key)}
+              key={method.key}
+            >
+              <span>{method.key === "stripe" ? "Credit card" : method.label}</span>
+              <small>{method.key === "stripe" ? "Secure checkout by Stripe" : "Pay with PayPal"}</small>
+            </button>
+          ))}
+        </div>
+        <p className="payment-after-note dialog-payment-note">{PAYMENT_NOTE}</p>
+      </section>
+    </div>
+  );
+}
+
+function SetupDialog({ open, onClose }) {
+  if (!open) {
+    return null;
+  }
+
+  return (
+    <div className="dialog-backdrop" role="presentation" onMouseDown={onClose}>
+      <section
+        className="dialog-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="setup-title"
+        onMouseDown={(event) => event.stopPropagation()}
+      >
+        <button className="icon-button" type="button" onClick={onClose} aria-label="Close dialog">
+          x
+        </button>
         <p className="section-kicker">Link needed</p>
-        <h2 id="checkout-title">Add your live tools when accounts are ready.</h2>
+        <h2 id="setup-title">Add your live tools when accounts are ready.</h2>
         <p>
-          Set the Vite environment variables for Stripe, PayPal, Beehiiv, and the survey URL. The
-          page already has the correct buttons and event tracking hooks.
+          Set the Vite environment variables for Stripe, PayPal, Beehiiv, and the survey URL. The page already has the
+          correct buttons and event tracking hooks.
         </p>
         <button className="primary-button dialog-action" type="button" onClick={onClose}>
           Got it
