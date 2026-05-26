@@ -82,13 +82,12 @@ test("landing page exposes Stripe and PayPal checkout options", () => {
   assert.match(app, /window\.location\.href = withUtm\(paymentLink\)/);
 });
 
-test("top reservation CTA opens a payment choice dialog", () => {
-  assert.match(app, /openPaymentDialog/);
-  assert.match(app, /setPaymentDialogOpen\(true\)/);
-  assert.match(app, /Reserve your spot for \$1/);
-  assert.match(app, /Credit card/);
-  assert.match(app, /onPayment\(method\.key\)/);
-  assert.match(styles, /dialog-payment-methods/);
+test("top reservation CTA goes straight to PayPal checkout", () => {
+  assert.match(app, /const reserveWithPayPal = \(source = "unknown"\) => \{/);
+  assert.match(app, /reserveWithPayment\("paypal", source\)/);
+  assert.match(app, /<SiteNav onWaitlist=\{\(\) => focusWaitlist\("nav"\)\} onReserve=\{\(\) => reserveWithPayPal\("nav"\)\}/);
+  assert.match(app, /onReserve=\{\(\) => reserveWithPayPal\("hero"\)\}/);
+  assert.match(app, /window\.location\.href = withUtm\(paymentLink\)/);
 });
 
 test("landing page explains the dual payment provider path", () => {

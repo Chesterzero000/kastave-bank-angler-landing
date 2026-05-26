@@ -179,6 +179,10 @@ function App() {
     setPaymentDialogOpen(true);
   };
 
+  const reserveWithPayPal = (source = "unknown") => {
+    reserveWithPayment("paypal", source);
+  };
+
   const reserveWithPayment = (providerKey = DEFAULT_PAYMENT_METHOD.key, source = "unknown") => {
     const paymentMethod = PAYMENT_METHODS.find((method) => method.key === providerKey) || DEFAULT_PAYMENT_METHOD;
     const provider = paymentMethod.key;
@@ -279,12 +283,12 @@ function App() {
   return (
     <>
       <AnnouncementBar />
-      <SiteNav onWaitlist={() => focusWaitlist("nav")} onReserve={() => openPaymentDialog("nav")} />
+      <SiteNav onWaitlist={() => focusWaitlist("nav")} onReserve={() => reserveWithPayPal("nav")} />
       <main>
         <Hero
           hookVariant={hookVariant}
           onSubscribe={(email) => subscribe(email, "hero")}
-          onReserve={() => openPaymentDialog("hero")}
+          onReserve={() => reserveWithPayPal("hero")}
           message={signupMessage}
         />
         <CastOptionsSection />
