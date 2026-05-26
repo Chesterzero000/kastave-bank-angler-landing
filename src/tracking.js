@@ -13,6 +13,8 @@ let engagementSent = false;
 let observedSectionIds = new Set();
 let analyticsInitialized = false;
 
+const DEFAULT_META_PIXEL_ID = "1542765323857764";
+
 export function captureUtmParams() {
   const captured = parseAttribution(window.location.search, getStoredUtm());
 
@@ -57,7 +59,7 @@ export function initAnalytics() {
   captureUtmParams();
 
   const gaId = import.meta.env.VITE_GA_MEASUREMENT_ID;
-  const metaPixelId = import.meta.env.VITE_META_PIXEL_ID;
+  const metaPixelId = String(import.meta.env.VITE_META_PIXEL_ID || DEFAULT_META_PIXEL_ID).trim();
   const tiktokPixelId = import.meta.env.VITE_TIKTOK_PIXEL_ID;
   const plausibleDomain = import.meta.env.VITE_PLAUSIBLE_DOMAIN;
 
