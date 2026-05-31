@@ -109,7 +109,7 @@ The V2 site should make a first-time visitor understand Kastave quickly, leave a
 - Product specs: product-image hero plus battery, weight, sonar range, speed, wind/chop, and connectivity details.
 - Media direction: scripts for the next proof assets.
 - Privacy: simple icon-led private maps and spot ownership.
-- Reservation: email plus a single `Reserve for $1` path into `/deposit`.
+- Reservation: product-image offer with email signup, `Reserve for $1`, and package contents.
 - FAQ and footer.
 
 ## Verification Commands

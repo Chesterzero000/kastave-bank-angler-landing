@@ -2752,48 +2752,6 @@ h3 {
   line-height: 1.6;
 }
 
-.reservation-card p,
-.reservation-secondary small {
-  color: var(--muted);
-  line-height: 1.65;
-}
-
-.payment-after-note {
-  margin-top: 14px;
-  border-top: 1px solid var(--line);
-  padding-top: 14px;
-  color: var(--muted);
-  font-size: 0.92rem;
-  line-height: 1.55;
-}
-
-.reservation-clarity {
-  border-left: 3px solid var(--orange);
-  padding-left: 12px;
-}
-
-.reservation-card {
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: white;
-}
-
-.option-label {
-  display: inline-flex;
-  margin-bottom: 18px;
-  color: var(--orange-dark);
-  font-weight: 900;
-}
-
-.reservation-card ul {
-  display: grid;
-  gap: 9px;
-  margin: 0;
-  padding-left: 18px;
-  color: var(--muted);
-  line-height: 1.45;
-}
-
 .privacy-section {
   color: var(--ink);
   background: white;
@@ -2846,83 +2804,161 @@ h3 {
   line-height: 1.34;
 }
 
-.reservation-heading {
-  max-width: 860px;
-  text-align: center;
-}
-
-.reservation-options {
+.package-offer-layout {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: 28px;
-  border: 1px solid rgba(16, 19, 18, 0.1);
-  border-radius: 36px;
-  padding: 10px;
-  background: white;
-  box-shadow: 0 24px 64px rgba(16, 19, 18, 0.08);
+  grid-template-columns: minmax(0, 1.08fr) minmax(420px, 0.92fr);
+  gap: clamp(18px, 3vw, 32px);
+  align-items: stretch;
 }
 
-.reservation-card {
-  border: 0;
-  border-radius: 28px;
-  padding: clamp(22px, 3.5vw, 32px);
+.package-product-media {
+  min-height: clamp(560px, 64vw, 760px);
+  margin: 0;
+  overflow: hidden;
+  border-radius: 42px;
+  background: #d9e4df;
+  box-shadow: 0 24px 64px rgba(16, 19, 18, 0.12);
 }
 
-.reservation-card h3 {
-  margin: 0 0 10px;
-  font-size: clamp(1.45rem, 2.1vw, 2.25rem);
-  line-height: 1;
+.package-product-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 58% center;
 }
 
-.email-card .email-form {
+.package-offer-card {
+  display: grid;
+  align-content: center;
+  gap: 14px;
+  border-radius: 42px;
+  padding: clamp(26px, 4vw, 46px);
+  background: #f0ebe7;
+}
+
+.package-offer-card h2 {
+  margin: 0;
+  color: var(--orange-dark);
+  font-size: clamp(3.4rem, 8vw, 8.4rem);
+  font-weight: 700;
+  line-height: 0.88;
+}
+
+.package-tagline {
+  margin: 0;
+  color: var(--orange-dark);
+  font-size: clamp(1.35rem, 2.6vw, 2.6rem);
+  font-weight: 500;
+  line-height: 1.08;
+}
+
+.package-offer-copy {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(1.02rem, 1.5vw, 1.18rem);
+  font-weight: 650;
+  line-height: 1.45;
+}
+
+.package-offer-card .email-form {
   min-height: 58px;
-  margin-top: 22px;
   border: 2px solid rgba(16, 19, 18, 0.1);
   border-radius: 999px;
   background: white;
 }
 
-.email-card .email-form input {
+.package-offer-card .email-form input {
   color: var(--ink);
   background: white;
 }
 
-.email-card .email-form input::placeholder {
+.package-offer-card .email-form input::placeholder {
   color: #87908d;
 }
 
-.email-card .email-form button {
+.package-offer-card .email-form button {
   margin: 4px;
   border-radius: 999px;
   background: var(--orange-dark);
 }
 
-.payment-card {
-  color: white;
-  background:
-    radial-gradient(circle at 84% 16%, rgba(255, 122, 26, 0.18), transparent 28%),
-    var(--charcoal);
-}
-
-.payment-card p,
-.payment-card li {
-  color: rgba(255, 255, 255, 0.72);
-}
-
-.payment-card .checkout-button {
+.package-reserve-button {
+  display: inline-flex;
+  width: max-content;
+  min-width: 220px;
   min-height: 54px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   border-radius: 999px;
-  color: var(--charcoal);
-  background: white;
+  padding: 0 24px;
+  color: white;
+  background: var(--orange-dark);
+  font-weight: 950;
+  box-shadow: 0 16px 34px rgba(196, 54, 34, 0.2);
 }
 
-.reservation-secondary {
+.package-includes {
+  margin-top: 8px;
+  border-radius: 24px;
+  padding: 16px 22px;
+  background: rgba(255, 255, 255, 0.62);
+}
+
+.package-includes h3 {
+  margin: 0 0 12px;
+  color: var(--orange-dark);
+  font-size: 0.98rem;
+}
+
+.package-includes ul {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.package-includes li {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 18px;
-  margin-top: 18px;
+  border-top: 1px solid rgba(16, 19, 18, 0.12);
+  padding: 9px 0;
+  color: rgba(16, 19, 18, 0.72);
+  font-weight: 700;
+}
+
+.package-includes li:first-child {
+  border-top: 0;
+}
+
+.package-includes strong {
+  color: var(--ink);
+  font-size: 1.05rem;
+}
+
+.package-reservation-note {
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 650;
+  line-height: 1.5;
+}
+
+.package-reservation-note p {
+  margin: 0;
+}
+
+.package-reservation-note small {
+  color: rgba(16, 19, 18, 0.62);
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.package-waitlist-button {
+  width: max-content;
 }
 
 .nav-waitlist-button,
@@ -2988,32 +3024,6 @@ h3 {
   background: var(--orange);
   padding: 0 18px;
   white-space: nowrap;
-}
-
-.payment-logo-row {
-  display: flex;
-  gap: 14px;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  margin-bottom: 14px;
-}
-
-.payment-wordmark {
-  font-size: 1.35rem;
-  font-weight: 900;
-  letter-spacing: 0;
-}
-
-.payment-provider-stripe {
-  color: #635bff;
-}
-
-.payment-provider-paypal {
-  color: #003087;
-}
-
-.payment-provider-paypal::first-letter {
-  color: #009cde;
 }
 
 .checkout-button {
@@ -3339,9 +3349,13 @@ details p {
   }
 
   .app-ui-layout,
-  .reservation-options,
+  .package-offer-layout,
   .site-footer {
     grid-template-columns: 1fr;
+  }
+
+  .package-product-media {
+    min-height: 440px;
   }
 
   .app-mode-text-grid {
@@ -3542,9 +3556,8 @@ details p {
     justify-content: flex-start;
   }
 
-  .reservation-secondary {
-    align-items: flex-start;
-    flex-direction: column;
+  .package-offer-card {
+    border-radius: 34px;
   }
 
 }
@@ -3688,8 +3701,23 @@ details p {
     margin: 0;
   }
 
-  .reservation-card {
-    padding: 18px;
+  .package-product-media {
+    min-height: 360px;
+    border-radius: 28px;
+  }
+
+  .package-offer-card {
+    border-radius: 28px;
+    padding: 22px;
+  }
+
+  .package-reserve-button,
+  .package-waitlist-button {
+    width: 100%;
+  }
+
+  .package-includes {
+    padding: 16px;
   }
 }
 

@@ -20,7 +20,7 @@ test("landing page presents the $1 to $100 credit offer and $600-$1,000 product 
   assert.match(content, /depositAmount:\s*"\$1"/);
   assert.match(app, /hero-offer-card/);
   assert.match(content, /not a finished-unit purchase/);
-  assert.match(app, /reservation-clarity/);
+  assert.match(app, /package-reservation-note/);
 });
 
 test("landing page supports the three paid-ad hook variants", () => {
@@ -289,7 +289,7 @@ test("landing page exposes Stripe and PayPal checkout options", () => {
   assert.match(content, /paypalPaymentLink:\s*PAYPAL_PAYMENT_LINK/);
   assert.match(content, /reservationPaymentLink:\s*DEFAULT_PAYMENT_METHOD\.paymentLink/);
   assert.match(app, /PAYMENT_METHODS\.map/);
-  assert.match(app, /reservation-deposit-button/);
+  assert.match(app, /package-reserve-button/);
   assert.match(app, /Choose Stripe or PayPal on the deposit page/);
   assert.doesNotMatch(app, /Pay with \{method\.label\}/);
   assert.match(app, /window\.location\.href = withUtm\(paymentLink\)/);
@@ -432,10 +432,29 @@ test("landing page explains the dual payment provider path", () => {
   assert.match(content, /PAYMENT_NOTE/);
   assert.match(content, /Choose Stripe or PayPal/);
   assert.match(content, /What if Stripe or PayPal does not redirect after payment\?/);
-  assert.match(app, /payment-after-note/);
+  assert.match(app, /package-reservation-note/);
   assert.match(app, /What happens after payment\?/);
   assert.match(app, /thanks-next-steps/);
   assert.match(app, /source="thanks"/);
+});
+
+test("reservation section presents product image and package contents", () => {
+  assert.match(app, /const PACKAGE_INCLUDES/);
+  assert.match(app, /Kastave Scout boat/);
+  assert.match(app, /Removable battery pack/);
+  assert.match(app, /Kastave app \+ founder software membership/);
+  assert.match(app, /USB-C charging cable/);
+  assert.match(app, /Quick-start guide/);
+  assert.match(app, /className="section-inner package-offer-layout"/);
+  assert.match(app, /className="package-product-media"/);
+  assert.match(app, /depositHeroImage/);
+  assert.match(app, /Package includes/);
+  assert.match(styles, /\.package-offer-layout\s*\{/);
+  assert.match(styles, /\.package-product-media\s*\{/);
+  assert.match(styles, /\.package-offer-card\s*\{/);
+  assert.match(styles, /\.package-includes\s*\{/);
+  assert.doesNotMatch(styles, /\.reservation-options/);
+  assert.doesNotMatch(styles, /\.payment-card/);
 });
 
 test("verified purchase records are webhook-only", () => {

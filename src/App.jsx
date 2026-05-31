@@ -173,6 +173,14 @@ const DEPOSIT_STEPS = [
   "Apply $100 credit",
 ];
 
+const PACKAGE_INCLUDES = [
+  "Kastave Scout boat",
+  "Removable battery pack",
+  "Kastave app + founder software membership",
+  "USB-C charging cable",
+  "Quick-start guide",
+];
+
 const DEPOSIT_FAQS = [
   {
     question: "Is this the full Kastave price?",
@@ -1279,46 +1287,48 @@ function PrivacySection() {
 function ReservationSection({ depositHref, onSubscribe, onWaitlist, onReserve, message }) {
   return (
     <section className="reservation-section" id="special-offers" aria-labelledby="reservation-title">
-      <div className="section-inner reservation-heading">
-        <p className="section-kicker">Founder access</p>
-        <h2 id="reservation-title">Join the list. Reserve the credit when you are ready.</h2>
-      </div>
-      <div className="section-inner reservation-options">
-        <article className="reservation-card email-card">
-          <span className="option-label">Email</span>
-          <h3>Get launch updates</h3>
-          <p>Field tests, app progress, and Kickstarter timing.</p>
+      <div className="section-inner package-offer-layout">
+        <figure className="package-product-media">
+          <img src={depositHeroImage} alt="Kastave scout boat being carried at a lakeshore" loading="lazy" decoding="async" />
+        </figure>
+        <article className="package-offer-card">
+          <p className="section-kicker">Launching soon on Kickstarter</p>
+          <h2 id="reservation-title">Kastave</h2>
+          <p className="package-tagline">Your shoreline fishing scout.</p>
+          <p className="package-offer-copy">
+            Sign up and reserve to get {RESERVATION_OFFER.creditAmount} launch credit toward your first Kastave.
+          </p>
           <EmailForm
             id="reservation-email"
             source="reservation"
             onSubscribe={onSubscribe}
             buttonLabel="Sign up"
           />
-          <p className="form-message">{message}</p>
-        </article>
-        <article className="reservation-card payment-card">
-          <span className="option-label">Deposit</span>
-          <div className="payment-logo-row" aria-label="Stripe and PayPal payment options">
-            {PAYMENT_METHODS.map((method) => (
-              <span className={`payment-wordmark payment-provider-${method.key}`} key={method.key}>
-                {method.label}
-              </span>
-            ))}
-          </div>
-          <h3>$1 today. $100 credit later.</h3>
-          <p>Secure your founder record through Stripe or PayPal.</p>
-          <p className="reservation-clarity">{RESERVATION_OFFER.body}</p>
-          <a className="checkout-button payment-choice reservation-deposit-button" href={depositHref} onClick={onReserve}>
+          {message && <p className="form-message">{message}</p>}
+          <a className="package-reserve-button" href={depositHref} onClick={onReserve}>
             Reserve for $1 <span aria-hidden="true">-&gt;</span>
           </a>
-          <p className="payment-after-note">Choose Stripe or PayPal on the deposit page. No long checkout form here.</p>
+          <div className="package-includes" aria-label="Package includes">
+            <h3>Package includes</h3>
+            <ul>
+              {PACKAGE_INCLUDES.map((item) => (
+                <li key={item}>
+                  <span>{item}</span>
+                  <strong aria-hidden="true">✓</strong>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="package-reservation-note">
+            <p>
+              This is a {RESERVATION_OFFER.depositAmount} founder reservation, not a finished-unit purchase.
+            </p>
+            <small>Choose Stripe or PayPal on the deposit page. No long checkout form here.</small>
+          </div>
+          <button className="text-link package-waitlist-button" type="button" onClick={onWaitlist}>
+            Not ready to reserve? Join Early Access instead
+          </button>
         </article>
-      </div>
-      <div className="section-inner reservation-secondary">
-        <button className="text-link" type="button" onClick={onWaitlist}>
-          Not ready to reserve? Join Early Access instead
-        </button>
-        <small>Production-in-progress. This is not a finished-unit purchase or shipping claim yet.</small>
       </div>
     </section>
   );

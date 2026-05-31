@@ -39,6 +39,9 @@ const pageChecks = [
       "Wi-Fi 6",
       "Bluetooth 5.4",
       "Reserve for $1",
+      "Package includes",
+      "Kastave Scout boat",
+      "Kastave app + founder software membership",
       "Sign up",
     ],
     mustExclude: [
