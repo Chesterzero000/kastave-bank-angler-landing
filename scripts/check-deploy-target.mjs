@@ -156,7 +156,7 @@ async function verifyEnvExample() {
 
   const expectedLines = [
     "VITE_STRIPE_PAYMENT_LINK=https://buy.stripe.com/9B69AVbpieTIcPx9rBd7q00",
-    "VITE_PAYPAL_PAYMENT_LINK=https://www.paypal.com/ncp/payment/6W9PTBNB267ZW",
+    "VITE_PAYPAL_PAYMENT_LINK=",
     "PAYPAL_ENV=live",
     "VITE_META_PIXEL_ID=1542765323857764",
     "VITE_PLAUSIBLE_DOMAIN=kastave.com",

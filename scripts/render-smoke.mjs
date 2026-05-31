@@ -155,11 +155,20 @@ function verifyPaymentMethods(paymentMethods) {
     throw new Error(`Expected Stripe and PayPal payment methods, got: ${providerKeys.join(",") || "none"}`);
   }
 
-  paymentMethods.forEach((method) => {
-    if (!method.paymentLink || !isPaymentUrl(method.paymentLink)) {
-      throw new Error(`Payment method ${method.key} is missing a valid payment link.`);
-    }
-  });
+  const stripe = paymentMethods.find((method) => method.key === "stripe");
+  const paypal = paymentMethods.find((method) => method.key === "paypal");
+
+  if (!stripe?.paymentLink || !isPaymentUrl(stripe.paymentLink)) {
+    throw new Error("Stripe payment method is missing a valid payment link.");
+  }
+
+  if (paypal.paymentLink && !isPaymentUrl(paypal.paymentLink)) {
+    throw new Error("PayPal payment method has an invalid payment link.");
+  }
+
+  if (!paypal.paymentLink && !paypal.disabledReason) {
+    throw new Error("PayPal must either have a valid payment link or an explicit disabled reason.");
+  }
 }
 
 function installBrowserGlobals(url) {

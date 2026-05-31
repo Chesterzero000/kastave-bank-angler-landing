@@ -68,7 +68,7 @@ export const recommendedEnv = [
   },
 ];
 
-const placeholderPatterns = [/^your-/i, /^whsec_your/i, /^the-/i, /^example$/i, /^changeme$/i];
+const placeholderPatterns = [/^your-/i, /^whsec_your/i, /^the-/i, /^example$/i, /^changeme$/i, /replace[_-]?with/i];
 
 export function validateProductionEnv(env = process.env) {
   const failures = [];

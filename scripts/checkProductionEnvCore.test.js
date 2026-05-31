@@ -5,7 +5,7 @@ import { validateProductionEnv } from "./checkProductionEnvCore.mjs";
 
 const requiredSampleEnv = {
   VITE_STRIPE_PAYMENT_LINK: "https://buy.stripe.com/9B69AVbpieTIcPx9rBd7q00",
-  VITE_PAYPAL_PAYMENT_LINK: "https://www.paypal.com/ncp/payment/6W9PTBNB267ZW",
+  VITE_PAYPAL_PAYMENT_LINK: "https://www.paypal.com/ncp/payment/TESTPAYPALLINK",
   VITE_META_PIXEL_ID: "1542765323857764",
   STRIPE_WEBHOOK_SECRET: "whsec_test_nonsecret",
   PAYPAL_CLIENT_ID: "fake-client-id",
@@ -41,6 +41,7 @@ test("validateProductionEnv rejects wrong hosts, placeholders, and invalid modes
     VITE_PAYPAL_PAYMENT_LINK: "not-a-url",
     VITE_META_PIXEL_ID: "pixel-id",
     STRIPE_WEBHOOK_SECRET: "your-secret",
+    PAYPAL_CLIENT_ID: "replace-with-client-id",
     PAYPAL_ENV: "production",
   });
 
@@ -49,5 +50,6 @@ test("validateProductionEnv rejects wrong hosts, placeholders, and invalid modes
   assert.match(failures, /VITE_PAYPAL_PAYMENT_LINK: expected a valid URL/);
   assert.match(failures, /VITE_META_PIXEL_ID: expected numeric Meta Pixel ID/);
   assert.match(failures, /STRIPE_WEBHOOK_SECRET still looks like a placeholder/);
+  assert.match(failures, /PAYPAL_CLIENT_ID still looks like a placeholder/);
   assert.match(failures, /PAYPAL_ENV: expected live or sandbox/);
 });

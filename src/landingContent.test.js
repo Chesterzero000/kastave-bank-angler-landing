@@ -291,14 +291,19 @@ test("landing page exposes Stripe and PayPal checkout options", () => {
   );
   assert.match(
     content,
-    /const PAYPAL_PAYMENT_LINK =\s*import\.meta\.env\.VITE_PAYPAL_PAYMENT_LINK\s*\|\|\s*"https:\/\/www\.paypal\.com\/ncp\/payment\/6W9PTBNB267ZW"/,
+    /const PAYPAL_PAYMENT_LINK = import\.meta\.env\.VITE_PAYPAL_PAYMENT_LINK \|\| ""/,
   );
+  assert.doesNotMatch(content, /6W9PTBNB267ZW/);
+  assert.match(content, /PAYPAL_PAYMENT_SETUP_PENDING/);
+  assert.match(content, /disabledReason: "PayPal setup pending"/);
   assert.match(content, /PAYMENT_METHODS/);
   assert.match(content, /paypalPaymentLink:\s*PAYPAL_PAYMENT_LINK/);
   assert.match(content, /reservationPaymentLink:\s*DEFAULT_PAYMENT_METHOD\.paymentLink/);
   assert.match(app, /PAYMENT_METHODS\.map/);
+  assert.match(app, /disabled=\{!method\.paymentLink\}/);
+  assert.match(app, /setup pending/);
   assert.match(app, /package-reserve-button/);
-  assert.match(app, /Choose Stripe or PayPal on the deposit page/);
+  assert.match(app, /PayPal appears after its live link is connected/);
   assert.doesNotMatch(app, /Pay with \{method\.label\}/);
   assert.match(app, /window\.location\.href = withUtm\(paymentLink\)/);
 });
@@ -447,7 +452,7 @@ test("privacy section follows a simple icon-led privacy layout", () => {
 
 test("landing page explains the dual payment provider path", () => {
   assert.match(content, /PAYMENT_NOTE/);
-  assert.match(content, /Choose Stripe or PayPal/);
+  assert.match(content, /PayPal appears after the live PayPal payment link is configured/);
   assert.match(content, /What if Stripe or PayPal does not redirect after payment\?/);
   assert.match(app, /package-reservation-note/);
   assert.match(app, /What happens after payment\?/);

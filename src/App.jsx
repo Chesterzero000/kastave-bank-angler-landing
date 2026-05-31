@@ -7,6 +7,7 @@ import {
   HOOK_VARIANTS,
   PAYMENT_AFTER_STEPS,
   PAYMENT_METHODS,
+  PAYPAL_PAYMENT_SETUP_PENDING,
   RESERVATION_OFFER,
   SITE,
   getPaymentMethodLabel,
@@ -200,7 +201,9 @@ const DEPOSIT_FAQS = [
   },
   {
     question: "Can I use PayPal or a card?",
-    answer: "Yes. The page keeps both routes simple: credit card through Stripe, or PayPal checkout.",
+    answer: PAYPAL_PAYMENT_SETUP_PENDING
+      ? "Credit card through Stripe is active now. PayPal stays visible but disabled until the live PayPal payment link is configured."
+      : "Yes. The page keeps both routes simple: credit card through Stripe, or PayPal checkout.",
   },
   {
     question: "Why reserve before Kickstarter?",
@@ -763,10 +766,14 @@ function DepositPage({ onPayment }) {
             <button
               className={`deposit-mondo-pay-button deposit-mondo-pay-${method.key}`}
               type="button"
+              disabled={!method.paymentLink}
+              aria-disabled={!method.paymentLink}
+              title={method.disabledReason || `Pay with ${method.label}`}
               onClick={() => onPayment(method.key)}
               key={method.key}
             >
-              {method.key === "stripe" ? "Credit Card" : method.label} <span aria-hidden="true">-&gt;</span>
+              {method.key === "stripe" ? "Credit Card" : method.label}{" "}
+              <span aria-hidden="true">{method.paymentLink ? "->" : "setup pending"}</span>
             </button>
           ))}
         </div>
@@ -780,7 +787,11 @@ function DepositPage({ onPayment }) {
             <strong aria-hidden="true">✓</strong>
           </li>
           <li>
-            <span>Secure Stripe or PayPal checkout.</span>
+            <span>
+              {PAYPAL_PAYMENT_SETUP_PENDING
+                ? "PayPal checkout appears after the live link is connected."
+                : "Secure Stripe or PayPal checkout."}
+            </span>
             <strong aria-hidden="true">✓</strong>
           </li>
         </ul>
@@ -1349,7 +1360,11 @@ function ReservationSection({ depositHref, onSubscribe, onWaitlist, onReserve, m
             <p>
               This is a {RESERVATION_OFFER.depositAmount} founder reservation, not a finished-unit purchase.
             </p>
-            <small>Choose Stripe or PayPal on the deposit page. No long checkout form here.</small>
+            <small>
+              {PAYPAL_PAYMENT_SETUP_PENDING
+                ? "Stripe is active now. PayPal appears after its live link is connected. No long checkout form here."
+                : "Choose Stripe or PayPal on the deposit page. No long checkout form here."}
+            </small>
           </div>
           <button className="text-link package-waitlist-button" type="button" onClick={onWaitlist}>
             Not ready to reserve? Join Early Access instead

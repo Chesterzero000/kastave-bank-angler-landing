@@ -13,7 +13,8 @@ The V2 site should make a first-time visitor understand Kastave quickly, leave a
 - Homepage `Reserve for $1` CTAs route to `/deposit`, not directly to PayPal or Stripe.
 - Homepage bottom founder-access card also routes to `/deposit`; direct payment choices only appear on `/deposit`.
 - `/deposit` explains `$1 Deposit Now, $100 Credit Later`, founder reservation, expected product price, and the fact that it is not the full product purchase.
-- `/deposit` exposes two payment choices: `Credit Card` through Stripe and `PayPal`.
+- `/deposit` exposes `Credit Card` through Stripe and keeps a guarded `PayPal` option visible. PayPal is disabled locally
+  until a live `VITE_PAYPAL_PAYMENT_LINK` is configured, so users are not sent to the known broken PayPal page.
 - The payment page does not render a long card or billing form inside the Kastave site.
 - Meta Pixel remains installed with pixel ID `1542765323857764`.
 - The site does not manually send email, phone, name, or address fields to Meta advanced matching.
@@ -37,9 +38,9 @@ The V2 site should make a first-time visitor understand Kastave quickly, leave a
 - `scripts/check-assets.mjs` verifies required V2 assets exist and retired PNG / GitHub Pages public assets are absent
   from source references and the current filesystem.
 - `scripts/render-smoke.mjs` verifies React-rendered homepage/deposit/thanks/legal/unknown-route output, including that
-  homepage CTAs route to `/deposit` before payment, `/deposit` renders only the two payment choices, internal anchors
-  point to real rendered section ids, internal routes are supported, and external links are limited to approved payment
-  providers or email.
+  homepage CTAs route to `/deposit` before payment, `/deposit` renders Stripe plus a guarded PayPal option, internal
+  anchors point to real rendered section ids, internal routes are supported, and external links are limited to approved
+  payment providers or email.
 - `scripts/check-production-env.mjs` now verifies the required Vercel production environment variables without printing
   secret values or triggering any payment/deployment action.
 - `scripts/deploy-ready.mjs` runs the full local preflight first, then requires the production payment, webhook,
@@ -52,15 +53,17 @@ The V2 site should make a first-time visitor understand Kastave quickly, leave a
   `/thanks?provider=stripe`, legal routes, policy aliases, and an unknown route SPA fallback.
 - Browser responsive layout audit passed on desktop `1440x960`, tablet `1024x900`, and mobile `390x844`: homepage and
   `/deposit` both report `overflowX: 0`; mobile nav switches to the hamburger; `Who is Kastave For` and `Get the
-  Highlights` remain the same heading size at each breakpoint; `/deposit` still has only `Credit Card` and `PayPal`
-  payment choices with no long checkout form.
+  Highlights` remain the same heading size at each breakpoint; `/deposit` keeps the short `Credit Card` / `PayPal`
+  choice surface with no long checkout form.
 
 ## Requirement Audit
 
 - Latest local version retained: old GitHub Pages workflow/CNAME and old heavy PNG hero/product assets are removed from the current worktree; current V2 assets are JPGs referenced by React.
 - Old deposit-page CSS from earlier iterations is removed; current checkout styling is the `deposit-mondo-*` implementation only.
 - Meta Pixel: `src/tracking.js`, `index.html`, `.env.example`, and tests all use `1542765323857764`.
-- Payment simplification: all homepage reservation links point to `/deposit`; `/deposit` has only `Credit Card` and `PayPal` buttons, with no embedded billing form.
+- Payment simplification: all homepage reservation links point to `/deposit`; `/deposit` has only the short
+  `Credit Card` / `PayPal` choice surface, with PayPal disabled until a live link is configured and no embedded billing
+  form.
 - Beni/Mondo-inspired structure: hero, launch offer, highlight bento, target audience carousel, deposit page, rounded cards, and simple CTA hierarchy are implemented locally.
 - Target audiences: four personas are implemented with image assets and scene-specific overlay animations.
 - App UI: Auto, Silent, and Performance mode previews are present in the phone mockup.
@@ -83,7 +86,7 @@ The V2 site should make a first-time visitor understand Kastave quickly, leave a
 | Homepage `Reserve for $1` should not jump directly to PayPal/Stripe | Done locally | `render-smoke` verifies homepage reservation links route to `/deposit` |
 | `/deposit` should present a polished Beni/Mondo-style reservation page | Done locally | `deposit-mondo-*` implementation and `deposit page presents a polished reservation checkout` test |
 | Deposit CTA should jump to payment choices | Done locally | `jumpToDepositCheckout`, `deposit_checkout_jump`, `#deposit-checkout` |
-| Payment should be simple: choose Stripe credit card or PayPal | Done locally | `/deposit` renders `Credit Card` and `PayPal` buttons only |
+| Payment should be simple: choose Stripe credit card or PayPal | Done locally, PayPal gated | `/deposit` renders `Credit Card` and `PayPal`; PayPal is disabled until `VITE_PAYPAL_PAYMENT_LINK` is live |
 | Avoid a long checkout/billing form on Kastave site | Done locally | `render-smoke` and tests verify no embedded long form fields |
 | Clarify `$1 deposit` and `$100 credit later` so users do not mistake it for full product purchase | Done locally | Deposit copy includes target product price and not-full-product language |
 | Add terms and privacy pages | Done locally | `/privacy`, `/terms`, `/policies/privacy-policy`, `/policies/terms-of-service` |
@@ -203,13 +206,13 @@ Latest local result on 2026-05-31:
 - `node scripts/check-production-env.mjs` with non-secret sample required env values: passes while warning about recommended
   analytics/newsletter variables.
 - `node scripts/check-production-env.mjs --kastave-env-file .env.production.local`: supported for ignored local production values.
-- `node scripts/deploy-ready.mjs`: local preflight passes, then the production gate reports both current blockers:
-  missing production env values and the broken PayPal payment link. Use it as the final Vercel-ready gate after configuring
-  production secrets and replacing the PayPal link.
+- `node scripts/deploy-ready.mjs`: local preflight passes, then the production gate reports current blockers such as
+  missing production env values or a missing/invalid PayPal payment link. Use it as the final Vercel-ready gate after
+  configuring production secrets and adding the live PayPal link.
 - Browser responsive layout audit after the mobile founder-offer fix: `1440x960`, `1024x900`, and `390x844` all have
   homepage `overflowX: 0` and deposit-page `overflowX: 0`.
-- `node scripts/check-payment-links.mjs`: Stripe link is reachable; current PayPal link returns a merchant/payment setup
-  error page and must be repaired or replaced before production deployment.
+- `node scripts/check-payment-links.mjs`: Stripe link is reachable; PayPal now has no committed broken fallback and must be
+  provided through `VITE_PAYPAL_PAYMENT_LINK` before production deployment.
 
 ## Deployment Gate
 
@@ -229,5 +232,5 @@ Do not deploy until:
 - Final video/photo materials still depend on real or generated production-ready assets.
 - Final product specs should be updated after field testing.
 - Payment completion should be verified in Stripe and PayPal dashboards after deployment.
-- Current PayPal payment link must be fixed or replaced before deployment because the payment-link smoke check detects a
-  merchant setup error page.
+- A live PayPal payment link must be added before deployment because the previously committed PayPal fallback was a
+  merchant setup error page and has been removed.

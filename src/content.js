@@ -1,7 +1,8 @@
 const STRIPE_PAYMENT_LINK =
   import.meta.env.VITE_STRIPE_PAYMENT_LINK || "https://buy.stripe.com/9B69AVbpieTIcPx9rBd7q00";
-const PAYPAL_PAYMENT_LINK =
-  import.meta.env.VITE_PAYPAL_PAYMENT_LINK || "https://www.paypal.com/ncp/payment/6W9PTBNB267ZW";
+const PAYPAL_PAYMENT_LINK = import.meta.env.VITE_PAYPAL_PAYMENT_LINK || "";
+
+export const PAYPAL_PAYMENT_SETUP_PENDING = !PAYPAL_PAYMENT_LINK;
 
 export const PAYMENT_METHODS = [
   STRIPE_PAYMENT_LINK
@@ -21,7 +22,14 @@ export const PAYMENT_METHODS = [
         receiptNote:
           "After PayPal payment, PayPal sends your receipt. If PayPal does not redirect automatically, return to Kastave and join the email list so we can match updates to you.",
       }
-    : null,
+    : {
+        key: "paypal",
+        label: "PayPal",
+        paymentLink: "",
+        disabledReason: "PayPal setup pending",
+        receiptNote:
+          "PayPal checkout appears after the live PayPal payment link is configured in production.",
+      },
 ].filter(Boolean);
 
 export const DEFAULT_PAYMENT_METHOD = PAYMENT_METHODS[0] || {
@@ -112,8 +120,9 @@ export const PRIVACY_POINTS = [
   "Your exploration map stays yours",
 ];
 
-export const PAYMENT_NOTE =
-  "Choose Stripe or PayPal. After payment, your receipt is the first confirmation; return to Kastave if the payment page does not redirect automatically.";
+export const PAYMENT_NOTE = PAYPAL_PAYMENT_SETUP_PENDING
+  ? "Stripe checkout is available now. PayPal appears after the live PayPal payment link is configured."
+  : "Choose Stripe or PayPal. After payment, your receipt is the first confirmation; return to Kastave if the payment page does not redirect automatically.";
 
 export const PAYMENT_AFTER_STEPS = [
   "Stripe or PayPal sends your payment receipt.",

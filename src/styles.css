@@ -838,6 +838,18 @@ h3 {
   box-shadow: 0 16px 34px rgba(255, 196, 57, 0.24);
 }
 
+.deposit-mondo-pay-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+  filter: grayscale(0.18);
+  box-shadow: none;
+}
+
+.deposit-mondo-pay-button:disabled span {
+  font-size: 0.78em;
+  text-transform: uppercase;
+}
+
 .deposit-mondo-checklist {
   width: min(820px, 100%);
   margin: 34px 0 0;

@@ -197,7 +197,7 @@ npm run check:payment-links
 ```bash
 VITE_STRIPE_PAYMENT_LINK=https://buy.stripe.com/9B69AVbpieTIcPx9rBd7q00
 STRIPE_WEBHOOK_SECRET=
-VITE_PAYPAL_PAYMENT_LINK=https://www.paypal.com/ncp/payment/6W9PTBNB267ZW
+VITE_PAYPAL_PAYMENT_LINK=https://www.paypal.com/ncp/payment/REPLACE_WITH_LIVE_LINK
 PAYPAL_CLIENT_ID=
 PAYPAL_CLIENT_SECRET=
 PAYPAL_WEBHOOK_ID=
@@ -262,13 +262,13 @@ https://kastave.com/thanks?provider=stripe
 Production payment link:
 
 ```txt
-https://www.paypal.com/ncp/payment/6W9PTBNB267ZW
+https://www.paypal.com/ncp/payment/REPLACE_WITH_LIVE_LINK
 ```
 
 Set this Vercel environment variable so the `/deposit` page can open the live PayPal checkout:
 
 ```txt
-VITE_PAYPAL_PAYMENT_LINK=https://www.paypal.com/ncp/payment/6W9PTBNB267ZW
+VITE_PAYPAL_PAYMENT_LINK=https://www.paypal.com/ncp/payment/REPLACE_WITH_LIVE_LINK
 ```
 
 If PayPal supports a return URL for this payment link, set it to:
