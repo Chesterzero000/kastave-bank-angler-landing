@@ -30,7 +30,6 @@ import logoImage from "../assets/kastave-logo-wordmark.png";
 import processImage from "../assets/kastave-new-process.jpg";
 import recognitionImage from "../assets/kastave-new-recognition.jpg";
 import depositHeroImage from "../assets/kastave-deposit-hand-carry-product-match.jpg";
-import appSonarImage from "../assets/kastave-app-sonar.jpg";
 import productDetailImage from "../assets/kastave-product-detail.jpg";
 import terrainFeatureImage from "../assets/kastave-feature-3d-terrain.jpg";
 import waterFeatureImage from "../assets/kastave-feature-water-conditions.jpg";
@@ -1095,122 +1094,65 @@ function AudienceSection() {
 }
 
 function AppExperienceSection() {
-  const [activeModeKey, setActiveModeKey] = useState(APP_MODES[0].key);
-  const activeMode = APP_MODES.find((mode) => mode.key === activeModeKey) || APP_MODES[0];
-  const activeModeIndex = APP_MODES.findIndex((mode) => mode.key === activeMode.key);
-  const activeModeTabId = `app-mode-tab-${activeMode.key}`;
-
-  const selectAppMode = (modeKey) => {
-    setActiveModeKey(modeKey);
-    trackEvent("app_mode_preview", { mode: modeKey });
-  };
-
-  const handleModeKeyDown = (event) => {
-    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) {
-      return;
-    }
-
-    event.preventDefault();
-
-    let nextIndex = activeModeIndex;
-    if (event.key === "ArrowLeft") {
-      nextIndex = (activeModeIndex - 1 + APP_MODES.length) % APP_MODES.length;
-    }
-    if (event.key === "ArrowRight") {
-      nextIndex = (activeModeIndex + 1) % APP_MODES.length;
-    }
-    if (event.key === "Home") {
-      nextIndex = 0;
-    }
-    if (event.key === "End") {
-      nextIndex = APP_MODES.length - 1;
-    }
-
-    selectAppMode(APP_MODES[nextIndex].key);
-  };
+  const [autoMode, ...supportModes] = APP_MODES;
 
   return (
     <section className="app-ui-section" id="app-ui" aria-labelledby="app-ui-title">
       <div className="section-inner app-ui-layout">
         <div className="app-ui-copy">
           <p className="section-kicker">Kastave app UI</p>
-          <h2 id="app-ui-title">Scan mode, cast calls, and private spots in one fishing screen.</h2>
+          <h2 id="app-ui-title">Auto mode first. Quiet or fast when you need it.</h2>
           <p>
-            The app should feel like a fishing tool, not a raw sonar puzzle. Pick the boat behavior, watch the scan
-            path, then choose the first cast from a clean map.
+            The app should feel like a fishing tool, not a raw sonar puzzle. Auto Mode is the main scan flow; Silent
+            and Performance are simple behavior choices for different water.
           </p>
-          <div className="mode-tab-row" role="tablist" aria-label="Kastave boat modes">
-            {APP_MODES.map((mode) => (
-              <button
-                className={activeMode.key === mode.key ? "is-active" : ""}
-                id={`app-mode-tab-${mode.key}`}
-                key={mode.key}
-                type="button"
-                role="tab"
-                aria-selected={activeMode.key === mode.key}
-                aria-controls="app-mode-panel"
-                tabIndex={activeMode.key === mode.key ? 0 : -1}
-                onClick={() => selectAppMode(mode.key)}
-                onKeyDown={handleModeKeyDown}
-              >
-                {mode.label}
-              </button>
-            ))}
-          </div>
-          <article
-            className={`app-mode-card app-mode-${activeMode.key}`}
-            id="app-mode-panel"
-            role="tabpanel"
-            aria-labelledby={activeModeTabId}
-          >
-            <span>{activeMode.title}</span>
-            <p>{activeMode.body}</p>
-            <div>
-              {activeMode.metrics.map((metric) => (
-                <strong key={metric}>{metric}</strong>
-              ))}
-            </div>
-          </article>
-        </div>
-        <div className="app-ui-visual" aria-label="Kastave mobile app interface concept">
-          <div className={`phone-shell phone-mode-${activeMode.key}`}>
-            <div className="phone-camera" aria-hidden="true" />
-            <div className="phone-screen">
-              <div className="app-topbar">
-                <span>Kastave</span>
-                <strong>{activeMode.label}</strong>
-              </div>
-              <div className="app-status-strip">
-                <span>{activeMode.status}</span>
-                <strong>{activeMode.action}</strong>
-              </div>
-              <div className="lake-map">
-                <span className="map-contour map-contour-one" />
-                <span className="map-contour map-contour-two" />
-                <span className="map-contour map-contour-three" />
-                <span className="map-route" />
-                <span className="map-scan-fan" />
-                <span className="map-boat" />
-                <span className="cast-pin cast-pin-safe" />
-                <span className="cast-pin cast-pin-structure" />
-                <span className="cast-pin cast-pin-risk" />
-              </div>
-              <div className="app-readout-grid">
-                {activeMode.readouts.map((readout) => (
-                  <span key={readout.label}>
-                    {readout.label}
-                    <strong>{readout.value}</strong>
-                  </span>
+          <div className="app-mode-stack" aria-label="Kastave boat modes">
+            <article className="app-mode-card app-mode-card-auto">
+              <span>{autoMode.title}</span>
+              <p>{autoMode.body}</p>
+              <div>
+                {autoMode.metrics.map((metric) => (
+                  <strong key={metric}>{metric}</strong>
                 ))}
               </div>
-              <div className="cast-call-list">
-                <span>Safe</span>
-                <span>Structure</span>
-                <span>Risk / Reward</span>
-              </div>
+            </article>
+            <div className="app-mode-text-grid">
+              {supportModes.map((mode) => (
+                <article className={`app-mode-text app-mode-text-${mode.key}`} key={mode.key}>
+                  <span>{mode.title}</span>
+                  <p>{mode.body}</p>
+                  <small>{mode.metrics.join(" / ")}</small>
+                </article>
+              ))}
             </div>
           </div>
-          <img src={appSonarImage} alt="" aria-hidden="true" loading="lazy" decoding="async" />
+        </div>
+        <div className="auto-mode-media" aria-label="Auto Mode media slot">
+          <div className="auto-mode-placeholder" aria-hidden="true">
+            <div className="auto-mode-map">
+              <span className="auto-contour auto-contour-one" />
+              <span className="auto-contour auto-contour-two" />
+              <span className="auto-route-path" />
+              <span className="auto-scan-beam" />
+              <span className="auto-boat-marker" />
+              <span className="auto-cast-pin auto-cast-pin-safe" />
+              <span className="auto-cast-pin auto-cast-pin-structure" />
+              <span className="auto-cast-pin auto-cast-pin-risk" />
+            </div>
+            <div className="auto-mode-panel">
+              {autoMode.readouts.map((readout) => (
+                <span key={readout.label}>
+                  {readout.label}
+                  <strong>{readout.value}</strong>
+                </span>
+              ))}
+            </div>
+            <div className="auto-cast-row">
+              <span>Safe</span>
+              <span>Structure</span>
+              <span>Risk / Reward</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>

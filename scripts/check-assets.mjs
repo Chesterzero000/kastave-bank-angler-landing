@@ -11,7 +11,6 @@ const sourceFiles = [
 ];
 
 const requiredAssets = [
-  "assets/kastave-app-sonar.jpg",
   "assets/kastave-audience-bank-angler.jpg",
   "assets/kastave-audience-castable-auto-scan-ui-v7.jpg",
   "assets/kastave-audience-hidden-snag-first-person-v4.jpg",

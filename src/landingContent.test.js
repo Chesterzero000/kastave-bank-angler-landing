@@ -33,19 +33,16 @@ test("landing page supports the three paid-ad hook variants", () => {
   assert.match(styles, /hero-hook-card/);
 });
 
-test("app mode tabs are accessible and keyboard operable", () => {
-  assert.match(app, /const activeModeTabId = `app-mode-tab-\$\{activeMode\.key\}`/);
-  assert.match(app, /const handleModeKeyDown = \(event\) => \{/);
-  assert.match(app, /\["ArrowLeft", "ArrowRight", "Home", "End"\]\.includes\(event\.key\)/);
-  assert.match(app, /id=\{`app-mode-tab-\$\{mode\.key\}`\}/);
-  assert.match(app, /role="tab"/);
-  assert.match(app, /aria-selected=\{activeMode\.key === mode\.key\}/);
-  assert.match(app, /aria-controls="app-mode-panel"/);
-  assert.match(app, /tabIndex=\{activeMode\.key === mode\.key \? 0 : -1\}/);
-  assert.match(app, /onKeyDown=\{handleModeKeyDown\}/);
-  assert.match(app, /id="app-mode-panel"/);
-  assert.match(app, /role="tabpanel"/);
-  assert.match(app, /aria-labelledby=\{activeModeTabId\}/);
+test("app mode section highlights auto mode and keeps other modes as text", () => {
+  assert.match(app, /const \[autoMode, \.\.\.supportModes\] = APP_MODES/);
+  assert.match(app, /Auto mode first\. Quiet or fast when you need it\./);
+  assert.match(app, /className="app-mode-card app-mode-card-auto"/);
+  assert.match(app, /className="app-mode-text-grid"/);
+  assert.match(app, /className="auto-mode-media" aria-label="Auto Mode media slot"/);
+  assert.match(app, /className="auto-mode-placeholder" aria-hidden="true"/);
+  assert.doesNotMatch(app, /activeModeKey/);
+  assert.doesNotMatch(app, /role="tab"/);
+  assert.doesNotMatch(app, /phone-shell/);
 });
 
 test("hero uses simple launch language and Kickstarter status", () => {
@@ -75,8 +72,8 @@ test("v2 landing page adds a founder offer bar, app UI modes, specs, and media d
   assert.match(app, /Auto shoreline sweep/);
   assert.match(app, /Quiet close-cover pass/);
   assert.match(app, /Fast long-bank sweep/);
-  assert.match(app, /app-status-strip/);
-  assert.match(app, /app-readout-grid/);
+  assert.match(app, /auto-mode-panel/);
+  assert.match(app, /auto-cast-row/);
   assert.match(app, /function ProductSpecsSection/);
   assert.match(app, /PRODUCT_SPECS/);
   assert.match(app, /function SpecIcon/);
@@ -93,11 +90,10 @@ test("v2 landing page adds a founder offer bar, app UI modes, specs, and media d
   assert.match(app, /kastave-audience-castable-auto-scan-ui-v7\.jpg/);
   assert.match(styles, /\.launch-offer-bar/);
   assert.match(styles, /\.app-ui-section/);
-  assert.match(styles, /\.phone-shell/);
-  assert.match(styles, /\.phone-mode-silent \.map-route/);
-  assert.match(styles, /\.phone-mode-performance \.map-scan-fan/);
-  assert.match(styles, /@media \(max-width:\s*820px\)[\s\S]*?\.lake-map\s*\{[^}]*height:\s*300px/s);
-  assert.match(styles, /@media \(max-width:\s*620px\)[\s\S]*?\.lake-map\s*\{[^}]*height:\s*260px/s);
+  assert.match(styles, /\.auto-mode-placeholder/);
+  assert.match(styles, /\.app-mode-text-grid/);
+  assert.match(styles, /\.auto-mode-panel/);
+  assert.doesNotMatch(styles, /\.phone-shell/);
   assert.match(styles, /\.product-specs-section/);
   assert.match(styles, /\.specs-showcase/);
   assert.match(styles, /\.specs-product-image/);
@@ -345,7 +341,6 @@ test("image loading priorities favor fast landing-page rendering", () => {
   assert.match(app, /className="deposit-hero-image"[\s\S]*?fetchPriority="high"[\s\S]*?decoding="async"/);
   assert.match(app, /<img src=\{item\.image\} alt="" aria-hidden="true" loading="lazy" decoding="async" \/>/);
   assert.match(app, /src=\{audience\.image\}[\s\S]*?loading="lazy"[\s\S]*?decoding="async"/);
-  assert.match(app, /src=\{appSonarImage\} alt="" aria-hidden="true" loading="lazy" decoding="async"/);
   assert.match(app, /src=\{productDetailImage\}[\s\S]*?alt="Kastave scout boat product detail"[\s\S]*?loading="lazy"[\s\S]*?decoding="async"/);
 });
 
