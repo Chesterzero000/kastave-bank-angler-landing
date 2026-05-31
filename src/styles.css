@@ -536,115 +536,6 @@ h3 {
   font-size: 0.9rem;
 }
 
-.launch-offer-bar {
-  padding: 12px clamp(16px, 4vw, 42px);
-  background: #f6f4ef;
-}
-
-.launch-offer-inner {
-  display: grid;
-  grid-template-columns: minmax(260px, 1fr) minmax(320px, 0.86fr) auto;
-  gap: 16px;
-  align-items: center;
-  width: min(1280px, 100%);
-  margin: 0 auto;
-  border: 1px solid rgba(16, 19, 18, 0.1);
-  border-radius: 999px;
-  padding: 10px 10px 10px 22px;
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 12px 32px rgba(16, 19, 18, 0.07);
-}
-
-.launch-offer-inner > * {
-  min-width: 0;
-}
-
-.launch-mini-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0 0 4px;
-  color: #252b2a;
-  font-size: 0.86rem;
-  font-weight: 900;
-}
-
-.launch-mini-status small {
-  color: rgba(16, 19, 18, 0.34);
-}
-
-.launch-mini-status em {
-  color: var(--kickstarter);
-  font-style: normal;
-  text-transform: uppercase;
-}
-
-.launch-offer-copy strong {
-  display: block;
-  color: var(--ink);
-  font-size: clamp(1.08rem, 1.45vw, 1.42rem);
-  line-height: 1.08;
-  overflow-wrap: anywhere;
-}
-
-.launch-offer-copy p {
-  margin: 0;
-}
-
-.launch-proof-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
-}
-
-.launch-proof-pill {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 6px;
-  min-height: 0;
-  border-right: 1px solid rgba(16, 19, 18, 0.12);
-  border-radius: 0;
-  padding: 0 12px;
-  color: var(--ink);
-  background: transparent;
-}
-
-.launch-proof-pill:first-child {
-  padding-left: 0;
-}
-
-.launch-proof-pill:last-child {
-  border-right: 0;
-  padding-right: 0;
-}
-
-.launch-proof-pill strong,
-.launch-proof-pill span {
-  display: block;
-}
-
-.launch-proof-pill strong {
-  color: var(--orange-dark);
-  font-size: 1rem;
-  line-height: 1;
-}
-
-.launch-proof-pill span {
-  margin-top: 0;
-  color: var(--muted);
-  font-size: 0.76rem;
-  font-weight: 800;
-  line-height: 1.2;
-}
-
-.launch-offer-actions {
-  display: flex;
-  gap: 8px;
-}
-
-.launch-offer-actions button,
-.launch-offer-actions a,
 .specs-reserve-button {
   display: inline-flex;
   min-height: 48px;
@@ -658,12 +549,6 @@ h3 {
   font-weight: 950;
 }
 
-.launch-email-button {
-  color: var(--ink);
-  background: transparent;
-}
-
-.launch-reserve-button,
 .specs-reserve-button {
   color: white;
   background: var(--charcoal);
@@ -3546,7 +3431,6 @@ details p {
 }
 
 @media (max-width: 1120px) {
-  .launch-offer-inner,
   .app-ui-layout {
     grid-template-columns: 1fr;
   }
@@ -3558,10 +3442,6 @@ details p {
 
   .specs-detail-row {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .launch-offer-actions {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .media-script-grid {
@@ -3661,10 +3541,6 @@ details p {
   .reservation-options,
   .site-footer {
     grid-template-columns: 1fr;
-  }
-
-  .launch-proof-row {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .app-mode-text-grid {
@@ -3877,25 +3753,6 @@ details p {
 }
 
 @media (max-width: 620px) {
-  .launch-offer-bar {
-    padding: 12px;
-  }
-
-  .launch-offer-inner {
-    border-radius: 24px;
-    padding: 14px;
-  }
-
-  .launch-proof-row,
-  .launch-offer-actions {
-    display: grid;
-    grid-template-columns: 1fr;
-  }
-
-  .launch-proof-pill {
-    min-height: auto;
-  }
-
   .auto-mode-placeholder {
     min-height: 440px;
     border-radius: 28px;

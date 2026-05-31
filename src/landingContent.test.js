@@ -60,10 +60,10 @@ test("hero signup continues to the deposit page before payment", () => {
   assert.match(app, /window\.location\.href = withUtm\("\/deposit"\)/);
 });
 
-test("v2 landing page adds a founder offer bar, app UI modes, specs, and media direction", () => {
-  assert.match(app, /function LaunchOfferBar/);
-  assert.match(app, /<LaunchOfferBar/);
-  assert.match(app, /V2_PROOF_POINTS/);
+test("v2 landing page adds app UI modes, specs, and media direction", () => {
+  assert.doesNotMatch(app, /function LaunchOfferBar/);
+  assert.doesNotMatch(app, /<LaunchOfferBar/);
+  assert.doesNotMatch(app, /V2_PROOF_POINTS/);
   assert.match(app, /function AppExperienceSection/);
   assert.match(app, /APP_MODES/);
   assert.match(app, /Auto Mode/);
@@ -88,7 +88,7 @@ test("v2 landing page adds a founder offer bar, app UI modes, specs, and media d
   assert.match(app, /function MediaScriptSection/);
   assert.match(app, /MEDIA_SCRIPT_CARDS/);
   assert.match(app, /kastave-audience-castable-auto-scan-ui-v7\.jpg/);
-  assert.match(styles, /\.launch-offer-bar/);
+  assert.doesNotMatch(styles, /\.launch-offer-bar/);
   assert.match(styles, /\.app-ui-section/);
   assert.match(styles, /\.auto-mode-placeholder/);
   assert.match(styles, /\.app-mode-text-grid/);
@@ -473,9 +473,9 @@ test("mobile breakpoints keep landing and deposit flows usable", () => {
   assert.match(styles, /@media \(max-width:\s*820px\)[\s\S]*?\.hero\s*\{[^}]*min-height:\s*auto/s);
   assert.match(styles, /@media \(max-width:\s*820px\)[\s\S]*?\.main-nav\s*\{[^}]*display:\s*none/s);
   assert.match(styles, /@media \(max-width:\s*820px\)[\s\S]*?\.main-nav\.is-open\s*\{[^}]*display:\s*flex/s);
-  assert.match(styles, /\.launch-offer-inner > \*\s*\{[^}]*min-width:\s*0/s);
-  assert.match(styles, /\.launch-offer-copy strong\s*\{[^}]*overflow-wrap:\s*anywhere/s);
-  assert.match(styles, /@media \(max-width:\s*620px\)[\s\S]*?\.launch-proof-row,[\s\S]*?\.launch-offer-actions\s*\{[^}]*display:\s*grid/s);
+  assert.doesNotMatch(styles, /\.launch-offer-inner/);
+  assert.doesNotMatch(styles, /\.launch-proof-row/);
+  assert.doesNotMatch(styles, /\.launch-offer-actions/);
   assert.match(styles, /@media \(max-width:\s*820px\)[\s\S]*?\.highlight-bento-grid,[\s\S]*?\.highlight-bento-main,[\s\S]*?\.highlight-bento-side\s*\{[^}]*grid-template-columns:\s*1fr/s);
   assert.match(styles, /@media \(max-width:\s*820px\)[\s\S]*?\.audience-card-row\s*\{[^}]*grid-auto-columns:\s*minmax\(286px,\s*82vw\)/s);
   assert.match(styles, /@media \(max-width:\s*820px\)[\s\S]*?\.deposit-mondo-card-grid,[\s\S]*?\.deposit-mondo-payment-row,[\s\S]*?\.deposit-mondo-steps\s*\{[^}]*grid-template-columns:\s*1fr/s);

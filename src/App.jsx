@@ -39,13 +39,6 @@ import audiencePondHopperImage from "../assets/kastave-audience-pond-hopper.jpg"
 import audienceHiddenSnagImage from "../assets/kastave-audience-hidden-snag-first-person-v4.jpg";
 import audienceCastableVsKastaveImage from "../assets/kastave-audience-castable-auto-scan-ui-v7.jpg";
 
-const V2_PROOF_POINTS = [
-  { value: "$1", label: "founder reservation" },
-  { value: "$100", label: "launch credit" },
-  { value: "3", label: "AI cast calls" },
-  { value: "Private", label: "spot log by default" },
-];
-
 const APP_MODES = [
   {
     key: "auto",
@@ -484,11 +477,6 @@ function App() {
           onReserve={(event) => openDepositPage("hero", event)}
           message={signupMessage}
         />
-        <LaunchOfferBar
-          depositHref={withUtm("/deposit")}
-          onWaitlist={() => focusWaitlist("launch_offer_bar")}
-          onReserve={(event) => openDepositPage("launch_offer_bar", event)}
-        />
         <CastOptionsSection />
         <AudienceSection />
         <AppExperienceSection />
@@ -634,39 +622,6 @@ function Hero({ depositHref, hookVariant, onSubscribe, onReserve, message }) {
           <strong>Kickstarter</strong>
         </div>
         <p className="microcopy">{HERO.note}</p>
-      </div>
-    </section>
-  );
-}
-
-function LaunchOfferBar({ depositHref, onWaitlist, onReserve }) {
-  return (
-    <section className="launch-offer-bar" aria-label="Kastave founder reservation offer">
-      <div className="launch-offer-inner">
-        <div className="launch-offer-copy">
-          <p className="launch-mini-status">
-            <span>Coming soon</span>
-            <small aria-hidden="true">·</small>
-            <em>Kickstarter</em>
-          </p>
-          <strong>$1 deposit now. $100 credit later.</strong>
-        </div>
-        <div className="launch-proof-row" aria-label="Founder offer highlights">
-          {V2_PROOF_POINTS.map((point) => (
-            <div className="launch-proof-pill" key={point.label}>
-              <strong>{point.value}</strong>
-              <span>{point.label}</span>
-            </div>
-          ))}
-        </div>
-        <div className="launch-offer-actions">
-          <button type="button" className="launch-email-button" onClick={onWaitlist}>
-            Join Early Access
-          </button>
-          <a className="launch-reserve-button" href={depositHref} onClick={onReserve}>
-            Reserve for $1
-          </a>
-        </div>
       </div>
     </section>
   );

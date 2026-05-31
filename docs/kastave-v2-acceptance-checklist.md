@@ -78,7 +78,7 @@ The V2 site should make a first-time visitor understand Kastave quickly, leave a
 | Install/keep Meta Pixel `1542765323857764` | Done locally | `src/tracking.js`, `index.html` noscript, `src/landingContent.test.js` |
 | Do not rely on manual Meta advanced matching fields | Done locally | Site has no name, phone, address, DOB, or gender collection fields |
 | Homepage should use simpler Beni/Mondo-style language | Done locally | Hero copy: `meet Kastave`, `Your shoreline fishing scout`, `Coming soon · Kickstarter` |
-| Include `Coming soon · Kickstarter` positioning | Done locally | Homepage hero, founder offer bar, deposit hero, product specs |
+| Include `Coming soon · Kickstarter` positioning | Done locally | Homepage hero, deposit hero, product specs |
 | Homepage email signup should go to `/deposit` before payment | Done locally | React render smoke and `hero signup continues to the deposit page before payment` test |
 | Homepage `Reserve for $1` should not jump directly to PayPal/Stripe | Done locally | `render-smoke` verifies homepage reservation links route to `/deposit` |
 | `/deposit` should present a polished Beni/Mondo-style reservation page | Done locally | `deposit-mondo-*` implementation and `deposit page presents a polished reservation checkout` test |
@@ -103,7 +103,6 @@ The V2 site should make a first-time visitor understand Kastave quickly, leave a
 ## Page Sections
 
 - Hero: simple positioning, email signup, reserve CTA, Kickstarter status.
-- Launch offer bar: founder reservation proof points and CTA.
 - Highlights: 3D underwater view, auto-scan, water sensing, AI cast calls, private spot log.
 - Target audience: 4 bank-angler personas with matched image overlays.
 - App UI: Auto Mode hero with media slot, plus text summaries for Silent and Performance.
