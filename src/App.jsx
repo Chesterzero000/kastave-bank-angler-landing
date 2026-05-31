@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import {
   ANNOUNCEMENT,
-  BANK_PAIN_POINTS,
   CASTABLE_WORKFLOW,
   DEFAULT_PAYMENT_METHOD,
   FAQS,
   HERO,
   HOOK_VARIANTS,
-  LANDING_PAIN_POINTS,
   PAYMENT_AFTER_STEPS,
   PAYMENT_METHODS,
   PRIVACY_POINTS,
@@ -26,7 +24,6 @@ import {
   withUtm,
 } from "./tracking.js";
 import {
-  recordPainPointAnswer,
   recordReservationIntent,
   recordWaitlistSignup,
 } from "./supabaseBackend.js";
@@ -37,10 +34,6 @@ import recognitionImage from "../assets/kastave-new-recognition.jpg";
 import depositHeroImage from "../assets/kastave-deposit-hand-carry-product-match.jpg";
 import appSonarImage from "../assets/kastave-app-sonar.jpg";
 import productDetailImage from "../assets/kastave-product-detail.jpg";
-import redditPondHasFishImage from "../assets/reddit-proof-pond-has-fish.png";
-import redditSnagFrustrationImage from "../assets/reddit-proof-snag-frustration.png";
-import redditStockedPondImage from "../assets/reddit-proof-stocked-pond.png";
-import redditTrebleWeedsImage from "../assets/reddit-proof-treble-weeds.png";
 import terrainFeatureImage from "../assets/kastave-feature-3d-terrain.jpg";
 import waterFeatureImage from "../assets/kastave-feature-water-conditions.jpg";
 import strategyFeatureImage from "../assets/kastave-feature-ai-strategy.jpg";
@@ -124,33 +117,6 @@ const MEDIA_SCRIPT_CARDS = [
   {
     title: "Auto-scan to 3 cast calls",
     body: "Launch from shore, show a calm sweep path, then cut to the app UI revealing Safe, Structure, and Risk / Reward points.",
-  },
-];
-
-const REDDIT_PAIN_PROOFS = [
-  {
-    title: "Unknown pond",
-    image: redditPondHasFishImage,
-    source: "https://www.reddit.com/r/FishingForBeginners/comments/1erghut/how_do_i_know_if_a_pond_has_fish/",
-    alt: "Reddit post asking how to know if a pond has fish.",
-  },
-  {
-    title: "Pressured stocked pond",
-    image: redditStockedPondImage,
-    source: "https://www.reddit.com/r/FishingForBeginners/comments/1emb79p/cant_catch_anything_on_stocked_pond/",
-    alt: "Reddit post about not catching anything on a stocked pond.",
-  },
-  {
-    title: "Weeds and treble hooks",
-    image: redditTrebleWeedsImage,
-    source: "https://www.reddit.com/r/FishingForBeginners/comments/1nwpaq3/how_would_you_fish_this/",
-    alt: "Reddit comment about tall vegetation and not being able to run a trebled lure through it.",
-  },
-  {
-    title: "Snags and lost lures",
-    image: redditSnagFrustrationImage,
-    source: "https://www.reddit.com/r/FishingForBeginners/comments/1mwkcd3/yeah_ive_about_had_it/",
-    alt: "Reddit post about snapping a rod, losing lures, and feeling discouraged.",
   },
 ];
 
@@ -358,7 +324,6 @@ function getThanksPaymentProvider() {
 
 function App() {
   const [setupDialogOpen, setSetupDialogOpen] = useState(false);
-  const [painCtaOpen, setPainCtaOpen] = useState(false);
   const [signupMessage, setSignupMessage] = useState("");
   const hookVariant = getLandingHookVariant();
   const currentPath = window.location.pathname;
@@ -398,24 +363,6 @@ function App() {
       });
     }
   }, [isThanksPage]);
-
-  useEffect(() => {
-    if (isThanksPage || isDepositPage || isPrivacyPage || isTermsPage) {
-      return undefined;
-    }
-
-    if (sessionStorage.getItem("kastave_pain_cta_seen") === "true") {
-      return undefined;
-    }
-
-    const timer = setTimeout(() => {
-      setPainCtaOpen(true);
-      sessionStorage.setItem("kastave_pain_cta_seen", "true");
-      trackEvent("pain_point_cta_view");
-    }, 5000);
-
-    return () => clearTimeout(timer);
-  }, [isDepositPage, isPrivacyPage, isTermsPage, isThanksPage]);
 
   const openDepositPage = (source = "unknown", event) => {
     trackLeadIntent({ cta: "reserve_for_1", cta_location: source, source });
@@ -510,25 +457,6 @@ function App() {
     }
   };
 
-  const submitPainPoint = ({ painPoint, customAnswer }) => {
-    trackEvent("pain_point_submit", { painPoint, hasCustomAnswer: Boolean(customAnswer) });
-    recordPainPointAnswer({ painPoint, customAnswer });
-    const answers = JSON.parse(localStorage.getItem("kastave_pain_points") || "[]");
-    answers.push({
-      painPoint,
-      customAnswer,
-      createdAt: new Date().toISOString(),
-    });
-    localStorage.setItem("kastave_pain_points", JSON.stringify(answers));
-    setPainCtaOpen(false);
-    focusWaitlist("pain_point_cta");
-  };
-
-  const closePainCta = () => {
-    trackEvent("pain_point_cta_close");
-    setPainCtaOpen(false);
-  };
-
   if (isThanksPage) {
     return <ThanksPage onSubscribe={(email) => subscribe(email, "thanks")} message={signupMessage} />;
   }
@@ -573,7 +501,6 @@ function App() {
         <MediaScriptSection />
         <HowItWorksSection />
         <CastableComparisonSection />
-        <PainSection />
         <PrivacySection />
         <ReservationSection
           depositHref={withUtm("/deposit")}
@@ -586,7 +513,6 @@ function App() {
       </main>
       <Footer />
       <SetupDialog open={setupDialogOpen} onClose={() => setSetupDialogOpen(false)} />
-      <PainPointCta open={painCtaOpen} onClose={closePainCta} onSubmit={submitPainPoint} />
     </>
   );
 }
@@ -1416,110 +1342,6 @@ function WorkflowCard({ tone, workflow }) {
   );
 }
 
-function PainSection() {
-  const [activeProof, setActiveProof] = useState(null);
-
-  const openProof = (proof, painPoint) => {
-    setActiveProof({ ...proof, painPoint });
-    trackEvent("pain_reddit_proof_open", {
-      proof: proof.title.toLowerCase().replace(/\s+/g, "_"),
-      href: proof.source,
-    });
-  };
-
-  return (
-    <section className="pain-section" id="pain" aria-labelledby="pain-title">
-      <div className="section-inner pain-grid">
-        <div>
-          <p className="section-kicker">Bank angler problem</p>
-          <h2 id="pain-title">Stop guessing where to start.</h2>
-        </div>
-        <div className="pain-card-grid" aria-label="Reddit-backed pain point cards">
-          {REDDIT_PAIN_PROOFS.map((proof, index) => (
-            <button
-              className="pain-evidence-card"
-              key={proof.title}
-              type="button"
-              onClick={() => openProof(proof, LANDING_PAIN_POINTS[index])}
-            >
-              <div className="pain-evidence-copy">
-                <span>Reddit proof</span>
-                <p>{LANDING_PAIN_POINTS[index]}</p>
-              </div>
-              <div className="pain-proof-preview">
-                <img src={proof.image} alt={proof.alt} loading="lazy" decoding="async" />
-              </div>
-              <span className="pain-proof-action">View comment detail</span>
-            </button>
-          ))}
-        </div>
-      </div>
-      <PainEvidenceDialog proof={activeProof} onClose={() => setActiveProof(null)} />
-    </section>
-  );
-}
-
-function PainEvidenceDialog({ proof, onClose }) {
-  useEffect(() => {
-    if (!proof) {
-      return undefined;
-    }
-
-    const closeOnEscape = (event) => {
-      if (event.key === "Escape") {
-        onClose();
-      }
-    };
-
-    window.addEventListener("keydown", closeOnEscape);
-    return () => window.removeEventListener("keydown", closeOnEscape);
-  }, [proof, onClose]);
-
-  if (!proof) {
-    return null;
-  }
-
-  const linkName = proof.title.toLowerCase().replace(/\s+/g, "_");
-
-  return (
-    <div className="dialog-backdrop pain-proof-dialog-backdrop" role="presentation" onMouseDown={onClose}>
-      <section
-        className="pain-proof-dialog"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="pain-proof-dialog-title"
-        onMouseDown={(event) => event.stopPropagation()}
-      >
-        <button className="icon-button" type="button" onClick={onClose} aria-label="Close Reddit proof detail">
-          x
-        </button>
-        <div className="pain-proof-dialog-copy">
-          <p className="section-kicker">Reddit proof</p>
-          <h3 id="pain-proof-dialog-title">{proof.painPoint}</h3>
-          <a
-            className="text-link"
-            href={proof.source}
-            target="_blank"
-            rel="noreferrer"
-            onClick={() =>
-              trackEvent("link_click", {
-                link: linkName,
-                source: "pain_reddit_detail",
-                href: proof.source,
-              })
-            }
-          >
-            Open original Reddit thread
-          </a>
-        </div>
-        <div className="pain-proof-dialog-image">
-          <img src={proof.image} alt={proof.alt} loading="lazy" decoding="async" />
-        </div>
-      </section>
-    </div>
-  );
-}
-
 function PrivacyAppVisual() {
   return (
     <figure className="privacy-app-visual" aria-label="Kastave app screen saving a private fishing waypoint">
@@ -1727,9 +1549,6 @@ function Footer() {
         <a href="#castable-comparison" onClick={() => trackFooterLink("comparison", "#castable-comparison")}>
           Compare
         </a>
-        <a href="#pain" onClick={() => trackFooterLink("proof", "#pain")}>
-          Proof
-        </a>
         <a href="#special-offers" onClick={() => trackFooterLink("reserve", "#special-offers")}>
           Reserve
         </a>
@@ -1792,71 +1611,6 @@ function ThanksPage({ onSubscribe, message }) {
         </a>
       </section>
     </main>
-  );
-}
-
-function PainPointCta({ open, onClose, onSubmit }) {
-  const [selected, setSelected] = useState(BANK_PAIN_POINTS[0]);
-  const [customAnswer, setCustomAnswer] = useState("");
-
-  if (!open) {
-    return null;
-  }
-
-  const submit = (event) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-
-    onSubmit({
-      painPoint: formData.get("pain-point") || selected,
-      customAnswer: String(formData.get("custom-answer") || customAnswer).trim(),
-    });
-  };
-
-  return (
-    <div className="pain-cta-backdrop" role="presentation">
-      <section className="pain-cta-card" role="dialog" aria-modal="true" aria-labelledby="pain-cta-title">
-        <button className="icon-button" type="button" onClick={onClose} aria-label="Close pain point question">
-          x
-        </button>
-        <p className="section-kicker">Quick question</p>
-        <h2 id="pain-cta-title">What is your biggest pain point when fishing from the bank?</h2>
-        <form onSubmit={submit}>
-          <div className="pain-options">
-            {BANK_PAIN_POINTS.map((point) => (
-              <label className={selected === point ? "is-selected" : ""} key={point}>
-                <input
-                  type="radio"
-                  name="pain-point"
-                  value={point}
-                  checked={selected === point}
-                  onChange={() => setSelected(point)}
-                />
-                <span>{point}</span>
-              </label>
-            ))}
-          </div>
-          <label className="custom-answer">
-            <span>Other / custom answer</span>
-            <textarea
-              name="custom-answer"
-              value={customAnswer}
-              onChange={(event) => setCustomAnswer(event.target.value)}
-              placeholder="Tell us what slows you down on the bank..."
-              rows="3"
-            />
-          </label>
-          <div className="pain-cta-actions">
-            <button className="checkout-button" type="submit">
-              Submit and join Early Access
-            </button>
-            <button className="text-link" type="button" onClick={onClose}>
-              Skip for now
-            </button>
-          </div>
-        </form>
-      </section>
-    </div>
   );
 }
 

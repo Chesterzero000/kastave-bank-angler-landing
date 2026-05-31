@@ -51,19 +51,6 @@ export function recordWaitlistSignup(email, properties = {}) {
   });
 }
 
-export function recordPainPointAnswer({ painPoint, customAnswer, source = "pain_point_cta" }) {
-  return insertRow("pain_point_answers", {
-    pain_point: painPoint,
-    custom_answer: customAnswer || null,
-    source,
-    variant: getExperimentVariant(),
-    page_path: window.location.pathname,
-    visitor_id: getVisitorId(),
-    utm: extractUtm({}),
-    user_agent: navigator.userAgent,
-  });
-}
-
 export function recordReservationIntent({
   amountCents = 100,
   refundable = false,

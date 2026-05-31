@@ -335,9 +335,8 @@ Run the SQL files in `supabase/migrations/` in order in your Supabase project SQ
 
 It creates:
 
-- `landing_events`: page views, CTA clicks, email submits, payment clicks, and popup events
+- `landing_events`: page views, CTA clicks, email submits, and payment clicks
 - `waitlist_signups`: normalized email signups
-- `pain_point_answers`: bank-fishing pain point responses
 - `reservation_intents`: Stripe or PayPal reservation button clicks, not completed payment confirmations
 - `purchase_events`: completed Stripe or PayPal `$1` reservation payments from the webhook
 - `landing_metric_summary`: authenticated-only summary view by A/B variant

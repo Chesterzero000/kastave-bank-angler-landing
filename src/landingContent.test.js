@@ -225,6 +225,24 @@ test("landing page does not render the removed product value plan section", () =
   assert.doesNotMatch(app, /#plan/);
 });
 
+test("landing page does not render the removed bank angler problem section", () => {
+  assert.doesNotMatch(app, /<PainSection \/>/);
+  assert.doesNotMatch(app, /function PainSection/);
+  assert.doesNotMatch(app, /function PainEvidenceDialog/);
+  assert.doesNotMatch(app, /function PainPointCta/);
+  assert.doesNotMatch(app, /Bank angler problem/);
+  assert.doesNotMatch(app, /Stop guessing where to start/);
+  assert.doesNotMatch(app, /Reddit proof/);
+  assert.doesNotMatch(app, /#pain/);
+  assert.doesNotMatch(app, /pain_point_cta/);
+  assert.doesNotMatch(content, /BANK_PAIN_POINTS/);
+  assert.doesNotMatch(content, /LANDING_PAIN_POINTS/);
+  assert.doesNotMatch(styles, /\.pain-section/);
+  assert.doesNotMatch(styles, /\.pain-card-grid/);
+  assert.doesNotMatch(styles, /\.pain-cta-card/);
+  assert.doesNotMatch(styles, /\.pain-proof-dialog/);
+});
+
 test("landing page imports every image referenced by highlight cards", () => {
   assert.match(app, /import processImage from "\.\.\/assets\/kastave-new-process\.jpg"/);
   assert.match(app, /image:\s*processImage/);
@@ -298,7 +316,6 @@ test("image loading priorities favor fast landing-page rendering", () => {
   assert.match(app, /src=\{appSonarImage\} alt="" aria-hidden="true" loading="lazy" decoding="async"/);
   assert.match(app, /src=\{processImage\}[\s\S]*?loading="lazy"[\s\S]*?decoding="async"/);
   assert.match(app, /src=\{productDetailImage\} alt="Kastave scout boat product detail" loading="lazy" decoding="async"/);
-  assert.match(app, /src=\{proof\.image\} alt=\{proof\.alt\} loading="lazy" decoding="async"/);
 });
 
 test("deposit page presents a polished reservation checkout", () => {
@@ -412,6 +429,7 @@ test("navigation and footer only point to live landing sections", () => {
   assert.match(app, /trackFooterLink\("audience", "#audience"\)/);
   assert.match(app, /trackFooterLink\("app_ui", "#app-ui"\)/);
   assert.match(app, /trackFooterLink\("specs", "#specs"\)/);
+  assert.doesNotMatch(app, /trackFooterLink\("proof", "#pain"\)/);
   assert.doesNotMatch(app, /Casts: "#cast-options"/);
   assert.doesNotMatch(app, /Features: "#features"/);
 });

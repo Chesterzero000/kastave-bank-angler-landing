@@ -104,21 +104,6 @@ export const RESERVATION_OFFER = {
   body: "This is not a finished-unit purchase. It is a non-refundable founder reservation that unlocks a launch credit toward your first Kastave if you buy at launch.",
 };
 
-export const BANK_PAIN_POINTS = [
-  "After-work pond sessions are too short for blind searching",
-  "Public ponds are pressured, but I do not know if I should move",
-  "Grass and snag risk make treble hooks feel like a gamble",
-  "Without a boat, I only care about water I can actually reach",
-  "My first cast needs a reason, not just a hunch",
-];
-
-export const LANDING_PAIN_POINTS = [
-  "Unknown bank water burns the first half of a short session",
-  "Public ponds get hammered, and the bank gives few clues",
-  "Weeds, ledges, channels, rocks, and hard bottom change the lure choice",
-  "Most sonar data still needs to become a first-cast decision",
-];
-
 export const CASTABLE_WORKFLOW = {
   title: "Stop casting your fish finder.",
   body: "Castable sonar can be useful. The problem is the bank workflow: you may spend the first part of the session casting the tool instead of fishing the water.",

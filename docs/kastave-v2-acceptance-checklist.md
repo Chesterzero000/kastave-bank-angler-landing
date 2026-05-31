@@ -110,7 +110,6 @@ The V2 site should make a first-time visitor understand Kastave quickly, leave a
 - Product specs: product type, modes, reads, app workflow, launch plan, target price.
 - Media direction: scripts for the next proof assets.
 - Workflow comparison: castable sonar workflow versus Kastave workflow.
-- Pain proof: Reddit-backed problem cards.
 - Privacy: private maps and spot ownership.
 - Reservation: email plus a single `Reserve for $1` path into `/deposit`.
 - FAQ and footer.

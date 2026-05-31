@@ -20,7 +20,6 @@ const requiredHomeAnchorTargets = [
   "app-ui",
   "specs",
   "castable-comparison",
-  "pain",
   "special-offers",
   "faq",
 ];
@@ -37,7 +36,13 @@ const pageChecks = [
       "Reserve for $1",
       "Sign up",
     ],
-    mustExclude: ["Core Capabilities", "Built to scan, model, and choose the first 3 casts."],
+    mustExclude: [
+      "Core Capabilities",
+      "Built to scan, model, and choose the first 3 casts.",
+      "Bank angler problem",
+      "Stop guessing where to start.",
+      "Reddit proof",
+    ],
     check: (html) => {
       const hrefs = extractHrefs(html);
       const externalPaymentHref = hrefs.find((href) => isPaymentUrl(href));
@@ -83,7 +88,7 @@ const pageChecks = [
   {
     path: "/not-a-real-route",
     mustInclude: ["Kastave", "Get the Highlights", "Who is Kastave For"],
-    mustExclude: ["Not Found", "Core Capabilities"],
+    mustExclude: ["Not Found", "Core Capabilities", "Bank angler problem"],
   },
 ];
 
