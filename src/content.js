@@ -51,8 +51,8 @@ export const SITE = {
   programName: "Kastave Bank Fishing Scout Co-Creation Program",
   domain: "https://kastave.com",
   contactEmail: "Kastave@proton.me",
-  priceRange: "$600-$1,000 target product price",
-  productPrice: "$600-$1,000",
+  priceRange: "$699 planned launch price",
+  productPrice: "$699",
   stripePaymentLink: STRIPE_PAYMENT_LINK,
   paypalPaymentLink: PAYPAL_PAYMENT_LINK,
   reservationPaymentLink: DEFAULT_PAYMENT_METHOD.paymentLink,
@@ -68,7 +68,7 @@ export const HERO = {
   eyebrow: "meet",
   title: "Kastave",
   body: "Your shoreline fishing scout. Scan the water, see the bottom, and pick your first cast.",
-  note: "Coming soon on Kickstarter. Reserve $1 for a $100 launch credit.",
+  note: "Coming soon on Kickstarter. Limited-time founder offer: reserve $1 for a $100 launch credit.",
 };
 
 export const HOOK_VARIANTS = {
@@ -109,9 +109,11 @@ export const HOOK_VARIANTS = {
 export const RESERVATION_OFFER = {
   depositAmount: "$1",
   creditAmount: "$100",
-  productPrice: "$600-$1,000",
-  title: "Reserve for $1. Get $100 launch credit.",
-  body: "This is not a finished-unit purchase. It is a non-refundable founder reservation that unlocks a launch credit toward your first Kastave if you buy at launch.",
+  productPrice: "$699",
+  discountLabel: "Limited-time founder offer",
+  discountCopy: "Lock the planned $699 launch price and get $100 launch credit while founder reservations are open.",
+  title: "Reserve for $1. Lock $699 founder pricing.",
+  body: "This is not a finished-unit purchase. It is a non-refundable founder reservation that unlocks a limited-time founder offer and launch credit toward your first Kastave if you buy at launch.",
 };
 
 export const PRIVACY_POINTS = [

@@ -14,8 +14,9 @@ const trackingMigration = readFileSync(
   "utf8",
 );
 
-test("landing page presents the $1 to $100 credit offer and $600-$1,000 product price range", () => {
-  assert.match(content, /productPrice:\s*"\$600-\$1,000"/);
+test("landing page presents the $1 to $100 credit offer and $699 founder price", () => {
+  assert.match(content, /productPrice:\s*"\$699"/);
+  assert.match(content, /discountLabel:\s*"Limited-time founder offer"/);
   assert.match(content, /creditAmount:\s*"\$100"/);
   assert.match(content, /depositAmount:\s*"\$1"/);
   assert.match(app, /hero-offer-card/);
@@ -374,10 +375,11 @@ test("deposit page presents a polished reservation checkout", () => {
   assert.match(app, /Deposit Now <span aria-hidden="true">-&gt;<\/span>/);
   assert.match(app, /Deposit Now,/);
   assert.match(app, /Credit Later/);
-  assert.match(app, /Estimated product price/);
+  assert.match(app, /planned launch price/);
   assert.match(app, /not the full product/);
   assert.match(content, /depositAmount:\s*"\$1"/);
   assert.match(content, /creditAmount:\s*"\$100"/);
+  assert.match(content, /productPrice:\s*"\$699"/);
   assert.match(app, /Credit Card/);
   assert.match(app, /PayPal/);
   assert.match(app, /function DepositPerkIcon/);

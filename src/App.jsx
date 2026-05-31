@@ -154,7 +154,7 @@ const DEPOSIT_PERKS = [
   {
     icon: "pricing",
     title: "Founder pricing",
-    body: `Your ${RESERVATION_OFFER.depositAmount} reservation unlocks ${RESERVATION_OFFER.creditAmount} launch credit toward your first Kastave.`,
+    body: `Your ${RESERVATION_OFFER.depositAmount} reservation locks the planned ${RESERVATION_OFFER.productPrice} launch price and unlocks ${RESERVATION_OFFER.creditAmount} credit.`,
   },
   {
     icon: "allocation",
@@ -185,11 +185,11 @@ const PACKAGE_INCLUDES = [
 const DEPOSIT_FAQS = [
   {
     question: "Is this the full Kastave price?",
-    answer: `No. This is a ${RESERVATION_OFFER.depositAmount} founder reservation, not a finished-unit purchase. The target product price is ${RESERVATION_OFFER.productPrice}.`,
+    answer: `No. This is a ${RESERVATION_OFFER.depositAmount} founder reservation, not a finished-unit purchase. The planned launch price is ${RESERVATION_OFFER.productPrice}.`,
   },
   {
     question: "What do I get for $1?",
-    answer: `You reserve a founder spot and unlock ${RESERVATION_OFFER.creditAmount} launch credit toward your first Kastave if you buy at launch.`,
+    answer: `You reserve a founder spot, lock the planned ${RESERVATION_OFFER.productPrice} launch price, and unlock ${RESERVATION_OFFER.creditAmount} launch credit toward your first Kastave if you buy at launch.`,
   },
   {
     question: "Is the reservation refundable?",
@@ -267,8 +267,8 @@ const TERMS_SECTIONS = [
     title: "Founder reservation",
     body: [
       `The ${RESERVATION_OFFER.depositAmount} founder reservation is not a finished-product purchase and does not guarantee a shipped unit.`,
-      `If you later buy Kastave at launch, the reservation is intended to unlock ${RESERVATION_OFFER.creditAmount} launch credit toward your first unit.`,
-      `The current estimated product price is ${RESERVATION_OFFER.productPrice}. Final pricing, specifications, accessories, availability, launch date, and campaign details may change.`,
+      `If you later buy Kastave at launch, the reservation is intended to unlock the limited-time founder offer and ${RESERVATION_OFFER.creditAmount} launch credit toward your first unit.`,
+      `The current planned launch price is ${RESERVATION_OFFER.productPrice}. Final pricing, specifications, accessories, availability, launch date, and campaign details may change.`,
       "Unless otherwise required by law, the founder reservation is non-refundable because it is used to measure demand and plan the first production run.",
     ],
   },
@@ -623,13 +623,15 @@ function Hero({ depositHref, hookVariant, onSubscribe, onReserve, message }) {
             <div className="hero-offer-copy">
               <strong>{RESERVATION_OFFER.title}</strong>
               <span>
-                {RESERVATION_OFFER.creditAmount} launch credit toward the {RESERVATION_OFFER.productPrice} Kastave
-                Scout.
+                {RESERVATION_OFFER.discountLabel}: {RESERVATION_OFFER.creditAmount} launch credit toward the{" "}
+                {RESERVATION_OFFER.productPrice} Kastave Scout.
               </span>
             </div>
           </div>
         )}
-        <p className="hero-signup-copy">Sign up and reserve to get {RESERVATION_OFFER.creditAmount} launch credit.</p>
+        <p className="hero-signup-copy">
+          {RESERVATION_OFFER.discountLabel}: reserve to get {RESERVATION_OFFER.creditAmount} launch credit.
+        </p>
         <div className="hero-actions" id="reserve">
           <EmailForm id="hero-email" source="hero" onSubscribe={onSubscribe} buttonLabel="Sign up" />
           <a className="secondary-link hero-reserve-button" href={depositHref} onClick={onReserve}>
@@ -725,14 +727,13 @@ function DepositPage({ onPayment }) {
             <strong>{RESERVATION_OFFER.depositAmount}</strong> Deposit Now,{" "}
             <strong>{RESERVATION_OFFER.creditAmount}</strong> Credit Later
           </h1>
-          <p className="deposit-lock-label">Founder launch credit</p>
+          <p className="deposit-lock-label">{RESERVATION_OFFER.discountLabel}</p>
           <div className="deposit-lock-price" aria-label="Kastave launch credit">
-            <strong>{RESERVATION_OFFER.creditAmount}</strong>
-            <span>launch credit</span>
+            <strong>{RESERVATION_OFFER.productPrice}</strong>
+            <span>planned launch price</span>
           </div>
           <p className="deposit-price-note">
-            Estimated product price: {RESERVATION_OFFER.productPrice}. This is a reservation credit, not the full product
-            price.
+            {RESERVATION_OFFER.discountCopy} This is a reservation credit, not the full product price.
           </p>
           <button className="deposit-mondo-primary" type="button" onClick={() => jumpToDepositCheckout("hero")}>
             Deposit Now <span aria-hidden="true">-&gt;</span>
@@ -760,7 +761,7 @@ function DepositPage({ onPayment }) {
       <section className="deposit-mondo-save" id="deposit-checkout" aria-label="Kastave reservation checkout">
         <p>Save</p>
         <strong>{RESERVATION_OFFER.creditAmount}</strong>
-        <p>with {RESERVATION_OFFER.depositAmount} deposit</p>
+        <p>with {RESERVATION_OFFER.depositAmount} deposit on the {RESERVATION_OFFER.productPrice} founder offer</p>
         <div className="deposit-mondo-payment-row" aria-label="Choose payment method">
           {PAYMENT_METHODS.map((method) => (
             <button
@@ -1333,7 +1334,8 @@ function ReservationSection({ depositHref, onSubscribe, onWaitlist, onReserve, m
           <h2 id="reservation-title">Kastave</h2>
           <p className="package-tagline">Your shoreline fishing scout.</p>
           <p className="package-offer-copy">
-            Sign up and reserve to get {RESERVATION_OFFER.creditAmount} launch credit toward your first Kastave.
+            {RESERVATION_OFFER.discountLabel}: sign up and reserve to lock the planned{" "}
+            {RESERVATION_OFFER.productPrice} launch price and get {RESERVATION_OFFER.creditAmount} credit.
           </p>
           <EmailForm
             id="reservation-email"
@@ -1463,7 +1465,10 @@ function Footer({ onSubscribe, message }) {
         </a>
         <h2 id="footer-title">Kastave</h2>
         <p>Your shoreline fishing scout.</p>
-        <span>Sign up and reserve to get {RESERVATION_OFFER.creditAmount} launch credit.</span>
+        <span>
+          {RESERVATION_OFFER.discountLabel}: lock {RESERVATION_OFFER.productPrice} and get{" "}
+          {RESERVATION_OFFER.creditAmount} credit.
+        </span>
         <EmailForm id="footer-email" source="footer" onSubscribe={onSubscribe} buttonLabel="Sign up" />
         {message && <p className="form-message footer-form-message">{message}</p>}
       </div>
