@@ -1,0 +1,4 @@
+interface:
+  display_name: "GitHub 上传"
+  short_description: "上传代码到 GitHub 并处理 push、认证、远端热修复和线上验证问题。"
+  default_prompt: "帮我把当前代码上传到 GitHub；如果 git push 失败，请用 GitHub connector 或最小热修复方案处理，并验证线上是否更新。"

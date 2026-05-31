@@ -85,27 +85,6 @@ export function recordReservationIntent({
   });
 }
 
-export function recordPurchaseEvent({
-  eventId,
-  amountCents = 100,
-  currency = "USD",
-  provider = "paypal",
-  source = "thanks_page",
-} = {}) {
-  return insertRow("purchase_events", {
-    event_id: eventId || null,
-    provider,
-    amount_cents: amountCents,
-    currency,
-    source,
-    variant: getExperimentVariant(),
-    page_path: window.location.pathname,
-    visitor_id: getVisitorId(),
-    utm: extractUtm({}),
-    user_agent: navigator.userAgent,
-  });
-}
-
 function insertRow(table, row) {
   if (!isSupabaseConfigured()) {
     return Promise.resolve();

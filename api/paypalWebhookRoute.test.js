@@ -1,8 +1,7 @@
 import assert from "node:assert/strict";
-import { Readable } from "node:stream";
 import test from "node:test";
 
-import handler from "./paypal-webhook.js";
+import paypalWebhook from "./paypal-webhook.js";
 
 const event = {
   id: "WH-ROUTE-TEST",
@@ -24,23 +23,25 @@ const paypalHeaders = {
   "paypal-transmission-time": "2026-05-20T00:00:00Z",
 };
 
+test("paypal webhook route exposes a Vercel Web fetch handler", () => {
+  assert.equal(typeof paypalWebhook.fetch, "function");
+});
+
 test("paypal webhook route rejects non-POST requests", async () => {
-  const res = createResponse();
+  const response = await paypalWebhook.fetch(new Request("https://kastave.com/api/paypal-webhook"));
+  const body = await response.json();
 
-  await handler({ method: "GET", headers: {} }, res);
-
-  assert.equal(res.statusCode, 405);
-  assert.equal(res.headers.Allow, "POST");
-  assert.deepEqual(JSON.parse(res.body), { ok: false, error: "method_not_allowed" });
+  assert.equal(response.status, 405);
+  assert.equal(response.headers.get("Allow"), "POST");
+  assert.deepEqual(body, { ok: false, error: "method_not_allowed" });
 });
 
 test("paypal webhook route rejects invalid JSON", async () => {
-  const res = createResponse();
+  const response = await paypalWebhook.fetch(createRequest("{not-json"));
+  const body = await response.json();
 
-  await handler(createRequest("{not-json"), res);
-
-  assert.equal(res.statusCode, 400);
-  assert.deepEqual(JSON.parse(res.body), { ok: false, error: "invalid_json" });
+  assert.equal(response.status, 400);
+  assert.deepEqual(body, { ok: false, error: "invalid_json" });
 });
 
 test("paypal webhook route verifies and records a valid completed capture", async () => {
@@ -71,11 +72,11 @@ test("paypal webhook route verifies and records a valid completed capture", asyn
   });
 
   try {
-    const res = createResponse();
-    await handler(createRequest(JSON.stringify(event), paypalHeaders), res);
+    const response = await paypalWebhook.fetch(createRequest(JSON.stringify(event), paypalHeaders));
+    const body = await response.json();
 
-    assert.equal(res.statusCode, 200);
-    assert.equal(JSON.parse(res.body).recorded, true);
+    assert.equal(response.status, 200);
+    assert.equal(body.recorded, true);
     assert.equal(requests.length, 3);
   } finally {
     restoreEnv(previousEnv);
@@ -84,33 +85,11 @@ test("paypal webhook route verifies and records a valid completed capture", asyn
 });
 
 function createRequest(body, headers = {}) {
-  const req = Readable.from([body]);
-  req.method = "POST";
-  req.headers = headers;
-  return req;
-}
-
-function createResponse() {
-  return {
-    statusCode: 200,
-    headers: {},
-    body: "",
-    setHeader(name, value) {
-      this.headers[name] = value;
-    },
-    status(code) {
-      this.statusCode = code;
-      return this;
-    },
-    json(body) {
-      this.body = JSON.stringify(body);
-      return this;
-    },
-    end(body = "") {
-      this.body = body;
-      return this;
-    },
-  };
+  return new Request("https://kastave.com/api/paypal-webhook", {
+    method: "POST",
+    headers,
+    body,
+  });
 }
 
 function snapshotEnv() {

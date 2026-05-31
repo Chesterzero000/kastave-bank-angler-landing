@@ -18,6 +18,10 @@ const event = {
   },
 };
 
+test("stripe webhook route exposes a Vercel Web fetch handler", () => {
+  assert.equal(typeof stripeWebhook.fetch, "function");
+});
+
 test("stripe webhook route rejects non-POST requests", async () => {
   const response = await stripeWebhook.fetch(new Request("https://kastave.com/api/stripe-webhook"));
   const body = await response.json();

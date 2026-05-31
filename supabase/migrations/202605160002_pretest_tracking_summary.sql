@@ -53,7 +53,7 @@ drop view if exists public.pretest_creative_summary;
 drop view if exists public.landing_metric_summary;
 
 create or replace view public.landing_metric_summary as
-with by_variant as (
+with event_counts as (
   select
     variant,
     count(*) filter (where event_name = 'page_view') as page_views,
@@ -63,7 +63,7 @@ with by_variant as (
     count(*) filter (where event_name = 'lead') as leads,
     count(*) filter (where event_name = 'lead_submit_failed') as lead_submit_failures,
     count(*) filter (where event_name = 'initiate_checkout') as checkout_starts,
-    count(*) filter (where event_name = 'purchase') as purchases,
+    count(*) filter (where event_name = 'purchase') as thank_you_purchase_events,
     count(*) filter (where event_name = 'payment_failed') as payment_failures,
     count(*) filter (where event_name = 'faq_opened') as faq_opens,
     round(
@@ -75,9 +75,18 @@ with by_variant as (
     max(created_at) as last_seen_at
   from public.landing_events
   group by variant
+),
+verified_purchase_counts as (
+  select
+    variant,
+    count(*) as verified_purchases
+  from public.purchase_events
+  where amount_cents = 100
+    and upper(currency) = 'USD'
+  group by variant
 )
 select
-  variant,
+  event_counts.variant,
   page_views,
   avg_time_on_page_seconds,
   lead_intents,
@@ -88,15 +97,18 @@ select
   lead_submit_failures,
   checkout_starts,
   round(checkout_starts::numeric / nullif(page_views, 0), 4) as checkout_start_rate,
-  purchases,
-  round(purchases::numeric / nullif(page_views, 0), 4) as one_dollar_purchase_rate,
+  coalesce(verified_purchases, 0) as verified_purchases,
+  round(coalesce(verified_purchases, 0)::numeric / nullif(page_views, 0), 4) as one_dollar_purchase_rate,
+  thank_you_purchase_events,
   payment_failures,
   outbound_clicks,
   faq_opens,
   round(faq_opens::numeric / nullif(page_views, 0), 4) as faq_open_rate,
   first_seen_at,
   last_seen_at
-from by_variant;
+from event_counts
+left join verified_purchase_counts
+  on verified_purchase_counts.variant = event_counts.variant;
 
 create or replace view public.pretest_creative_summary as
 select

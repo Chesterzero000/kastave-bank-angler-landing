@@ -5,9 +5,18 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "test": "node --test src/**/*.test.js api/**/*.test.js",
+    "test": "node --test src/**/*.test.js api/**/*.test.js scripts/**/*.test.js",
+    "check:structure": "node scripts/check-project-structure.mjs",
+    "check:assets": "node scripts/check-assets.mjs",
+    "check:deploy-target": "node scripts/check-deploy-target.mjs",
     "build": "vite build && node scripts/create-spa-fallback.mjs",
-    "preview": "vite preview --host 0.0.0.0"
+    "render:smoke": "node scripts/render-smoke.mjs",
+    "preview": "vite preview --host 0.0.0.0",
+    "preview:smoke": "node scripts/preview-smoke.mjs",
+    "preflight": "node scripts/preflight.mjs",
+    "deploy:ready": "node scripts/deploy-ready.mjs",
+    "check:payment-links": "node scripts/check-payment-links.mjs",
+    "check:prod-env": "node scripts/check-production-env.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^5.1.2",
