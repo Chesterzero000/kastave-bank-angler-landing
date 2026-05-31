@@ -108,7 +108,7 @@ The V2 site should make a first-time visitor understand Kastave quickly, leave a
 - App UI: Auto Mode hero with media slot, plus text summaries for Silent and Performance.
 - Product specs: product-image hero plus battery, weight, sonar range, speed, wind/chop, and connectivity details.
 - Media direction: scripts for the next proof assets.
-- Privacy: simple icon-led private maps and spot ownership.
+- Privacy: simple icon-led private maps, spot ownership, and an app-style private waypoint preview.
 - Reservation: product-image offer with email signup, `Reserve for $1`, and package contents.
 - FAQ and Beni-style image footer with Facebook link.
 

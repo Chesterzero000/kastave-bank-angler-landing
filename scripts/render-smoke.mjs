@@ -32,6 +32,8 @@ const pageChecks = [
       "Who is Kastave For",
       "Auto mode first. Quiet or fast when you need it.",
       "Your Privacy Comes First",
+      "Waypoint saved",
+      "Only you can see this spot.",
       "Built tough. Bank ready.",
       "6 hours",
       "20 m radius",

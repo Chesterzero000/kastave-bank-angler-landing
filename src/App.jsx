@@ -1257,6 +1257,40 @@ function PrivacyIcon({ type }) {
   );
 }
 
+function PrivacyAppVisual() {
+  return (
+    <div className="privacy-app-visual" aria-label="Kastave app private waypoint preview">
+      <div className="privacy-device-shell">
+        <div className="privacy-device-top">
+          <span>Kastave</span>
+          <strong>Private map</strong>
+        </div>
+        <div className="privacy-map-screen">
+          <span className="privacy-contour privacy-contour-one" />
+          <span className="privacy-contour privacy-contour-two" />
+          <span className="privacy-contour privacy-contour-three" />
+          <span className="privacy-private-route" />
+          <span className="privacy-waypoint privacy-waypoint-one">Drop-off</span>
+          <span className="privacy-waypoint privacy-waypoint-two">Brush</span>
+          <span className="privacy-boat-dot" />
+        </div>
+        <div className="privacy-map-card">
+          <strong>Waypoint saved</strong>
+          <span>Only you can see this spot.</span>
+        </div>
+        <div className="privacy-toggle-row">
+          <span>Public feed</span>
+          <strong>Off</strong>
+        </div>
+        <div className="privacy-toggle-row">
+          <span>Share location</span>
+          <strong>Off</strong>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function PrivacySection() {
   return (
     <section className="privacy-section" id="privacy" aria-labelledby="privacy-title">
@@ -1270,6 +1304,7 @@ function PrivacySection() {
             </article>
           ))}
         </div>
+        <PrivacyAppVisual />
       </div>
     </section>
   );

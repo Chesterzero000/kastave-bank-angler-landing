@@ -421,19 +421,28 @@ test("site includes privacy policy and terms pages", () => {
 test("privacy section follows a simple icon-led privacy layout", () => {
   assert.match(app, /const PRIVACY_STATEMENTS/);
   assert.match(app, /function PrivacyIcon/);
+  assert.match(app, /function PrivacyAppVisual/);
   assert.match(app, /Your Privacy Comes First/);
   assert.match(app, /No public spot feed\. No spot burning/);
   assert.match(app, /className="section-inner privacy-simple-layout"/);
   assert.match(app, /className="privacy-statement-list"/);
   assert.match(app, /className="privacy-icon"/);
+  assert.match(app, /className="privacy-app-visual"/);
+  assert.match(app, /className="privacy-device-shell"/);
+  assert.match(app, /Kastave app private waypoint preview/);
+  assert.match(app, /Waypoint saved/);
+  assert.match(app, /Only you can see this spot\./);
+  assert.match(app, /Public feed/);
+  assert.match(app, /Share location/);
   assert.match(styles, /\.privacy-section\s*\{[^}]*background:\s*white/s);
   assert.match(styles, /\.privacy-simple-layout\s*\{[^}]*text-align:\s*center/s);
   assert.match(styles, /\.privacy-simple-layout h2\s*\{[^}]*color:\s*var\(--orange-dark\)/s);
   assert.match(styles, /\.privacy-statement-list\s*\{/);
   assert.match(styles, /\.privacy-icon\s*\{/);
-  assert.doesNotMatch(app, /function PrivacyAppVisual/);
-  assert.doesNotMatch(styles, /\.privacy-app-visual/);
-  assert.doesNotMatch(styles, /\.privacy-map-screen/);
+  assert.match(styles, /\.privacy-app-visual\s*\{/);
+  assert.match(styles, /\.privacy-device-shell\s*\{/);
+  assert.match(styles, /\.privacy-map-screen\s*\{/);
+  assert.match(styles, /\.privacy-waypoint\s*\{/);
 });
 
 test("landing page explains the dual payment provider path", () => {
