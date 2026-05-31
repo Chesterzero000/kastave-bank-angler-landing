@@ -18,6 +18,7 @@ const requiredFiles = [
   "scripts/create-spa-fallback.mjs",
   "scripts/check-production-env.mjs",
   "scripts/check-payment-links.mjs",
+  "scripts/check-release-state.mjs",
   "scripts/deploy-ready.mjs",
   ".env.example",
 ];
@@ -132,6 +133,7 @@ async function verifyPackageScripts() {
     build: "scripts/create-spa-fallback.mjs",
     preflight: "scripts/preflight.mjs",
     "deploy:ready": "scripts/deploy-ready.mjs",
+    "check:release-state": "scripts/check-release-state.mjs",
     "check:payment-links": "scripts/check-payment-links.mjs",
     "check:prod-env": "scripts/check-production-env.mjs",
   };
