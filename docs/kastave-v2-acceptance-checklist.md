@@ -12,7 +12,7 @@ The V2 site should make a first-time visitor understand Kastave quickly, leave a
 - Hero email signup stores the email path and routes to `/deposit`.
 - Homepage `Reserve for $1` CTAs route to `/deposit`, not directly to PayPal or Stripe.
 - Homepage bottom founder-access card also routes to `/deposit`; direct payment choices only appear on `/deposit`.
-- `/deposit` explains `$1 Deposit Now, $100 Credit Later`, founder reservation, `$699` planned launch price, limited-time founder offer, and the fact that it is not the full product purchase.
+- `/deposit` explains `$1 Deposit Now, $100 Off Later`, 3-day founder reservation, `$699` crossed down to the `$599` founder price, and the fact that it is not the full product purchase.
 - `/deposit` exposes `Credit Card` through Stripe and `PayPal` through the browser-verified `$1` PayPal payment link.
 - The payment page does not render a long card or billing form inside the Kastave site.
 - Meta Pixel remains installed with pixel ID `1542765323857764`.
@@ -91,7 +91,7 @@ The V2 site should make a first-time visitor understand Kastave quickly, leave a
 | Deposit CTA should jump to payment choices | Done locally | `jumpToDepositCheckout`, `deposit_checkout_jump`, `#deposit-checkout` |
 | Payment should be simple: choose Stripe credit card or PayPal | Done locally | `/deposit` renders `Credit Card` and `PayPal`; PayPal uses the browser-verified `$1` payment link |
 | Avoid a long checkout/billing form on Kastave site | Done locally | `render-smoke` and tests verify no embedded long form fields |
-| Clarify `$1 deposit` and `$100 credit later` so users do not mistake it for full product purchase | Done locally | Deposit copy includes `$699` planned launch price, limited-time founder offer, and not-full-product language |
+| Clarify `$1 deposit` and `$100 off later` so users do not mistake it for full product purchase | Done locally | Deposit copy includes `$699` crossed down to `$599`, 3-day founder offer, and not-full-product language |
 | Add terms and privacy pages | Done locally | `/privacy`, `/terms`, `/policies/privacy-policy`, `/policies/terms-of-service` |
 | Use 5 product highlights: 3D underwater, auto scan/cruise, water/fish sensing, AI 3 cast calls, private spot log | Done locally | Highlights bento copy and assets |
 | Use American fishing-language framing | Done locally | `skills/american-bass-angler-copy/`, persona titles, final copy such as `Scan the water, see the bottom, and pick your first cast` |

@@ -683,9 +683,28 @@ h3 {
   line-height: 1.1;
 }
 
+.deposit-offer-timer {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  margin: -6px 0 16px;
+  border: 1px solid rgba(217, 91, 0, 0.32);
+  border-radius: 999px;
+  padding: 0 18px;
+  background: rgba(255, 255, 255, 0.66);
+  color: var(--orange-dark);
+  font-size: clamp(0.86rem, 1.3vw, 1rem);
+  font-weight: 950;
+  line-height: 1;
+  text-transform: uppercase;
+  box-shadow: 0 10px 24px rgba(16, 19, 18, 0.08);
+  backdrop-filter: blur(10px);
+}
+
 .deposit-lock-price {
   display: inline-grid;
-  gap: 6px;
+  gap: 4px;
   align-items: center;
   justify-items: center;
   margin: 8px 0 16px;
@@ -695,6 +714,26 @@ h3 {
   background: rgba(255, 255, 255, 0.62);
   box-shadow: 0 14px 34px rgba(16, 19, 18, 0.1);
   backdrop-filter: blur(12px);
+}
+
+.deposit-original-price {
+  position: relative;
+  color: #111715;
+  font-size: clamp(1.45rem, 3vw, 2.15rem);
+  font-weight: 950;
+  line-height: 1;
+}
+
+.deposit-original-price::after {
+  content: "";
+  position: absolute;
+  left: -8%;
+  right: -8%;
+  top: 50%;
+  height: 4px;
+  border-radius: 999px;
+  background: #060808;
+  transform: rotate(-5deg);
 }
 
 .deposit-lock-price strong {

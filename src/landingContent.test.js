@@ -14,9 +14,11 @@ const trackingMigration = readFileSync(
   "utf8",
 );
 
-test("landing page presents the $1 to $100 credit offer and $699 founder price", () => {
-  assert.match(content, /productPrice:\s*"\$699"/);
-  assert.match(content, /discountLabel:\s*"Limited-time founder offer"/);
+test("landing page presents the $1 to $100 credit offer and $599 founder price", () => {
+  assert.match(content, /regularPrice:\s*"\$699"/);
+  assert.match(content, /productPrice:\s*"\$599"/);
+  assert.match(content, /discountLabel:\s*"3-day founder offer"/);
+  assert.match(content, /durationLabel:\s*"Ends in 3 days"/);
   assert.match(content, /creditAmount:\s*"\$100"/);
   assert.match(content, /depositAmount:\s*"\$1"/);
   assert.match(app, /hero-offer-card/);
@@ -374,12 +376,15 @@ test("deposit page presents a polished reservation checkout", () => {
   assert.match(app, /onClick=\{\(\) => onPayment\(method\.key\)\}/);
   assert.match(app, /Deposit Now <span aria-hidden="true">-&gt;<\/span>/);
   assert.match(app, /Deposit Now,/);
-  assert.match(app, /Credit Later/);
-  assert.match(app, /planned launch price/);
+  assert.match(app, /Off Later/);
+  assert.match(app, /deposit-offer-timer/);
+  assert.match(app, /limited-time founder price/);
+  assert.match(app, /deposit-original-price/);
   assert.match(app, /not the full product/);
   assert.match(content, /depositAmount:\s*"\$1"/);
   assert.match(content, /creditAmount:\s*"\$100"/);
-  assert.match(content, /productPrice:\s*"\$699"/);
+  assert.match(content, /regularPrice:\s*"\$699"/);
+  assert.match(content, /productPrice:\s*"\$599"/);
   assert.match(app, /Credit Card/);
   assert.match(app, /PayPal/);
   assert.match(app, /function DepositPerkIcon/);
