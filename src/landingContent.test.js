@@ -488,13 +488,22 @@ test("navigation and footer only point to live landing sections", () => {
   assert.match(app, /"Who it's for": "#audience"/);
   assert.match(app, /App: "#app-ui"/);
   assert.match(app, /Specs: "#specs"/);
-  assert.match(app, /trackFooterLink\("audience", "#audience"\)/);
-  assert.match(app, /trackFooterLink\("app_ui", "#app-ui"\)/);
-  assert.match(app, /trackFooterLink\("specs", "#specs"\)/);
+  assert.match(app, /className="footer-background"/);
+  assert.match(app, /className="footer-social-links"/);
+  assert.match(app, /href=\{SITE\.facebookUrl\}/);
+  assert.match(app, /trackFooterLink\("facebook", SITE\.facebookUrl\)/);
+  assert.match(content, /facebookUrl:\s*import\.meta\.env\.VITE_FACEBOOK_URL\s*\|\|\s*"https:\/\/www\.facebook\.com\/kastave"/);
+  assert.match(app, /<Footer onSubscribe=\{\(email\) => subscribe\(email, "footer"\)\} message=\{signupMessage\} \/>/);
+  assert.match(app, /id="footer-email"/);
+  assert.match(app, /trackFooterLink\("privacy_policy", "\/privacy"\)/);
+  assert.match(app, /trackFooterLink\("terms_of_service", "\/terms"\)/);
   assert.doesNotMatch(app, /trackFooterLink\("proof", "#pain"\)/);
   assert.doesNotMatch(app, /trackFooterLink\("comparison", "#castable-comparison"\)/);
   assert.doesNotMatch(app, /Casts: "#cast-options"/);
   assert.doesNotMatch(app, /Features: "#features"/);
+  assert.match(styles, /\.site-footer\s*\{[^}]*min-height:\s*min\(760px,\s*92vh\)/s);
+  assert.match(styles, /\.footer-bottom\s*\{[^}]*grid-template-columns:\s*1fr auto 1fr/s);
+  assert.match(styles, /\.footer-social-links a\s*\{[^}]*border-radius:\s*50%/s);
 });
 
 test("audience and highlight headings use the same display scale", () => {

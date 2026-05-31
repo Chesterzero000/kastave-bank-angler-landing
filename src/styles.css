@@ -3143,37 +3143,155 @@ h3 {
 }
 
 .site-footer {
+  position: relative;
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: 34px;
-  padding: clamp(38px, 6vw, 76px) clamp(18px, 5vw, 72px);
+  min-height: min(760px, 92vh);
+  overflow: hidden;
+  align-items: end;
   color: white;
   background: var(--charcoal);
 }
 
-.site-footer .brand-logo {
-  width: 190px;
-  max-height: 42px;
+.footer-background,
+.footer-scrim {
+  position: absolute;
+  inset: 0;
+}
+
+.footer-background {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 56% center;
+}
+
+.footer-scrim {
+  z-index: 1;
+  background:
+    linear-gradient(90deg, rgba(6, 8, 8, 0.74) 0%, rgba(6, 8, 8, 0.38) 42%, rgba(6, 8, 8, 0.08) 72%),
+    linear-gradient(0deg, rgba(6, 8, 8, 0.72) 0%, rgba(6, 8, 8, 0.08) 38%, rgba(6, 8, 8, 0.22) 100%);
+}
+
+.footer-hero {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  justify-items: start;
+  width: min(520px, calc(100% - 36px));
+  margin: 0 auto 170px clamp(24px, 8vw, 96px);
+}
+
+.footer-brand {
+  display: inline-flex;
+  margin-bottom: 22px;
+}
+
+.footer-brand .brand-logo {
+  width: 176px;
+  max-height: 40px;
   filter: invert(1);
 }
 
-.footer-links {
-  display: grid;
-  gap: 10px;
+.footer-hero h2 {
+  margin: 0;
+  color: white;
+  font-size: clamp(5.2rem, 12vw, 9.6rem);
+  line-height: 0.74;
+}
+
+.footer-hero p {
+  margin: 10px 0 0;
+  color: white;
+  font-size: clamp(1.6rem, 3.4vw, 3rem);
+  font-weight: 800;
+  line-height: 1.04;
+}
+
+.footer-hero > span {
+  margin-top: 58px;
+  color: white;
+  font-size: 1rem;
   font-weight: 800;
 }
 
-.site-footer small {
-  display: block;
+.footer-hero .email-form {
+  min-height: 64px;
   margin-top: 14px;
-  color: rgba(255, 255, 255, 0.62);
+  border: 0;
+  border-radius: 999px;
+  background: rgba(16, 19, 18, 0.72);
+  box-shadow: 0 18px 48px rgba(6, 8, 8, 0.24);
 }
 
-.footer-contact {
-  display: inline-flex;
-  margin-top: 14px;
+.footer-hero .email-form input {
   color: white;
-  font-weight: 900;
+  padding-left: 28px;
+}
+
+.footer-hero .email-form button {
+  min-width: 190px;
+  margin: 5px;
+  border-radius: 999px;
+  background: var(--orange-dark);
+}
+
+.footer-form-message {
+  color: white;
+}
+
+.footer-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 24px;
+  align-items: center;
+  padding: 24px clamp(18px, 5vw, 72px) 28px;
+  background: linear-gradient(180deg, rgba(6, 8, 8, 0), rgba(6, 8, 8, 0.42));
+}
+
+.footer-legal-links,
+.footer-social-links {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.footer-legal-links {
+  flex-wrap: wrap;
+  font-weight: 850;
+}
+
+.footer-legal-links a,
+.footer-legal-links span {
+  color: white;
+}
+
+.site-footer small {
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.footer-social-links {
+  justify-content: flex-end;
+}
+
+.footer-social-links a {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 50%;
+  color: rgba(16, 19, 18, 0.82);
+  background: white;
+  font-size: 1.2rem;
+  font-weight: 950;
+  text-decoration: none;
 }
 
 .dialog-backdrop {
@@ -3608,6 +3726,28 @@ h3 {
     border-radius: 34px;
   }
 
+  .site-footer {
+    min-height: 780px;
+  }
+
+  .footer-hero {
+    margin: 0 auto 230px 24px;
+  }
+
+  .footer-bottom {
+    grid-template-columns: 1fr;
+    justify-items: start;
+    gap: 14px;
+  }
+
+  .site-footer small {
+    text-align: left;
+  }
+
+  .footer-social-links {
+    justify-content: flex-start;
+  }
+
 }
 
 @media (max-width: 620px) {
@@ -3766,6 +3906,59 @@ h3 {
 
   .package-includes {
     padding: 16px;
+  }
+
+  .site-footer {
+    min-height: 720px;
+  }
+
+  .footer-background {
+    object-position: 64% center;
+  }
+
+  .footer-scrim {
+    background:
+      linear-gradient(90deg, rgba(6, 8, 8, 0.78), rgba(6, 8, 8, 0.22)),
+      linear-gradient(0deg, rgba(6, 8, 8, 0.78), rgba(6, 8, 8, 0.18));
+  }
+
+  .footer-hero {
+    width: calc(100% - 36px);
+    margin: 0 auto 250px;
+  }
+
+  .footer-brand .brand-logo {
+    width: 136px;
+  }
+
+  .footer-hero > span {
+    margin-top: 34px;
+  }
+
+  .footer-hero .email-form {
+    min-height: auto;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    gap: 10px;
+  }
+
+  .footer-hero .email-form input,
+  .footer-hero .email-form button {
+    border-radius: 999px;
+  }
+
+  .footer-hero .email-form input {
+    background: rgba(16, 19, 18, 0.72);
+  }
+
+  .footer-hero .email-form button {
+    min-width: 0;
+    margin: 0;
+  }
+
+  .footer-bottom {
+    padding: 22px 18px;
   }
 }
 

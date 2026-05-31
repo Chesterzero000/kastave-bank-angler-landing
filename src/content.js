@@ -48,6 +48,7 @@ export const SITE = {
   paypalPaymentLink: PAYPAL_PAYMENT_LINK,
   reservationPaymentLink: DEFAULT_PAYMENT_METHOD.paymentLink,
   paymentProvider: DEFAULT_PAYMENT_METHOD.key,
+  facebookUrl: import.meta.env.VITE_FACEBOOK_URL || "https://www.facebook.com/kastave",
   beehiivFormUrl: import.meta.env.VITE_BEEHIIV_FORM_URL || "",
   surveyUrl: import.meta.env.VITE_SURVEY_URL || "",
 };

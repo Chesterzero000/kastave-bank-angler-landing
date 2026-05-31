@@ -13,13 +13,12 @@ const knownInternalRoutes = new Set([
   "/policies/privacy-policy",
   "/policies/terms-of-service",
 ]);
-const allowedExternalHosts = new Set(["buy.stripe.com", "paypal.com", "www.paypal.com"]);
+const allowedExternalHosts = new Set(["buy.stripe.com", "facebook.com", "paypal.com", "www.facebook.com", "www.paypal.com"]);
 const requiredHomeAnchorTargets = [
   "cast-options",
   "audience",
   "app-ui",
   "specs",
-  "special-offers",
   "faq",
 ];
 
@@ -43,6 +42,7 @@ const pageChecks = [
       "Kastave Scout boat",
       "Kastave app + founder software membership",
       "Sign up",
+      "For bank anglers who read before they cast.",
     ],
     mustExclude: [
       "Core Capabilities",

@@ -110,7 +110,7 @@ The V2 site should make a first-time visitor understand Kastave quickly, leave a
 - Media direction: scripts for the next proof assets.
 - Privacy: simple icon-led private maps and spot ownership.
 - Reservation: product-image offer with email signup, `Reserve for $1`, and package contents.
-- FAQ and footer.
+- FAQ and Beni-style image footer with Facebook link.
 
 ## Verification Commands
 

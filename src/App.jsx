@@ -510,7 +510,7 @@ function App() {
         />
         <FAQ />
       </main>
-      <Footer />
+      <Footer onSubscribe={(email) => subscribe(email, "footer")} message={signupMessage} />
       <SetupDialog open={setupDialogOpen} onClose={() => setSetupDialogOpen(false)} />
     </>
   );
@@ -1407,57 +1407,58 @@ function FAQ() {
   );
 }
 
-function Footer() {
+function Footer({ onSubscribe, message }) {
   const trackFooterLink = (link, href) => {
     trackEvent("link_click", { link, source: "footer", href });
   };
 
   return (
-    <footer className="site-footer">
-      <div>
-        <a className="brand" href="/" onClick={() => trackFooterLink("brand", "/")}>
+    <footer className="site-footer" aria-labelledby="footer-title">
+      <img className="footer-background" src={depositHeroImage} alt="" aria-hidden="true" loading="lazy" decoding="async" />
+      <div className="footer-scrim" />
+      <div className="footer-hero">
+        <a className="footer-brand" href="/" onClick={() => trackFooterLink("brand", "/")}>
           <img className="brand-logo" src={logoImage} alt={SITE.name} />
         </a>
-        <p>
-          {SITE.programName}: early access for bank anglers scouting unknown water before they cast.
-        </p>
+        <h2 id="footer-title">Kastave</h2>
+        <p>Your shoreline fishing scout.</p>
+        <span>Sign up and reserve to get {RESERVATION_OFFER.creditAmount} launch credit.</span>
+        <EmailForm id="footer-email" source="footer" onSubscribe={onSubscribe} buttonLabel="Sign up" />
+        {message && <p className="form-message footer-form-message">{message}</p>}
       </div>
-      <div className="footer-links">
-        <a href="#cast-options" onClick={() => trackFooterLink("cast_options", "#cast-options")}>
-          Highlights
-        </a>
-        <a href="#audience" onClick={() => trackFooterLink("audience", "#audience")}>
-          Who it's for
-        </a>
-        <a href="#app-ui" onClick={() => trackFooterLink("app_ui", "#app-ui")}>
-          App
-        </a>
-        <a href="#specs" onClick={() => trackFooterLink("specs", "#specs")}>
-          Specs
-        </a>
-        <a href="#special-offers" onClick={() => trackFooterLink("reserve", "#special-offers")}>
-          Reserve
-        </a>
-        <a href="#faq" onClick={() => trackFooterLink("faq", "#faq")}>
-          FAQ
-        </a>
-        <a href="/privacy" onClick={() => trackFooterLink("privacy_policy", "/privacy")}>
-          Privacy Policy
-        </a>
-        <a href="/terms" onClick={() => trackFooterLink("terms_of_service", "/terms")}>
-          Terms of Service
-        </a>
-      </div>
-      <div>
-        <strong>Transparent pretest</strong>
-        <small>Production-in-progress. No finished-unit shipping claim yet.</small>
-        <a
-          className="footer-contact"
-          href={`mailto:${SITE.contactEmail}`}
-          onClick={() => trackFooterLink("contact_email", `mailto:${SITE.contactEmail}`)}
-        >
-          Contact: {SITE.contactEmail}
-        </a>
+      <div className="footer-bottom">
+        <nav className="footer-legal-links" aria-label="Footer links">
+          <a href="/privacy" onClick={() => trackFooterLink("privacy_policy", "/privacy")}>
+            Privacy Policy
+          </a>
+          <span aria-hidden="true">·</span>
+          <a href="/terms" onClick={() => trackFooterLink("terms_of_service", "/terms")}>
+            Terms of Service
+          </a>
+          <span aria-hidden="true">·</span>
+          <a
+            href={`mailto:${SITE.contactEmail}`}
+            onClick={() => trackFooterLink("contact_email", `mailto:${SITE.contactEmail}`)}
+          >
+            Contact
+          </a>
+        </nav>
+        <small>
+          {SITE.name} © 2026
+          <br />
+          For bank anglers who read before they cast.
+        </small>
+        <div className="footer-social-links" aria-label="Social links">
+          <a
+            href={SITE.facebookUrl}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Kastave on Facebook"
+            onClick={() => trackFooterLink("facebook", SITE.facebookUrl)}
+          >
+            <span aria-hidden="true">f</span>
+          </a>
+        </div>
       </div>
     </footer>
   );
