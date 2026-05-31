@@ -52,20 +52,22 @@ async function verifyPaymentLink({ label, url, allowedHosts }) {
       redirect: "follow",
       signal: controller.signal,
       headers: {
-        "user-agent": "Kastave-payment-link-smoke/1.0",
+        "user-agent":
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
       },
     });
     const body = await response.text();
+    const recognizablePaymentPage = isRecognizablePaymentPage(label, body);
 
     if (!response.ok) {
       throw new Error(`${label} payment link returned HTTP ${response.status}.`);
     }
 
-    if (isMerchantErrorPage(body)) {
+    if (isMerchantErrorPage(body) && !recognizablePaymentPage) {
       throw new Error(`${label} payment link appears to show a merchant/payment setup error page.`);
     }
 
-    if (!body.toLowerCase().includes(label.toLowerCase())) {
+    if (!recognizablePaymentPage) {
       throw new Error(`${label} payment link did not return recognizable ${label} checkout content.`);
     }
   } catch (error) {
@@ -107,4 +109,18 @@ function isMerchantErrorPage(body) {
     /Things don't appear to be working/i,
     /This page is unavailable/i,
   ].some((pattern) => pattern.test(body));
+}
+
+function isRecognizablePaymentPage(label, body) {
+  if (label === "PayPal") {
+    return [
+      /hostedButtonDetails/i,
+      /"status":"ACTIVE"/i,
+      /Kastave \$1 Founder Reservation/i,
+      /"amount","value":"1\.00"/i,
+      /"payment_button_type","value":"LINK"/i,
+    ].every((pattern) => pattern.test(body));
+  }
+
+  return body.toLowerCase().includes(label.toLowerCase());
 }

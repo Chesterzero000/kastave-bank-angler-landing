@@ -13,8 +13,7 @@ The V2 site should make a first-time visitor understand Kastave quickly, leave a
 - Homepage `Reserve for $1` CTAs route to `/deposit`, not directly to PayPal or Stripe.
 - Homepage bottom founder-access card also routes to `/deposit`; direct payment choices only appear on `/deposit`.
 - `/deposit` explains `$1 Deposit Now, $100 Credit Later`, founder reservation, expected product price, and the fact that it is not the full product purchase.
-- `/deposit` exposes `Credit Card` through Stripe and keeps a guarded `PayPal` option visible. PayPal is disabled locally
-  until a live `VITE_PAYPAL_PAYMENT_LINK` is configured, so users are not sent to the known broken PayPal page.
+- `/deposit` exposes `Credit Card` through Stripe and `PayPal` through the browser-verified `$1` PayPal payment link.
 - The payment page does not render a long card or billing form inside the Kastave site.
 - Meta Pixel remains installed with pixel ID `1542765323857764`.
 - The site does not manually send email, phone, name, or address fields to Meta advanced matching.
@@ -86,7 +85,7 @@ The V2 site should make a first-time visitor understand Kastave quickly, leave a
 | Homepage `Reserve for $1` should not jump directly to PayPal/Stripe | Done locally | `render-smoke` verifies homepage reservation links route to `/deposit` |
 | `/deposit` should present a polished Beni/Mondo-style reservation page | Done locally | `deposit-mondo-*` implementation and `deposit page presents a polished reservation checkout` test |
 | Deposit CTA should jump to payment choices | Done locally | `jumpToDepositCheckout`, `deposit_checkout_jump`, `#deposit-checkout` |
-| Payment should be simple: choose Stripe credit card or PayPal | Done locally, PayPal gated | `/deposit` renders `Credit Card` and `PayPal`; PayPal is disabled until `VITE_PAYPAL_PAYMENT_LINK` is live |
+| Payment should be simple: choose Stripe credit card or PayPal | Done locally | `/deposit` renders `Credit Card` and `PayPal`; PayPal uses the browser-verified `$1` payment link |
 | Avoid a long checkout/billing form on Kastave site | Done locally | `render-smoke` and tests verify no embedded long form fields |
 | Clarify `$1 deposit` and `$100 credit later` so users do not mistake it for full product purchase | Done locally | Deposit copy includes target product price and not-full-product language |
 | Add terms and privacy pages | Done locally | `/privacy`, `/terms`, `/policies/privacy-policy`, `/policies/terms-of-service` |

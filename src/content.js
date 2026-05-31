@@ -1,6 +1,7 @@
 const STRIPE_PAYMENT_LINK =
   import.meta.env.VITE_STRIPE_PAYMENT_LINK || "https://buy.stripe.com/9B69AVbpieTIcPx9rBd7q00";
-const PAYPAL_PAYMENT_LINK = import.meta.env.VITE_PAYPAL_PAYMENT_LINK || "";
+const DEFAULT_PAYPAL_PAYMENT_LINK = "https://www.paypal.com/ncp/payment/6W9PTBNB267ZW";
+const PAYPAL_PAYMENT_LINK = import.meta.env.VITE_PAYPAL_PAYMENT_LINK ?? DEFAULT_PAYPAL_PAYMENT_LINK;
 
 export const PAYPAL_PAYMENT_SETUP_PENDING = !PAYPAL_PAYMENT_LINK;
 
