@@ -39,6 +39,85 @@
         alt=""
       />
     </noscript>
+    <script>
+      (() => {
+        const paypalLink = "https://www.paypal.com/ncp/payment/6W9PTBNB267ZW";
+        const attributionKeys = [
+          "fbclid",
+          "gclid",
+          "utm_source",
+          "utm_medium",
+          "utm_campaign",
+          "utm_content",
+          "utm_term",
+        ];
+
+        function getStoredAttribution() {
+          try {
+            return JSON.parse(localStorage.getItem("kastave_utm") || "{}");
+          } catch {
+            return {};
+          }
+        }
+
+        function buildPaymentUrl() {
+          const target = new URL(paypalLink);
+          const attribution = getStoredAttribution();
+          const currentParams = new URLSearchParams(window.location.search);
+
+          currentParams.forEach((value, key) => {
+            if (key.startsWith("utm_") || attributionKeys.includes(key)) {
+              attribution[key] = value;
+            }
+          });
+
+          Object.entries(attribution).forEach(([key, value]) => {
+            if (value && !target.searchParams.has(key)) {
+              target.searchParams.set(key, value);
+            }
+          });
+
+          return target.toString();
+        }
+
+        function trackReserveClick(button) {
+          const source = button.classList.contains("nav-reserve-button") ? "nav" : "hero";
+          const payload = {
+            amount_cents: 100,
+            content_name: "Kastave $1 early reservation",
+            currency: "USD",
+            provider: "paypal",
+            source,
+            value: 1,
+          };
+
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({ event: "initiate_checkout", ...payload });
+
+          if (window.fbq) {
+            window.fbq("track", "InitiateCheckout", payload);
+          }
+        }
+
+        document.addEventListener(
+          "click",
+          (event) => {
+            const target = event.target instanceof Element ? event.target : event.target?.parentElement;
+            const cta = target?.closest("button, a");
+
+            if (!cta || cta.textContent.replace(/\s+/g, " ").trim() !== "Reserve for $1") {
+              return;
+            }
+
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            trackReserveClick(cta);
+            window.location.assign(buildPaymentUrl());
+          },
+          true,
+        );
+      })();
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
