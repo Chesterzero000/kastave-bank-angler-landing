@@ -367,6 +367,20 @@ test("site includes privacy policy and terms pages", () => {
   assert.match(styles, /\.deposit-policy-footer/);
 });
 
+test("privacy section shows an app-style private waypoint map visual", () => {
+  assert.match(app, /function PrivacyAppVisual/);
+  assert.match(app, /Kastave app screen saving a private fishing waypoint/);
+  assert.match(app, /Waypoint saved/);
+  assert.match(app, /North grass edge/);
+  assert.match(app, /Private waypoint log/);
+  assert.match(app, /<PrivacyAppVisual \/>/);
+  assert.match(styles, /\.privacy-app-visual\s*\{/);
+  assert.match(styles, /\.privacy-map-screen\s*\{/);
+  assert.match(styles, /\.privacy-waypoint-primary/);
+  assert.match(styles, /\.privacy-save-card/);
+  assert.match(styles, /@media \(max-width:\s*620px\)[\s\S]*?\.privacy-map-screen\s*\{[^}]*min-height:\s*246px/s);
+});
+
 test("landing page explains the dual payment provider path", () => {
   assert.match(content, /PAYMENT_NOTE/);
   assert.match(content, /Choose Stripe or PayPal/);

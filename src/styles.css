@@ -3234,21 +3234,232 @@ h3 {
   color: rgba(255, 255, 255, 0.74);
 }
 
+.privacy-visual-stack {
+  display: grid;
+  gap: 16px;
+}
+
+.privacy-app-visual {
+  position: relative;
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 32px;
+  padding: 18px;
+  color: white;
+  background:
+    radial-gradient(circle at 76% 16%, rgba(61, 221, 173, 0.26), transparent 28%),
+    linear-gradient(135deg, rgba(13, 45, 63, 0.98), rgba(4, 10, 12, 0.96));
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.34);
+}
+
+.privacy-app-topbar,
+.privacy-app-visual figcaption {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.privacy-app-topbar span {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.privacy-app-topbar strong {
+  border: 1px solid rgba(61, 221, 173, 0.34);
+  border-radius: 999px;
+  padding: 7px 12px;
+  color: #8dffd5;
+  font-size: 0.78rem;
+  background: rgba(61, 221, 173, 0.1);
+}
+
+.privacy-map-screen {
+  position: relative;
+  min-height: 294px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 24px;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    radial-gradient(circle at 26% 72%, rgba(255, 122, 26, 0.16), transparent 18%),
+    linear-gradient(145deg, #063047, #05161f 64%, #0a0d0c);
+  background-size: 34px 34px, 34px 34px, auto, auto;
+}
+
+.privacy-map-screen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.2));
+  pointer-events: none;
+}
+
+.privacy-map-shore {
+  position: absolute;
+  inset: auto -12% -24% 12%;
+  height: 58%;
+  border-radius: 50% 50% 0 0;
+  background: rgba(44, 77, 46, 0.42);
+  filter: blur(1px);
+}
+
+.privacy-map-contour {
+  position: absolute;
+  border: 1px solid rgba(83, 204, 255, 0.38);
+  border-radius: 50%;
+  transform: rotate(-18deg);
+}
+
+.privacy-contour-one {
+  right: 13%;
+  bottom: 13%;
+  width: 64%;
+  height: 42%;
+}
+
+.privacy-contour-two {
+  right: 20%;
+  bottom: 22%;
+  width: 46%;
+  height: 28%;
+}
+
+.privacy-contour-three {
+  right: 34%;
+  bottom: 34%;
+  width: 24%;
+  height: 15%;
+}
+
+.privacy-route-line {
+  position: absolute;
+  left: 13%;
+  top: 24%;
+  width: 68%;
+  height: 46%;
+  border: 3px solid transparent;
+  border-bottom-color: rgba(61, 221, 173, 0.86);
+  border-left-color: rgba(61, 221, 173, 0.54);
+  border-radius: 50%;
+  transform: rotate(-12deg);
+  filter: drop-shadow(0 0 14px rgba(61, 221, 173, 0.36));
+}
+
+.privacy-waypoint {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  width: 18px;
+  height: 18px;
+  place-items: center;
+  border: 3px solid white;
+  border-radius: 50%;
+  background: var(--orange);
+  box-shadow: 0 0 0 8px rgba(255, 122, 26, 0.18), 0 12px 24px rgba(0, 0, 0, 0.24);
+}
+
+.privacy-waypoint-primary {
+  right: 27%;
+  top: 38%;
+}
+
+.privacy-waypoint-primary strong {
+  position: absolute;
+  right: -18px;
+  bottom: 26px;
+  border-radius: 999px;
+  padding: 6px 10px;
+  color: #06100e;
+  font-size: 0.72rem;
+  background: #8dffd5;
+  white-space: nowrap;
+}
+
+.privacy-waypoint-secondary {
+  left: 24%;
+  bottom: 27%;
+  width: 13px;
+  height: 13px;
+  background: #8dffd5;
+}
+
+.privacy-waypoint-third {
+  right: 16%;
+  bottom: 19%;
+  width: 12px;
+  height: 12px;
+  background: #ffd36b;
+}
+
+.privacy-save-card {
+  position: absolute;
+  z-index: 3;
+  left: 18px;
+  bottom: 18px;
+  display: grid;
+  gap: 4px;
+  width: min(240px, calc(100% - 36px));
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 20px;
+  padding: 14px;
+  background: rgba(2, 9, 11, 0.82);
+  backdrop-filter: blur(14px);
+}
+
+.privacy-save-card span,
+.privacy-save-card small {
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.privacy-save-card strong {
+  font-size: 1.1rem;
+}
+
+.privacy-app-visual figcaption {
+  align-items: flex-start;
+}
+
+.privacy-app-visual figcaption strong {
+  min-width: 120px;
+  color: #8dffd5;
+}
+
+.privacy-app-visual figcaption span {
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
 .privacy-points {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 12px;
 }
 
 .privacy-points span {
   display: grid;
-  min-height: 112px;
+  min-width: 0;
+  min-height: 86px;
   place-items: center;
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 8px;
-  padding: 18px;
+  padding: 16px;
   text-align: center;
+  font-size: 0.92rem;
   font-weight: 900;
+  overflow-wrap: anywhere;
   background: rgba(255, 255, 255, 0.08);
 }
 
@@ -3800,6 +4011,10 @@ details p {
     padding-right: 42px;
   }
 
+  .privacy-points {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .deposit-mondo-card-grid {
     gap: 22px;
   }
@@ -4168,6 +4383,22 @@ details p {
   .cast-call-list span {
     padding: 10px 5px;
     font-size: 0.66rem;
+  }
+
+  .privacy-app-visual {
+    border-radius: 24px;
+    padding: 12px;
+  }
+
+  .privacy-map-screen {
+    min-height: 246px;
+    border-radius: 18px;
+  }
+
+  .privacy-app-topbar,
+  .privacy-app-visual figcaption {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .spec-row {

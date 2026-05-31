@@ -33,6 +33,7 @@ const pageChecks = [
       "Kastave",
       "Get the Highlights",
       "Who is Kastave For",
+      "Private waypoint log",
       "Reserve for $1",
       "Sign up",
     ],

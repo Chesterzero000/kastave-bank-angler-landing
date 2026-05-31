@@ -1520,6 +1520,38 @@ function PainEvidenceDialog({ proof, onClose }) {
   );
 }
 
+function PrivacyAppVisual() {
+  return (
+    <figure className="privacy-app-visual" aria-label="Kastave app screen saving a private fishing waypoint">
+      <div className="privacy-app-topbar">
+        <span>Private Map</span>
+        <strong>Only you</strong>
+      </div>
+      <div className="privacy-map-screen">
+        <span className="privacy-map-shore" />
+        <span className="privacy-map-contour privacy-contour-one" />
+        <span className="privacy-map-contour privacy-contour-two" />
+        <span className="privacy-map-contour privacy-contour-three" />
+        <span className="privacy-route-line" />
+        <span className="privacy-waypoint privacy-waypoint-primary">
+          <strong>Saved</strong>
+        </span>
+        <span className="privacy-waypoint privacy-waypoint-secondary" />
+        <span className="privacy-waypoint privacy-waypoint-third" />
+        <div className="privacy-save-card">
+          <span>Waypoint saved</span>
+          <strong>North grass edge</strong>
+          <small>Private by default</small>
+        </div>
+      </div>
+      <figcaption>
+        <strong>Private waypoint log</strong>
+        <span>Save fishable structure, notes, and return spots without posting them to a public feed.</span>
+      </figcaption>
+    </figure>
+  );
+}
+
 function PrivacySection() {
   return (
     <section className="privacy-section" id="privacy" aria-labelledby="privacy-title">
@@ -1532,10 +1564,13 @@ function PrivacySection() {
             feed, and we do not sell your spots. Sharing is your choice.
           </p>
         </div>
-        <div className="privacy-points">
-          {PRIVACY_POINTS.map((point) => (
-            <span key={point}>{point}</span>
-          ))}
+        <div className="privacy-visual-stack">
+          <PrivacyAppVisual />
+          <div className="privacy-points">
+            {PRIVACY_POINTS.map((point) => (
+              <span key={point}>{point}</span>
+            ))}
+          </div>
         </div>
       </div>
     </section>
