@@ -15,6 +15,7 @@
     "preview:smoke": "node scripts/preview-smoke.mjs",
     "preflight": "node scripts/preflight.mjs",
     "deploy:ready": "node scripts/deploy-ready.mjs",
+    "check:vercel-env": "node scripts/vercel-env-checklist.mjs",
     "check:release-state": "node scripts/check-release-state.mjs",
     "check:payment-links": "node scripts/check-payment-links.mjs",
     "check:prod-env": "node scripts/check-production-env.mjs"

@@ -48,6 +48,9 @@ The V2 site should make a first-time visitor understand Kastave quickly, leave a
   blocks common merchant setup error pages.
 - `scripts/check-release-state.mjs` verifies the final release state after deployment: local `HEAD` must match
   `origin/main`, and `https://kastave.com` must serve the same Vite JS/CSS assets as the current `dist/index.html`.
+- `scripts/vercel-env-checklist.mjs` prints a redacted local production env mirror checklist for values that should
+  exist in Vercel, including required variables, recommended variables, webhook endpoints, return URLs, and final gates
+  without revealing secret values. It reads only local shell values and `.env.production.local`, not the Vercel dashboard.
 - Production env validation is covered by automated tests for missing variables, valid required sample values, invalid
   payment hosts, placeholders, and invalid PayPal mode.
 - Production preview route audit passed from `dist` on `http://127.0.0.1:4173/`, including `/`, `/deposit`,
@@ -166,6 +169,15 @@ production result: passes after real Stripe, PayPal, Supabase, and Meta Pixel va
 verification, put real values in ignored `.env.production.local` or pass `--kastave-env-file .env.production.local`.
 
 ```bash
+node scripts/vercel-env-checklist.mjs
+```
+
+Expected current local result: public values such as Stripe link, PayPal link, Meta Pixel, PayPal mode, and Plausible
+domain show as configured; any secret/server values absent from the local mirror show as missing. This does not prove
+the Vercel dashboard is missing those variables. The script also prints the Stripe/PayPal webhook
+endpoints and return URLs to configure, without printing secret values.
+
+```bash
 node scripts/deploy-ready.mjs
 ```
 
@@ -214,10 +226,12 @@ Latest local result on 2026-05-31:
 - `node scripts/check-production-env.mjs` with non-secret sample required env values: passes while warning about recommended
   analytics/newsletter variables.
 - `node scripts/check-production-env.mjs --kastave-env-file .env.production.local`: supported for ignored local production values.
+- `node scripts/vercel-env-checklist.mjs`: checks only the local production env mirror and fails clearly while the local
+  mirror lacks secret/server values; this does not prove Vercel is missing them and does not print secret values.
 - `node scripts/deploy-ready.mjs`: local preflight and payment-link smoke checks pass, then the production gate reports
   current blockers: missing `STRIPE_WEBHOOK_SECRET`, `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, `PAYPAL_WEBHOOK_ID`,
-  `SUPABASE_URL`, and `SUPABASE_SERVICE_ROLE_KEY`. Use it as the final Vercel-ready gate after configuring production
-  secrets.
+  `SUPABASE_URL`, and `SUPABASE_SERVICE_ROLE_KEY` from the local mirror. Use it as a local Vercel-ready mirror gate after
+  confirming production secrets exist in Vercel.
 - Browser responsive layout audit after the mobile founder-offer fix: `1440x960`, `1024x900`, and `390x844` all have
   homepage `overflowX: 0` and deposit-page `overflowX: 0`.
 - `node scripts/check-payment-links.mjs`: Stripe and PayPal links are reachable; the PayPal link is
