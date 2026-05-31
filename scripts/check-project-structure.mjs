@@ -26,6 +26,7 @@ const allowedTopLevelEntries = new Set([
 ]);
 
 const allowedDocFiles = new Set([
+  "kastave-landing-assets-requirements.md",
   "kastave-v2-acceptance-checklist.md",
   "kastave-v2-media-scripts.md",
   "转化追踪.md",
