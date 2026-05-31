@@ -30,7 +30,7 @@ git push origin <branch>
    - `Permission denied (publickey)`: SSH key is missing or not authorized.
    - `gh`, `vercel`, `npm`, or `npx` missing: do not assume those CLIs can be used.
 6. Use the GitHub connector when available. Search for the needed tools with `tool_search`, then prefer connector writes over asking the user to configure credentials during an urgent fix.
-7. Verify the remote commit and the live site. For web changes, check both GitHub commit content and the deployed URL.
+7. Verify the remote commit and the live site. For web changes, check both GitHub commit content and the deployed URL. For Kastave, prefer `node scripts/check-release-state.mjs` after deployment.
 
 ## Kastave V2 Rule
 
@@ -42,7 +42,7 @@ For the current Kastave landing page, the canonical reservation flow is:
 
 Do not reintroduce the historical emergency behavior where the homepage button jumps directly to PayPal or Stripe. If a remote hotfix from history contains direct PayPal logic, treat it as a past workaround, not the current target state.
 
-Before uploading this project as a full sync, run `node scripts/preflight.mjs` when possible. Before production deployment, use `node scripts/deploy-ready.mjs` only after real Vercel production environment variables are configured.
+Before uploading this project as a full sync, run `node scripts/preflight.mjs` when possible. Before production deployment, use `node scripts/deploy-ready.mjs` only after real Vercel production environment variables are configured. After push and Vercel deployment, run `node scripts/check-release-state.mjs` to verify that local `HEAD`, `origin/main`, and the live `https://kastave.com` assets are aligned.
 
 ## Connector Strategy
 

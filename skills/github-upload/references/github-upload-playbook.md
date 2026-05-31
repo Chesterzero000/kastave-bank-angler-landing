@@ -18,6 +18,7 @@
 - 发现远端 `origin/main` 仍然是旧逻辑，且本地改动跨多个文件。
 - 为避免只上传一个依赖其他文件的 React 改动导致构建风险，当时选择一个独立入口热修复：在 `index.html` 增加捕获阶段 click listener，拦截 `Reserve for $1`。
 - 当前 V2 流程已调整为先进入 `/deposit` 预订页，再让用户选择 Stripe 信用卡或 PayPal；不要继续把首页 CTA 直接写成 PayPal。
+- 远程历史热修复后来已经合并进本地历史，但当前本地提交删除了该入口脚本，保持首页进入 `/deposit`。
 - 用 `_fetch_file` 获取远端 `index.html` 与 SHA，再用 `_update_file` 写入完整替换内容。
 - 获取远端提交，线上 `curl https://kastave.com` 确认出现目标路径、关键拦截逻辑或预期资源。
 - 用 Browser/Chrome/Playwright 只验证跳转 URL 或付款选项显示，不提交付款。
@@ -35,6 +36,7 @@
 - 首页 `Sign up` 和 `Reserve for $1` 进入 `/deposit`。
 - `/deposit` 才展示 `Credit Card` 和 `PayPal` 两种支付方式。
 - 不要把首页 CTA 改回直接打开 PayPal 或 Stripe。
+- 当前 PayPal payment link 是 `https://www.paypal.com/ncp/payment/6W9PTBNB267ZW`，上传前可用 `node scripts/check-payment-links.mjs` 验证。
 - 保留 Meta Pixel `1542765323857764`。
 - 保留 Vercel serverless webhook：`/api/stripe-webhook` 与 `/api/paypal-webhook`。
 - 不要恢复 GitHub Pages workflow 或 `public/CNAME`。
@@ -51,6 +53,14 @@ node scripts/preflight.mjs
 ```bash
 node scripts/deploy-ready.mjs
 ```
+
+推送并等待 Vercel 部署后运行：
+
+```bash
+node scripts/check-release-state.mjs
+```
+
+该检查必须通过后，才能说 GitHub、Vercel 和线上 `kastave.com` 已同步。当前本地如果显示 `ahead N`，说明还没有完成上传。
 
 ## 上传前检查
 
@@ -106,6 +116,12 @@ HTML/资源检查：
 
 ```bash
 curl -L --max-time 20 -s https://kastave.com | rg -n "expected-string|payment-link|assets/index"
+```
+
+当前完整发布优先使用：
+
+```bash
+node scripts/check-release-state.mjs
 ```
 
 如果需要检查打包 JS：

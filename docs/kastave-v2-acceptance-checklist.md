@@ -46,6 +46,8 @@ The V2 site should make a first-time visitor understand Kastave quickly, leave a
   Supabase, and Meta Pixel environment variables to be present before deployment.
 - `scripts/check-payment-links.mjs` verifies public Stripe / PayPal payment links without submitting payment details and
   blocks common merchant setup error pages.
+- `scripts/check-release-state.mjs` verifies the final release state after deployment: local `HEAD` must match
+  `origin/main`, and `https://kastave.com` must serve the same Vite JS/CSS assets as the current `dist/index.html`.
 - Production env validation is covered by automated tests for missing variables, valid required sample values, invalid
   payment hosts, placeholders, and invalid PayPal mode.
 - Production preview route audit passed from `dist` on `http://127.0.0.1:4173/`, including `/`, `/deposit`,
@@ -61,8 +63,7 @@ The V2 site should make a first-time visitor understand Kastave quickly, leave a
 - Old deposit-page CSS from earlier iterations is removed; current checkout styling is the `deposit-mondo-*` implementation only.
 - Meta Pixel: `src/tracking.js`, `index.html`, `.env.example`, and tests all use `1542765323857764`.
 - Payment simplification: all homepage reservation links point to `/deposit`; `/deposit` has only the short
-  `Credit Card` / `PayPal` choice surface, with PayPal disabled until a live link is configured and no embedded billing
-  form.
+  `Credit Card` / `PayPal` choice surface, both payment links are reachable, and no embedded billing form is rendered.
 - Beni/Mondo-inspired structure: hero, launch offer, highlight bento, target audience carousel, deposit page, rounded cards, and simple CTA hierarchy are implemented locally.
 - Target audiences: four personas are implemented with image assets and scene-specific overlay animations.
 - App UI: Auto, Silent, and Performance mode previews are present in the phone mockup.
@@ -169,8 +170,16 @@ node scripts/deploy-ready.mjs
 ```
 
 Expected production result: preflight passes first, then production env validation and payment-link smoke checks pass.
-Expected local result without real production env: env validation and payment-link failures are both reported clearly, and
-no deployment action is taken.
+Expected local result without real production env: preflight and payment-link smoke checks pass, production env validation
+reports the missing secret/server variables clearly, and no deployment action is taken.
+
+```bash
+node scripts/check-release-state.mjs
+```
+
+Expected production result after push and Vercel deployment: local `HEAD` matches `origin/main`, and `https://kastave.com`
+serves the same Vite JS/CSS assets as the local `dist/index.html`. Expected current local result before push/deploy:
+fails clearly because local `main` is ahead of `origin/main` and production still serves the older deployment.
 
 Manual commands:
 
@@ -205,13 +214,16 @@ Latest local result on 2026-05-31:
 - `node scripts/check-production-env.mjs` with non-secret sample required env values: passes while warning about recommended
   analytics/newsletter variables.
 - `node scripts/check-production-env.mjs --kastave-env-file .env.production.local`: supported for ignored local production values.
-- `node scripts/deploy-ready.mjs`: local preflight passes, then the production gate reports current blockers such as
-  missing production env values or a missing/invalid PayPal payment link. Use it as the final Vercel-ready gate after
-  configuring production secrets and adding the live PayPal link.
+- `node scripts/deploy-ready.mjs`: local preflight and payment-link smoke checks pass, then the production gate reports
+  current blockers: missing `STRIPE_WEBHOOK_SECRET`, `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, `PAYPAL_WEBHOOK_ID`,
+  `SUPABASE_URL`, and `SUPABASE_SERVICE_ROLE_KEY`. Use it as the final Vercel-ready gate after configuring production
+  secrets.
 - Browser responsive layout audit after the mobile founder-offer fix: `1440x960`, `1024x900`, and `390x844` all have
   homepage `overflowX: 0` and deposit-page `overflowX: 0`.
-- `node scripts/check-payment-links.mjs`: Stripe link is reachable; PayPal now has no committed broken fallback and must be
-  provided through `VITE_PAYPAL_PAYMENT_LINK` before production deployment.
+- `node scripts/check-payment-links.mjs`: Stripe and PayPal links are reachable; the PayPal link is
+  `https://www.paypal.com/ncp/payment/6W9PTBNB267ZW`.
+- `node scripts/check-release-state.mjs`: currently fails as expected before release because local `main` is ahead of
+  `origin/main` and production is still serving the previous deployment.
 
 ## Deployment Gate
 
@@ -219,10 +231,12 @@ Do not deploy until:
 
 1. Local visual review is approved.
 2. Vercel production environment variables are configured and `node scripts/deploy-ready.mjs` passes.
-3. Stripe Payment Link redirect is set to `https://kastave.com/thanks?provider=stripe`.
-4. PayPal return URL is set to `https://kastave.com/thanks?provider=paypal` if PayPal supports it for this link.
-5. Stripe and PayPal webhooks are configured in production.
-6. `node scripts/check-payment-links.mjs` or
+3. The local commits are pushed to GitHub and Vercel finishes deploying the new build.
+4. `node scripts/check-release-state.mjs` passes against `https://kastave.com`.
+5. Stripe Payment Link redirect is set to `https://kastave.com/thanks?provider=stripe`.
+6. PayPal return URL is set to `https://kastave.com/thanks?provider=paypal`.
+7. Stripe and PayPal webhooks are configured in production.
+8. `node scripts/check-payment-links.mjs` or
    `node scripts/check-payment-links.mjs --kastave-env-file .env.production.local`
    passes for both Stripe and PayPal.
 
@@ -231,5 +245,5 @@ Do not deploy until:
 - Final video/photo materials still depend on real or generated production-ready assets.
 - Final product specs should be updated after field testing.
 - Payment completion should be verified in Stripe and PayPal dashboards after deployment.
-- A live PayPal payment link must be added before deployment because the previously committed PayPal fallback was a
-  merchant setup error page and has been removed.
+- The live PayPal payment link is configured and reachable, but a real completed PayPal payment should still be verified
+  after deployment together with the PayPal webhook record.
