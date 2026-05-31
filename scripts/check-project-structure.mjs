@@ -45,11 +45,15 @@ console.log("Project structure verified.");
 
 async function verifyTopLevelEntries() {
   const entries = await readdir(root);
-  const unexpected = entries.filter((entry) => !allowedTopLevelEntries.has(entry));
+  const unexpected = entries.filter((entry) => !isAllowedTopLevelEntry(entry));
 
   if (unexpected.length > 0) {
     throw new Error(`Unexpected top-level project entries:\n${unexpected.sort().join("\n")}`);
   }
+}
+
+function isAllowedTopLevelEntry(entry) {
+  return allowedTopLevelEntries.has(entry) || /^\.env\.[a-z0-9.-]+$/i.test(entry);
 }
 
 async function verifyDocsDirectory() {
