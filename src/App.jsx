@@ -1382,13 +1382,13 @@ function EmailForm({ id = "email", source = "inline_form", onSubscribe, buttonLa
 function FAQ() {
   return (
     <section className="faq" id="faq" aria-label="Kastave questions">
-      <div className="section-inner">
-        <p className="section-kicker">FAQ</p>
-        <h2>Clear answers before early access.</h2>
+      <div className="section-inner faq-inner">
+        <h2>FAQ</h2>
         <div className="faq-list">
-          {FAQS.map((item) => (
+          {FAQS.map((item, index) => (
             <details
               key={item.question}
+              open={index === 0}
               onToggle={(event) => {
                 if (event.currentTarget.open) {
                   trackEvent("faq_opened", { question: item.question });
@@ -1396,7 +1396,9 @@ function FAQ() {
               }}
             >
               <summary>{item.question}</summary>
-              <p>{item.answer}</p>
+              <div className="faq-answer">
+                <p>{item.answer}</p>
+              </div>
             </details>
           ))}
         </div>

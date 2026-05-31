@@ -1117,7 +1117,6 @@ h3 {
 }
 
 .section-inner,
-.faq,
 .section-heading {
   width: min(1180px, calc(100% - 36px));
   margin: 0 auto;
@@ -1127,15 +1126,12 @@ h3 {
   text-align: center;
 }
 
-.faq {
-  padding: clamp(62px, 8vw, 104px) 0;
-}
-
 .privacy-section,
 .reservation-section,
 .app-ui-section,
 .product-specs-section,
-.media-script-section {
+.media-script-section,
+.faq {
   padding: clamp(62px, 8vw, 104px) 0;
 }
 
@@ -2983,7 +2979,6 @@ h3 {
   background: var(--charcoal) !important;
 }
 
-.faq p,
 .site-footer p {
   color: var(--muted);
   line-height: 1.65;
@@ -3072,26 +3067,79 @@ h3 {
   background: white;
 }
 
+.faq-inner {
+  max-width: 900px;
+}
+
+.faq h2 {
+  margin: 0 0 clamp(34px, 5vw, 58px);
+  color: var(--orange-dark);
+  text-align: center;
+  font-size: clamp(5.6rem, 13vw, 10.6rem);
+  font-weight: 700;
+  line-height: 0.72;
+}
+
 .faq-list {
   display: grid;
-  gap: 10px;
-  margin-top: 30px;
+  gap: 14px;
 }
 
-details {
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--paper);
-  padding: 18px 20px;
+.faq-list details {
+  overflow: hidden;
+  border: 0;
+  border-radius: 42px;
+  background: #f2eeeb;
+  padding: 0;
 }
 
-summary {
+.faq-list summary {
+  position: relative;
+  display: grid;
+  min-height: 86px;
+  align-items: center;
+  padding: 0 70px 0 28px;
   cursor: pointer;
+  color: var(--ink);
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
   font-weight: 900;
+  line-height: 1.2;
+  list-style: none;
 }
 
-details p {
-  margin: 14px 0 0;
+.faq-list summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-list summary::after {
+  content: "+";
+  position: absolute;
+  top: 50%;
+  right: 34px;
+  color: var(--orange-dark);
+  font-size: 1.45rem;
+  font-weight: 500;
+  line-height: 1;
+  transform: translateY(-50%);
+}
+
+.faq-list details[open] summary::after {
+  content: "−";
+}
+
+.faq-answer {
+  margin: 0 28px 28px;
+  border-top: 1px solid rgba(16, 19, 18, 0.12);
+  padding-top: 24px;
+}
+
+.faq-answer p {
+  max-width: 720px;
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(1rem, 1.45vw, 1.18rem);
+  font-weight: 500;
+  line-height: 1.35;
 }
 
 .site-footer {

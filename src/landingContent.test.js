@@ -457,6 +457,19 @@ test("reservation section presents product image and package contents", () => {
   assert.doesNotMatch(styles, /\.payment-card/);
 });
 
+test("faq section follows the rounded Beni-style accordion layout", () => {
+  assert.match(app, /className="section-inner faq-inner"/);
+  assert.match(app, /<h2>FAQ<\/h2>/);
+  assert.match(app, /open=\{index === 0\}/);
+  assert.match(app, /className="faq-answer"/);
+  assert.doesNotMatch(app, /Clear answers before early access/);
+  assert.match(styles, /\.faq-inner\s*\{[^}]*max-width:\s*900px/s);
+  assert.match(styles, /\.faq h2\s*\{[^}]*font-size:\s*clamp\(5\.6rem,\s*13vw,\s*10\.6rem\)/s);
+  assert.match(styles, /\.faq-list details\s*\{[^}]*border-radius:\s*42px/s);
+  assert.match(styles, /\.faq-list summary::after\s*\{[^}]*content:\s*"\+"/s);
+  assert.match(styles, /\.faq-list details\[open\] summary::after\s*\{[^}]*content:\s*"−"/s);
+});
+
 test("verified purchase records are webhook-only", () => {
   assert.doesNotMatch(app, /recordPurchaseEvent/);
   assert.doesNotMatch(supabaseBackend, /export function recordPurchaseEvent/);
