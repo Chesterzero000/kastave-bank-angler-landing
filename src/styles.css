@@ -2456,8 +2456,7 @@ h3 {
   align-items: center;
 }
 
-.app-ui-copy > p:not(.section-kicker),
-.specs-copy > p {
+.app-ui-copy > p:not(.section-kicker) {
   color: var(--muted);
   font-size: clamp(1.02rem, 1.35vw, 1.22rem);
   font-weight: 650;
@@ -2833,75 +2832,113 @@ h3 {
 }
 
 .product-specs-section {
-  background: #f5f2ec;
+  overflow: hidden;
+  background: #e7e8e3;
 }
 
-.specs-layout {
+.specs-showcase {
   display: grid;
-  grid-template-columns: minmax(360px, 1fr) minmax(0, 1fr);
-  gap: clamp(28px, 6vw, 70px);
-  align-items: center;
+  gap: clamp(24px, 4vw, 42px);
 }
 
-.specs-media {
+.specs-hero {
   position: relative;
-}
-
-.specs-media img {
-  width: 100%;
-  border-radius: 42px;
-  object-fit: cover;
-  box-shadow: 0 28px 68px rgba(16, 19, 18, 0.14);
-}
-
-.specs-media-badges {
-  position: absolute;
-  left: 24px;
-  right: 24px;
-  bottom: 24px;
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  min-height: clamp(520px, 72vh, 680px);
+  align-items: flex-start;
+  overflow: hidden;
+  border-radius: 8px;
+  padding: clamp(34px, 7vw, 78px) clamp(24px, 5vw, 64px);
+  background:
+    linear-gradient(90deg, rgba(231, 232, 227, 0.98) 0%, rgba(231, 232, 227, 0.9) 34%, rgba(231, 232, 227, 0.24) 72%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(16, 19, 18, 0.08));
 }
 
-.specs-media-badges span {
-  border: 1px solid rgba(255, 255, 255, 0.32);
-  border-radius: 999px;
-  padding: 9px 12px;
-  color: white;
-  background: rgba(6, 8, 8, 0.62);
-  font-size: 0.76rem;
-  font-weight: 950;
-  backdrop-filter: blur(10px);
+.specs-product-image {
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: min(76%, 980px);
+  height: 100%;
+  object-fit: cover;
+  object-position: center right;
+  opacity: 0.78;
 }
 
-.spec-table {
+.specs-copy {
+  position: relative;
+  z-index: 2;
+  max-width: 560px;
+}
+
+.specs-copy h2 {
+  margin: 0;
+  color: var(--orange-dark);
+  font-size: clamp(4.2rem, 9vw, 8.8rem);
+  line-height: 0.92;
+}
+
+.specs-detail-row {
   display: grid;
-  gap: 8px;
-  margin: 26px 0;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: clamp(14px, 2vw, 26px);
+  align-items: start;
 }
 
-.spec-row {
+.spec-detail-card {
   display: grid;
-  grid-template-columns: minmax(130px, 0.54fr) minmax(0, 1fr);
-  gap: 14px;
-  align-items: center;
-  border: 1px solid rgba(16, 19, 18, 0.1);
-  border-radius: 20px;
-  padding: 14px 16px;
-  background: white;
+  min-width: 0;
+  align-content: start;
+  gap: 8px;
+  border-top: 1px solid rgba(16, 19, 18, 0.16);
+  padding-top: 16px;
 }
 
-.spec-row span {
-  color: var(--muted);
-  font-size: 0.82rem;
-  font-weight: 850;
-}
-
-.spec-row strong {
+.spec-icon {
+  width: 28px;
+  height: 28px;
   color: var(--ink);
-  font-size: 0.96rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.spec-detail-card span {
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 850;
+  line-height: 1.2;
+}
+
+.spec-detail-card strong {
+  color: var(--ink);
+  font-size: clamp(1rem, 1.3vw, 1.22rem);
+  line-height: 1.18;
+}
+
+.spec-detail-card small {
+  color: rgba(16, 19, 18, 0.68);
+  font-size: 0.82rem;
+  font-weight: 750;
   line-height: 1.35;
+}
+
+.specs-note-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  text-align: center;
+}
+
+.specs-note-row p {
+  max-width: 720px;
+  margin: 0;
+  color: rgba(16, 19, 18, 0.66);
+  font-size: 0.95rem;
+  font-weight: 750;
+  line-height: 1.5;
 }
 
 .media-script-section {
@@ -3627,9 +3664,17 @@ details p {
 
 @media (max-width: 1120px) {
   .launch-offer-inner,
-  .app-ui-layout,
-  .specs-layout {
+  .app-ui-layout {
     grid-template-columns: 1fr;
+  }
+
+  .specs-product-image {
+    width: 100%;
+    opacity: 0.48;
+  }
+
+  .specs-detail-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .launch-offer-actions {
@@ -3729,7 +3774,6 @@ details p {
   }
 
   .app-ui-layout,
-  .specs-layout,
   .privacy-layout,
   .reservation-options,
   .site-footer {
@@ -3742,6 +3786,24 @@ details p {
 
   .app-ui-visual {
     min-height: 560px;
+  }
+
+  .specs-hero {
+    min-height: 500px;
+    padding: 30px;
+  }
+
+  .specs-copy h2 {
+    font-size: clamp(3.3rem, 14vw, 5.8rem);
+  }
+
+  .specs-detail-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .specs-note-row {
+    align-items: stretch;
+    flex-direction: column;
   }
 
   .phone-shell {
@@ -4023,9 +4085,17 @@ details p {
     flex-direction: column;
   }
 
-  .spec-row {
+  .specs-hero {
+    min-height: 420px;
+    padding: 24px;
+  }
+
+  .specs-detail-row {
     grid-template-columns: 1fr;
-    gap: 4px;
+  }
+
+  .spec-detail-card {
+    min-height: 0;
   }
 
   .nav-waitlist-button {

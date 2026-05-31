@@ -93,14 +93,12 @@ const APP_MODES = [
 ];
 
 const PRODUCT_SPECS = [
-  { label: "Product type", value: "Autonomous bank-fishing scout boat" },
-  { label: "Primary use", value: "Shoreline scan, 3D bottom read, cast-point planning" },
-  { label: "Control modes", value: "Auto / Silent / Performance" },
-  { label: "Core reads", value: "Depth, terrain change, water clues, snag risk, private spots" },
-  { label: "App workflow", value: "Scan route, live map, 3 AI cast calls, private log" },
-  { label: "Launch plan", value: "Coming soon on Kickstarter" },
-  { label: "Target price", value: RESERVATION_OFFER.productPrice },
-  { label: "Founder offer", value: `${RESERVATION_OFFER.depositAmount} deposit unlocks ${RESERVATION_OFFER.creditAmount} credit` },
+  { icon: "battery", label: "Battery Life", value: "6 hours", detail: "target runtime" },
+  { icon: "weight", label: "Weight", value: "5 kg", detail: "about 11 lb" },
+  { icon: "sonar", label: "Sonar Range", value: "20 m radius", detail: "shoreline scan coverage" },
+  { icon: "speed", label: "Cruise Speed", value: "1.5 m/s max", detail: "quiet scan at lower speed" },
+  { icon: "wave", label: "Wind & Chop", value: "Beaufort 3", detail: "light chop, about 0.3 m" },
+  { icon: "connectivity", label: "Connectivity", value: "Wi-Fi 6", detail: "Bluetooth 5.4 pairing" },
 ];
 
 const MEDIA_SCRIPT_CARDS = [
@@ -1222,36 +1220,96 @@ function AppExperienceSection() {
 function ProductSpecsSection({ depositHref, onReserve }) {
   return (
     <section className="product-specs-section" id="specs" aria-labelledby="specs-title">
-      <div className="section-inner specs-layout">
-        <div className="specs-media">
-          <img src={productDetailImage} alt="Kastave scout boat product detail" loading="lazy" decoding="async" />
-          <div className="specs-media-badges" aria-label="Kastave product pillars">
-            <span>Auto scan</span>
-            <span>3D bottom</span>
-            <span>Private log</span>
+      <div className="section-inner specs-showcase">
+        <div className="specs-hero">
+          <img
+            className="specs-product-image"
+            src={productDetailImage}
+            alt="Kastave scout boat product detail"
+            loading="lazy"
+            decoding="async"
+          />
+          <div className="specs-copy">
+            <p className="section-kicker">Specs: what's under the hull</p>
+            <h2 id="specs-title">Built tough. Bank ready.</h2>
           </div>
         </div>
-        <div className="specs-copy">
-          <p className="section-kicker">Product details</p>
-          <h2 id="specs-title">A bank-fishing scout built around the first cast.</h2>
+        <div className="specs-detail-row" aria-label="Kastave product specifications">
+          {PRODUCT_SPECS.map((spec) => (
+            <article className="spec-detail-card" key={spec.label}>
+              <SpecIcon type={spec.icon} />
+              <span>{spec.label}</span>
+              <strong>{spec.value}</strong>
+              <small>{spec.detail}</small>
+            </article>
+          ))}
+        </div>
+        <div className="specs-note-row">
           <p>
-            These are launch-positioning specs for the v2 landing page. Exact battery, range, sensor package, and
-            waterproof ratings should be finalized after field testing.
+            Prototype targets for the Kickstarter field-test build. Final production ratings may be adjusted after
+            shoreline durability testing.
           </p>
-          <div className="spec-table" aria-label="Kastave product specifications">
-            {PRODUCT_SPECS.map((spec) => (
-              <div className="spec-row" key={spec.label}>
-                <span>{spec.label}</span>
-                <strong>{spec.value}</strong>
-              </div>
-            ))}
-          </div>
           <a className="specs-reserve-button" href={depositHref} onClick={onReserve}>
-            Reserve founder credit
+            Reserve for $1
           </a>
         </div>
       </div>
     </section>
+  );
+}
+
+function SpecIcon({ type }) {
+  const icons = {
+    battery: (
+      <>
+        <rect x="3" y="8" width="15" height="8" rx="1.8" />
+        <path d="M20 10.5v3" />
+        <path d="M6 11.5h6" />
+      </>
+    ),
+    weight: (
+      <>
+        <path d="M9 7a3 3 0 0 1 6 0" />
+        <rect x="5" y="7" width="14" height="12" rx="3" />
+        <path d="M9 13h6" />
+      </>
+    ),
+    sonar: (
+      <>
+        <circle cx="12" cy="12" r="2.5" />
+        <path d="M7.8 16.2a6 6 0 0 1 0-8.4" />
+        <path d="M16.2 7.8a6 6 0 0 1 0 8.4" />
+        <path d="M4.8 19.2a10.2 10.2 0 0 1 0-14.4" />
+      </>
+    ),
+    speed: (
+      <>
+        <path d="M4 15a8 8 0 1 1 16 0" />
+        <path d="M12 15l4-5" />
+        <path d="M8 17h8" />
+      </>
+    ),
+    wave: (
+      <>
+        <path d="M3 15c2.2 0 2.2-2 4.4-2s2.2 2 4.4 2 2.2-2 4.4-2 2.2 2 4.4 2" />
+        <path d="M3 19c2.2 0 2.2-2 4.4-2s2.2 2 4.4 2 2.2-2 4.4-2 2.2 2 4.4 2" />
+        <path d="M7 10l2-4 2 4" />
+      </>
+    ),
+    connectivity: (
+      <>
+        <path d="M5 9a11 11 0 0 1 14 0" />
+        <path d="M8 12a6.5 6.5 0 0 1 8 0" />
+        <path d="M10.8 15a2.4 2.4 0 0 1 2.4 0" />
+        <circle cx="12" cy="18" r="1" />
+      </>
+    ),
+  };
+
+  return (
+    <svg className="spec-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      {icons[type] || icons.sonar}
+    </svg>
   );
 }
 

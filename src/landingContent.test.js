@@ -79,6 +79,15 @@ test("v2 landing page adds a founder offer bar, app UI modes, specs, and media d
   assert.match(app, /app-readout-grid/);
   assert.match(app, /function ProductSpecsSection/);
   assert.match(app, /PRODUCT_SPECS/);
+  assert.match(app, /function SpecIcon/);
+  assert.match(app, /Built tough\. Bank ready\./);
+  assert.match(app, /6 hours/);
+  assert.match(app, /5 kg/);
+  assert.match(app, /20 m radius/);
+  assert.match(app, /1\.5 m\/s max/);
+  assert.match(app, /Beaufort 3/);
+  assert.match(app, /Wi-Fi 6/);
+  assert.match(app, /Bluetooth 5\.4/);
   assert.match(app, /function MediaScriptSection/);
   assert.match(app, /MEDIA_SCRIPT_CARDS/);
   assert.match(app, /kastave-audience-castable-auto-scan-ui-v7\.jpg/);
@@ -90,6 +99,10 @@ test("v2 landing page adds a founder offer bar, app UI modes, specs, and media d
   assert.match(styles, /@media \(max-width:\s*820px\)[\s\S]*?\.lake-map\s*\{[^}]*height:\s*300px/s);
   assert.match(styles, /@media \(max-width:\s*620px\)[\s\S]*?\.lake-map\s*\{[^}]*height:\s*260px/s);
   assert.match(styles, /\.product-specs-section/);
+  assert.match(styles, /\.specs-showcase/);
+  assert.match(styles, /\.specs-product-image/);
+  assert.match(styles, /\.specs-detail-row/);
+  assert.match(styles, /\.spec-icon/);
   assert.match(styles, /\.media-script-section/);
 });
 
@@ -333,7 +346,7 @@ test("image loading priorities favor fast landing-page rendering", () => {
   assert.match(app, /<img src=\{item\.image\} alt="" aria-hidden="true" loading="lazy" decoding="async" \/>/);
   assert.match(app, /src=\{audience\.image\}[\s\S]*?loading="lazy"[\s\S]*?decoding="async"/);
   assert.match(app, /src=\{appSonarImage\} alt="" aria-hidden="true" loading="lazy" decoding="async"/);
-  assert.match(app, /src=\{productDetailImage\} alt="Kastave scout boat product detail" loading="lazy" decoding="async"/);
+  assert.match(app, /src=\{productDetailImage\}[\s\S]*?alt="Kastave scout boat product detail"[\s\S]*?loading="lazy"[\s\S]*?decoding="async"/);
 });
 
 test("deposit page presents a polished reservation checkout", () => {

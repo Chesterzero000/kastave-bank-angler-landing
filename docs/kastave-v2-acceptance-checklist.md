@@ -107,7 +107,7 @@ The V2 site should make a first-time visitor understand Kastave quickly, leave a
 - Highlights: 3D underwater view, auto-scan, water sensing, AI cast calls, private spot log.
 - Target audience: 4 bank-angler personas with matched image overlays.
 - App UI: Auto Mode, Silent Mode, Performance Mode.
-- Product specs: product type, modes, reads, app workflow, launch plan, target price.
+- Product specs: product-image hero plus battery, weight, sonar range, speed, wind/chop, and connectivity details.
 - Media direction: scripts for the next proof assets.
 - Privacy: private maps and spot ownership.
 - Reservation: email plus a single `Reserve for $1` path into `/deposit`.
