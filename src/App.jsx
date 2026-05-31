@@ -1019,15 +1019,22 @@ function AudienceVisual({ type }) {
 }
 
 function AudienceSection() {
-  const scrollAudience = (direction) => {
-    const track = document.getElementById("audience-track");
-    if (!track) {
-      return;
-    }
-
-    track.scrollBy({ left: direction * track.clientWidth * 0.82, behavior: "smooth" });
-    trackEvent("audience_carousel_scroll", { direction: direction > 0 ? "next" : "previous" });
-  };
+  const renderAudienceCard = (audience, keySuffix = "") => (
+    <article className={`audience-card audience-card-${audience.animation}`} key={`${audience.title}${keySuffix}`}>
+      <div className={`audience-media audience-media-${audience.animation}`}>
+        <img
+          src={audience.image}
+          alt={audience.title}
+          style={{ objectPosition: audience.imagePosition }}
+          loading="lazy"
+          decoding="async"
+        />
+        <AudienceVisual type={audience.animation} />
+      </div>
+      <h3>{audience.title}</h3>
+      <p>{audience.body}</p>
+    </article>
+  );
 
   return (
     <section className="audience-section" id="audience" aria-labelledby="audience-title">
@@ -1035,31 +1042,15 @@ function AudienceSection() {
         <h2 className="audience-heading" id="audience-title">
           Who is Kastave For
         </h2>
-        <div className="audience-card-row" id="audience-track" aria-label="Kastave target anglers">
-          {TARGET_AUDIENCES.map((audience) => (
-            <article className={`audience-card audience-card-${audience.animation}`} key={audience.title}>
-              <div className={`audience-media audience-media-${audience.animation}`}>
-                <img
-                  src={audience.image}
-                  alt={audience.title}
-                  style={{ objectPosition: audience.imagePosition }}
-                  loading="lazy"
-                  decoding="async"
-                />
-                <AudienceVisual type={audience.animation} />
-              </div>
-              <h3>{audience.title}</h3>
-              <p>{audience.body}</p>
-            </article>
-          ))}
-        </div>
-        <div className="audience-controls" aria-label="Audience carousel controls">
-          <button type="button" onClick={() => scrollAudience(-1)} aria-label="Previous audience">
-            &lt;
-          </button>
-          <button type="button" onClick={() => scrollAudience(1)} aria-label="Next audience">
-            &gt;
-          </button>
+        <div className="audience-marquee" aria-label="Kastave target anglers">
+          <div className="audience-card-row">
+            <div className="audience-card-set">
+              {TARGET_AUDIENCES.map((audience) => renderAudienceCard(audience))}
+            </div>
+            <div className="audience-card-set" aria-hidden="true">
+              {TARGET_AUDIENCES.map((audience) => renderAudienceCard(audience, "-duplicate"))}
+            </div>
+          </div>
         </div>
       </div>
     </section>

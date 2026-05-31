@@ -1253,6 +1253,8 @@ h3 {
   overflow-x: clip;
   width: min(1660px, calc(100% - 120px));
   margin: 0 auto;
+  --audience-card-width: clamp(320px, 29vw, 520px);
+  --audience-card-gap: 32px;
 }
 
 .audience-heading {
@@ -1264,27 +1266,34 @@ h3 {
   text-align: center;
 }
 
-.audience-card-row {
-  display: grid;
-  grid-auto-columns: minmax(320px, calc((100% - 64px) / 3));
-  grid-auto-flow: column;
-  gap: 32px;
+.audience-marquee {
+  overflow: hidden;
   width: 100%;
-  max-width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding-bottom: 8px;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
 }
 
-.audience-card-row::-webkit-scrollbar {
-  display: none;
+.audience-card-row {
+  display: flex;
+  width: max-content;
+  animation: audienceScrollRight 34s linear infinite;
+  will-change: transform;
+}
+
+.audience-marquee:hover .audience-card-row {
+  animation-play-state: paused;
+}
+
+.audience-card-set {
+  display: grid;
+  grid-auto-columns: var(--audience-card-width);
+  grid-auto-flow: column;
+  gap: var(--audience-card-gap);
+  padding-right: var(--audience-card-gap);
 }
 
 .audience-card {
   min-width: 0;
-  scroll-snap-align: start;
 }
 
 .audience-media {
@@ -2042,32 +2051,14 @@ h3 {
   border-color: rgba(53, 215, 255, 0.56);
 }
 
-.audience-controls {
-  display: flex;
-  justify-content: flex-end;
-  gap: 14px;
-  margin-top: 28px;
-}
+@keyframes audienceScrollRight {
+  from {
+    transform: translate3d(-50%, 0, 0);
+  }
 
-.audience-controls button {
-  display: grid;
-  width: 56px;
-  height: 56px;
-  place-items: center;
-  border: 0;
-  border-radius: 50%;
-  color: white;
-  background: var(--orange-dark);
-  cursor: pointer;
-  font-size: 1.4rem;
-  font-weight: 950;
-  box-shadow: 0 16px 34px rgba(217, 91, 0, 0.18);
-}
-
-.audience-controls button:first-child {
-  color: rgba(16, 19, 18, 0.46);
-  background: rgba(16, 19, 18, 0.12);
-  box-shadow: none;
+  to {
+    transform: translate3d(0, 0, 0);
+  }
 }
 
 @keyframes audienceScanSweep {
@@ -3693,17 +3684,14 @@ h3 {
 
   .audience-inner {
     width: calc(100% - 32px);
+    --audience-card-width: min(82vw, 320px);
+    --audience-card-gap: 18px;
   }
 
   .audience-heading {
     margin-bottom: 20px;
     font-size: clamp(2rem, 10vw, 3rem);
     line-height: 1.4;
-  }
-
-  .audience-card-row {
-    grid-auto-columns: minmax(286px, 82vw);
-    gap: 18px;
   }
 
   .audience-media {
@@ -3716,10 +3704,6 @@ h3 {
 
   .audience-card h3 {
     margin-top: 18px;
-  }
-
-  .audience-controls {
-    justify-content: flex-start;
   }
 
   .package-offer-card {
@@ -3975,5 +3959,10 @@ h3 {
   .checkout-button:hover,
   .email-form button:hover {
     transform: none;
+  }
+
+  .audience-card-row {
+    animation: none !important;
+    transform: translate3d(0, 0, 0) !important;
   }
 }

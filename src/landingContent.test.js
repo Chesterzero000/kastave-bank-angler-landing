@@ -157,10 +157,16 @@ test("landing page includes a Mondo-style target audience carousel", () => {
   assert.match(app, /animation:\s*"sonar"/);
   assert.match(app, /function AudienceSection/);
   assert.match(app, /function AudienceVisual/);
-  assert.match(app, /audience_carousel_scroll/);
+  assert.doesNotMatch(app, /audience_carousel_scroll/);
+  assert.doesNotMatch(app, /audience-controls/);
+  assert.match(app, /audience-marquee/);
+  assert.match(app, /audience-card-set/);
+  assert.match(app, /aria-hidden="true"/);
   assert.match(app, /audience-media/);
   assert.match(app, /<AudienceSection \/>/);
-  assert.match(styles, /\.audience-card-row\s*\{[^}]*grid-auto-flow:\s*column/s);
+  assert.match(styles, /\.audience-card-row\s*\{[^}]*animation:\s*audienceScrollRight\s+34s\s+linear\s+infinite/s);
+  assert.match(styles, /\.audience-card-set\s*\{[^}]*grid-auto-flow:\s*column/s);
+  assert.match(styles, /\.audience-marquee:hover \.audience-card-row\s*\{[^}]*animation-play-state:\s*paused/s);
   assert.match(styles, /\.audience-media\s*\{[^}]*aspect-ratio:\s*1\.22/s);
   assert.match(styles, /\.audience-visual-layer\s*\{[^}]*pointer-events:\s*none/s);
   assert.match(styles, /\.audience-card img\s*\{[^}]*border-radius:\s*32px/s);
@@ -199,7 +205,9 @@ test("landing page includes a Mondo-style target audience carousel", () => {
   assert.match(styles, /@keyframes audienceRepeatCast/);
   assert.match(styles, /@keyframes audienceWakeForward/);
   assert.match(styles, /@keyframes audienceSonarBall/);
-  assert.match(styles, /\.audience-controls button\s*\{[^}]*border-radius:\s*50%/s);
+  assert.match(styles, /@keyframes audienceScrollRight/);
+  assert.match(styles, /@keyframes audienceScrollRight[\s\S]*?from\s*\{[^}]*translate3d\(-50%,\s*0,\s*0\)/);
+  assert.doesNotMatch(styles, /\.audience-controls/);
 });
 
 test("landing page does not render the removed castable workflow comparison", () => {
@@ -522,7 +530,7 @@ test("mobile breakpoints keep landing and deposit flows usable", () => {
   assert.doesNotMatch(styles, /\.launch-proof-row/);
   assert.doesNotMatch(styles, /\.launch-offer-actions/);
   assert.match(styles, /@media \(max-width:\s*820px\)[\s\S]*?\.highlight-bento-grid,[\s\S]*?\.highlight-bento-main,[\s\S]*?\.highlight-bento-side\s*\{[^}]*grid-template-columns:\s*1fr/s);
-  assert.match(styles, /@media \(max-width:\s*820px\)[\s\S]*?\.audience-card-row\s*\{[^}]*grid-auto-columns:\s*minmax\(286px,\s*82vw\)/s);
+  assert.match(styles, /@media \(max-width:\s*820px\)[\s\S]*?\.audience-inner\s*\{[^}]*--audience-card-width:\s*min\(82vw,\s*320px\)/s);
   assert.match(styles, /@media \(max-width:\s*820px\)[\s\S]*?\.deposit-mondo-card-grid,[\s\S]*?\.deposit-mondo-payment-row,[\s\S]*?\.deposit-mondo-steps\s*\{[^}]*grid-template-columns:\s*1fr/s);
   assert.match(styles, /@media \(max-width:\s*620px\)[\s\S]*?\.hero-actions,[\s\S]*?\.primary-button,[\s\S]*?\.secondary-link\s*\{[^}]*width:\s*100%/s);
   assert.match(styles, /@media \(max-width:\s*620px\)[\s\S]*?\.email-form\s*\{[^}]*flex-direction:\s*column/s);
