@@ -7,7 +7,6 @@ import {
   HOOK_VARIANTS,
   PAYMENT_AFTER_STEPS,
   PAYMENT_METHODS,
-  PRIVACY_POINTS,
   RESERVATION_OFFER,
   SITE,
   getPaymentMethodLabel,
@@ -105,6 +104,17 @@ const MEDIA_SCRIPT_CARDS = [
   {
     title: "Auto-scan to 3 cast calls",
     body: "Launch from shore, show a calm sweep path, then cut to the app UI revealing Safe, Structure, and Risk / Reward points.",
+  },
+];
+
+const PRIVACY_STATEMENTS = [
+  {
+    icon: "lock",
+    body: "Kastave saves your waypoints, notes, and scan history for you. Your fishing map stays private unless you choose to share it.",
+  },
+  {
+    icon: "shield",
+    body: "No public spot feed. No spot burning. We do not sell your saved fishing locations or turn your private water into someone else's map.",
   },
 ];
 
@@ -1229,57 +1239,37 @@ function MediaScriptSection() {
   );
 }
 
-function PrivacyAppVisual() {
+function PrivacyIcon({ type }) {
+  if (type === "lock") {
+    return (
+      <svg className="privacy-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        <path d="M10 14v-3.5a6 6 0 0 1 12 0V14" />
+        <path d="M8 14h16v13H8z" />
+        <path d="M16 19v4" />
+      </svg>
+    );
+  }
+
   return (
-    <figure className="privacy-app-visual" aria-label="Kastave app screen saving a private fishing waypoint">
-      <div className="privacy-app-topbar">
-        <span>Private Map</span>
-        <strong>Only you</strong>
-      </div>
-      <div className="privacy-map-screen">
-        <span className="privacy-map-shore" />
-        <span className="privacy-map-contour privacy-contour-one" />
-        <span className="privacy-map-contour privacy-contour-two" />
-        <span className="privacy-map-contour privacy-contour-three" />
-        <span className="privacy-route-line" />
-        <span className="privacy-waypoint privacy-waypoint-primary">
-          <strong>Saved</strong>
-        </span>
-        <span className="privacy-waypoint privacy-waypoint-secondary" />
-        <span className="privacy-waypoint privacy-waypoint-third" />
-        <div className="privacy-save-card">
-          <span>Waypoint saved</span>
-          <strong>North grass edge</strong>
-          <small>Private by default</small>
-        </div>
-      </div>
-      <figcaption>
-        <strong>Private waypoint log</strong>
-        <span>Save fishable structure, notes, and return spots without posting them to a public feed.</span>
-      </figcaption>
-    </figure>
+    <svg className="privacy-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+      <path d="M16 4 25 8v7c0 6.1-3.5 10.4-9 13-5.5-2.6-9-6.9-9-13V8l9-4Z" />
+      <path d="m11.5 16 3 3 6-7" />
+    </svg>
   );
 }
 
 function PrivacySection() {
   return (
     <section className="privacy-section" id="privacy" aria-labelledby="privacy-title">
-      <div className="section-inner privacy-layout">
-        <div>
-          <p className="section-kicker">Private maps</p>
-          <h2 id="privacy-title">Your spots stay yours.</h2>
-          <p>
-            Save private waypoints and build your own exploration log. Kastave is not a public spot
-            feed, and we do not sell your spots. Sharing is your choice.
-          </p>
-        </div>
-        <div className="privacy-visual-stack">
-          <PrivacyAppVisual />
-          <div className="privacy-points">
-            {PRIVACY_POINTS.map((point) => (
-              <span key={point}>{point}</span>
-            ))}
-          </div>
+      <div className="section-inner privacy-simple-layout">
+        <h2 id="privacy-title">Your Privacy Comes First</h2>
+        <div className="privacy-statement-list">
+          {PRIVACY_STATEMENTS.map((item) => (
+            <article className="privacy-statement" key={item.icon}>
+              <PrivacyIcon type={item.icon} />
+              <p>{item.body}</p>
+            </article>
+          ))}
         </div>
       </div>
     </section>

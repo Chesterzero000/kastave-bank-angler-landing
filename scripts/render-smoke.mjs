@@ -32,7 +32,7 @@ const pageChecks = [
       "Get the Highlights",
       "Who is Kastave For",
       "Auto mode first. Quiet or fast when you need it.",
-      "Private waypoint log",
+      "Your Privacy Comes First",
       "Built tough. Bank ready.",
       "6 hours",
       "20 m radius",
