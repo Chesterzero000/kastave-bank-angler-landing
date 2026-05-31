@@ -1255,8 +1255,7 @@ h3 {
 }
 
 .cast-options-section,
-.how-section,
-.castable-comparison-section {
+.how-section {
   padding: clamp(62px, 8vw, 104px) 0;
 }
 
@@ -3019,59 +3018,6 @@ h3 {
   line-height: 1.58;
 }
 
-.castable-comparison-section {
-  color: white;
-  background: var(--charcoal);
-}
-
-.castable-heading {
-  max-width: 840px;
-  text-align: center;
-}
-
-.castable-heading p {
-  color: rgba(255, 255, 255, 0.74);
-  line-height: 1.65;
-}
-
-.workflow-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-  margin-top: 34px;
-}
-
-.workflow-card {
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 8px;
-  padding: clamp(22px, 4vw, 34px);
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.workflow-card-kastave {
-  border-color: rgba(255, 122, 26, 0.52);
-  background: rgba(255, 122, 26, 0.12);
-}
-
-.workflow-card h3 {
-  font-size: clamp(1.6rem, 2.8vw, 3rem);
-  line-height: 1;
-}
-
-.workflow-card ol {
-  display: grid;
-  gap: 12px;
-  margin: 24px 0 0;
-  padding-left: 24px;
-  color: rgba(255, 255, 255, 0.74);
-  line-height: 1.55;
-}
-
-.workflow-card li::marker {
-  color: var(--orange);
-  font-weight: 950;
-}
-
 .privacy-layout p,
 .reservation-card p,
 .reservation-secondary small {
@@ -3858,7 +3804,6 @@ details p {
   .specs-layout,
   .privacy-layout,
   .reservation-options,
-  .workflow-grid,
   .site-footer {
     grid-template-columns: 1fr;
   }

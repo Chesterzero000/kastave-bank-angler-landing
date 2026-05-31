@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
   ANNOUNCEMENT,
-  CASTABLE_WORKFLOW,
   DEFAULT_PAYMENT_METHOD,
   FAQS,
   HERO,
@@ -500,7 +499,6 @@ function App() {
         <ProductSpecsSection depositHref={withUtm("/deposit")} onReserve={(event) => openDepositPage("specs", event)} />
         <MediaScriptSection />
         <HowItWorksSection />
-        <CastableComparisonSection />
         <PrivacySection />
         <ReservationSection
           depositHref={withUtm("/deposit")}
@@ -1309,39 +1307,6 @@ function MediaScriptSection() {
   );
 }
 
-function CastableComparisonSection() {
-  return (
-    <section
-      className="castable-comparison-section"
-      id="castable-comparison"
-      aria-labelledby="castable-comparison-title"
-    >
-      <div className="section-inner castable-heading">
-        <p className="section-kicker">Workflow comparison</p>
-        <h2 id="castable-comparison-title">{CASTABLE_WORKFLOW.title}</h2>
-        <p>{CASTABLE_WORKFLOW.body}</p>
-      </div>
-      <div className="section-inner workflow-grid">
-        <WorkflowCard tone="castable" workflow={CASTABLE_WORKFLOW.castable} />
-        <WorkflowCard tone="kastave" workflow={CASTABLE_WORKFLOW.kastave} />
-      </div>
-    </section>
-  );
-}
-
-function WorkflowCard({ tone, workflow }) {
-  return (
-    <article className={`workflow-card workflow-card-${tone}`}>
-      <h3>{workflow.title}</h3>
-      <ol>
-        {workflow.steps.map((step) => (
-          <li key={step}>{step}</li>
-        ))}
-      </ol>
-    </article>
-  );
-}
-
 function PrivacyAppVisual() {
   return (
     <figure className="privacy-app-visual" aria-label="Kastave app screen saving a private fishing waypoint">
@@ -1545,9 +1510,6 @@ function Footer() {
         </a>
         <a href="#specs" onClick={() => trackFooterLink("specs", "#specs")}>
           Specs
-        </a>
-        <a href="#castable-comparison" onClick={() => trackFooterLink("comparison", "#castable-comparison")}>
-          Compare
         </a>
         <a href="#special-offers" onClick={() => trackFooterLink("reserve", "#special-offers")}>
           Reserve

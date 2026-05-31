@@ -104,31 +104,6 @@ export const RESERVATION_OFFER = {
   body: "This is not a finished-unit purchase. It is a non-refundable founder reservation that unlocks a launch credit toward your first Kastave if you buy at launch.",
 };
 
-export const CASTABLE_WORKFLOW = {
-  title: "Stop casting your fish finder.",
-  body: "Castable sonar can be useful. The problem is the bank workflow: you may spend the first part of the session casting the tool instead of fishing the water.",
-  castable: {
-    title: "Castable sonar workflow",
-    steps: [
-      "Bring an extra rod or swap rigs",
-      "Cast the sonar ball",
-      "Retrieve slowly while watching the phone",
-      "Repeat from another angle",
-      "Still decide where to actually fish",
-    ],
-  },
-  kastave: {
-    title: "Kastave workflow",
-    steps: [
-      "Deploy from shore",
-      "Auto-scan reachable water",
-      "Build a 3D terrain read",
-      "Compare Safe / Structure / Risk-Reward",
-      "Then make the cast",
-    ],
-  },
-};
-
 export const PRIVACY_POINTS = [
   "Private by default",
   "No public spot burning",

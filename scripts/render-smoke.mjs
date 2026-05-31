@@ -19,7 +19,6 @@ const requiredHomeAnchorTargets = [
   "audience",
   "app-ui",
   "specs",
-  "castable-comparison",
   "special-offers",
   "faq",
 ];
@@ -39,6 +38,7 @@ const pageChecks = [
     mustExclude: [
       "Core Capabilities",
       "Built to scan, model, and choose the first 3 casts.",
+      "Workflow comparison",
       "Bank angler problem",
       "Stop guessing where to start.",
       "Reddit proof",
@@ -88,7 +88,7 @@ const pageChecks = [
   {
     path: "/not-a-real-route",
     mustInclude: ["Kastave", "Get the Highlights", "Who is Kastave For"],
-    mustExclude: ["Not Found", "Core Capabilities", "Bank angler problem"],
+    mustExclude: ["Not Found", "Core Capabilities", "Workflow comparison", "Bank angler problem"],
   },
 ];
 

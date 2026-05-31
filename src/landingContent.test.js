@@ -193,12 +193,17 @@ test("landing page includes a Mondo-style target audience carousel", () => {
   assert.match(styles, /\.audience-controls button\s*\{[^}]*border-radius:\s*50%/s);
 });
 
-test("landing page includes a castable sonar workflow comparison", () => {
-  assert.match(content, /CASTABLE_WORKFLOW/);
-  assert.match(content, /Castable sonar workflow/);
-  assert.match(content, /Kastave workflow/);
-  assert.match(app, /CastableComparisonSection/);
-  assert.match(styles, /workflow-grid/);
+test("landing page does not render the removed castable workflow comparison", () => {
+  assert.doesNotMatch(content, /CASTABLE_WORKFLOW/);
+  assert.doesNotMatch(app, /<CastableComparisonSection \/>/);
+  assert.doesNotMatch(app, /function CastableComparisonSection/);
+  assert.doesNotMatch(app, /function WorkflowCard/);
+  assert.doesNotMatch(app, /castable-comparison/);
+  assert.doesNotMatch(app, /Workflow comparison/);
+  assert.doesNotMatch(styles, /\.castable-comparison-section/);
+  assert.doesNotMatch(styles, /\.castable-heading/);
+  assert.doesNotMatch(styles, /\.workflow-grid/);
+  assert.doesNotMatch(styles, /\.workflow-card/);
 });
 
 test("landing page does not render the removed core capabilities carousel", () => {
@@ -430,6 +435,7 @@ test("navigation and footer only point to live landing sections", () => {
   assert.match(app, /trackFooterLink\("app_ui", "#app-ui"\)/);
   assert.match(app, /trackFooterLink\("specs", "#specs"\)/);
   assert.doesNotMatch(app, /trackFooterLink\("proof", "#pain"\)/);
+  assert.doesNotMatch(app, /trackFooterLink\("comparison", "#castable-comparison"\)/);
   assert.doesNotMatch(app, /Casts: "#cast-options"/);
   assert.doesNotMatch(app, /Features: "#features"/);
 });
