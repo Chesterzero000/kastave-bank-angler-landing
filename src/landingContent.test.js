@@ -206,6 +206,20 @@ test("landing page does not render the removed castable workflow comparison", ()
   assert.doesNotMatch(styles, /\.workflow-card/);
 });
 
+test("landing page does not render the removed how it works section", () => {
+  assert.doesNotMatch(content, /PROCESS_STEPS/);
+  assert.doesNotMatch(app, /<HowItWorksSection \/>/);
+  assert.doesNotMatch(app, /function HowItWorksSection/);
+  assert.doesNotMatch(app, /how-it-works/);
+  assert.doesNotMatch(app, /How it works/);
+  assert.doesNotMatch(app, /From unknown bank water to a first-cast plan/);
+  assert.doesNotMatch(app, /Deploy \/ Scan \/ 3D Read \/ Choose Cast/);
+  assert.doesNotMatch(styles, /\.how-section/);
+  assert.doesNotMatch(styles, /\.how-layout/);
+  assert.doesNotMatch(styles, /\.how-media/);
+  assert.doesNotMatch(styles, /\.how-step/);
+});
+
 test("landing page does not render the removed core capabilities carousel", () => {
   assert.doesNotMatch(app, /<FeaturesSection \/>/);
   assert.doesNotMatch(app, /function FeaturesSection/);
@@ -319,7 +333,6 @@ test("image loading priorities favor fast landing-page rendering", () => {
   assert.match(app, /<img src=\{item\.image\} alt="" aria-hidden="true" loading="lazy" decoding="async" \/>/);
   assert.match(app, /src=\{audience\.image\}[\s\S]*?loading="lazy"[\s\S]*?decoding="async"/);
   assert.match(app, /src=\{appSonarImage\} alt="" aria-hidden="true" loading="lazy" decoding="async"/);
-  assert.match(app, /src=\{processImage\}[\s\S]*?loading="lazy"[\s\S]*?decoding="async"/);
   assert.match(app, /src=\{productDetailImage\} alt="Kastave scout boat product detail" loading="lazy" decoding="async"/);
 });
 

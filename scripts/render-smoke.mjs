@@ -39,6 +39,8 @@ const pageChecks = [
       "Core Capabilities",
       "Built to scan, model, and choose the first 3 casts.",
       "Workflow comparison",
+      "How it works",
+      "From unknown bank water to a first-cast plan.",
       "Bank angler problem",
       "Stop guessing where to start.",
       "Reddit proof",
@@ -88,7 +90,7 @@ const pageChecks = [
   {
     path: "/not-a-real-route",
     mustInclude: ["Kastave", "Get the Highlights", "Who is Kastave For"],
-    mustExclude: ["Not Found", "Core Capabilities", "Workflow comparison", "Bank angler problem"],
+    mustExclude: ["Not Found", "Core Capabilities", "Workflow comparison", "How it works", "Bank angler problem"],
   },
 ];
 

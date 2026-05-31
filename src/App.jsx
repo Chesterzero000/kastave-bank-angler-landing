@@ -8,7 +8,6 @@ import {
   PAYMENT_AFTER_STEPS,
   PAYMENT_METHODS,
   PRIVACY_POINTS,
-  PROCESS_STEPS,
   RESERVATION_OFFER,
   SITE,
   getPaymentMethodLabel,
@@ -498,7 +497,6 @@ function App() {
         <AppExperienceSection />
         <ProductSpecsSection depositHref={withUtm("/deposit")} onReserve={(event) => openDepositPage("specs", event)} />
         <MediaScriptSection />
-        <HowItWorksSection />
         <PrivacySection />
         <ReservationSection
           depositHref={withUtm("/deposit")}
@@ -1215,37 +1213,6 @@ function AppExperienceSection() {
             </div>
           </div>
           <img src={appSonarImage} alt="" aria-hidden="true" loading="lazy" decoding="async" />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function HowItWorksSection() {
-  return (
-    <section className="how-section" id="how-it-works" aria-labelledby="how-title">
-      <div className="section-inner how-layout">
-        <div className="how-media">
-          <img
-            src={processImage}
-            alt="Kastave workflow from bank scan to cast choice"
-            loading="lazy"
-            decoding="async"
-          />
-          <div className="how-media-label">Deploy / Scan / 3D Read / Choose Cast</div>
-        </div>
-        <div className="how-copy">
-          <p className="section-kicker">How it works</p>
-          <h2 id="how-title">From unknown bank water to a first-cast plan.</h2>
-          <div className="how-steps">
-            {PROCESS_STEPS.map((step) => (
-              <article className="how-step" key={step.label}>
-                <span>{step.label}</span>
-                <h3>{step.title}</h3>
-                <p>{step.body}</p>
-              </article>
-            ))}
-          </div>
         </div>
       </div>
     </section>

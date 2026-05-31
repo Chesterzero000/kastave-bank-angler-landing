@@ -111,24 +111,6 @@ export const PRIVACY_POINTS = [
   "Your exploration map stays yours",
 ];
 
-export const PROCESS_STEPS = [
-  {
-    label: "Scan",
-    title: "Auto-scan the reachable bank water.",
-    body: "Run a repeatable sweep across the water you can actually fish from shore, even when the surface tells you almost nothing.",
-  },
-  {
-    label: "Model",
-    title: "Build the 3D underwater picture.",
-    body: "Turn depth, ledges, channels, rocks, weeds, and bottom hardness into a practical terrain view for the spot in front of you.",
-  },
-  {
-    label: "Choose",
-    title: "Pick 1 of 3 cast choices.",
-    body: "Start with a safe point, a structure point, or a high-risk, high-reward target based on terrain, depth, conditions, and your history.",
-  },
-];
-
 export const PAYMENT_NOTE =
   "Choose Stripe or PayPal. After payment, your receipt is the first confirmation; return to Kastave if the payment page does not redirect automatically.";
 

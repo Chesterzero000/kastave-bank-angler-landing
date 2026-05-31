@@ -1254,8 +1254,7 @@ h3 {
   padding: clamp(62px, 8vw, 104px) 0;
 }
 
-.cast-options-section,
-.how-section {
+.cast-options-section {
   padding: clamp(62px, 8vw, 104px) 0;
 }
 
@@ -2948,76 +2947,6 @@ h3 {
   line-height: 1.6;
 }
 
-.how-section {
-  background: var(--paper);
-}
-
-.how-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
-  gap: clamp(28px, 6vw, 72px);
-  align-items: center;
-}
-
-.how-media {
-  position: relative;
-  overflow: hidden;
-  border-radius: 8px;
-  background: var(--charcoal);
-  box-shadow: 0 22px 54px rgba(16, 19, 18, 0.16);
-}
-
-.how-media img {
-  width: 100%;
-  aspect-ratio: 16 / 10;
-  object-fit: cover;
-}
-
-.how-media-label {
-  position: absolute;
-  left: 18px;
-  right: 18px;
-  bottom: 18px;
-  border-radius: 8px;
-  padding: 12px 14px;
-  color: white;
-  background: rgba(6, 8, 8, 0.78);
-  font-weight: 900;
-}
-
-.how-copy > p {
-  color: var(--muted);
-  line-height: 1.68;
-}
-
-.how-steps {
-  display: grid;
-  gap: 12px;
-  margin-top: 28px;
-}
-
-.how-step {
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 18px;
-  background: white;
-}
-
-.how-step span {
-  display: inline-flex;
-  margin-bottom: 10px;
-  color: var(--orange-dark);
-  font-size: 0.78rem;
-  font-weight: 950;
-  text-transform: uppercase;
-}
-
-.how-step p {
-  margin: 0;
-  color: var(--muted);
-  line-height: 1.58;
-}
-
 .privacy-layout p,
 .reservation-card p,
 .reservation-secondary small {
@@ -3799,7 +3728,6 @@ details p {
     font-size: clamp(1.3rem, 7vw, 2rem);
   }
 
-  .how-layout,
   .app-ui-layout,
   .specs-layout,
   .privacy-layout,
