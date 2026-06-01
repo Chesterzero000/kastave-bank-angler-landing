@@ -66,6 +66,19 @@ export const recommendedEnv = [
     reason: "Lets non-hero email signup route to the newsletter provider if desired.",
     validate: validateUrl("https:"),
   },
+  {
+    name: "RESEND_API_KEY",
+    reason: "Lets /api/lead-notification send founder email alerts for new waitlist signups.",
+  },
+  {
+    name: "LEAD_NOTIFY_TO",
+    reason: "Recipient email address for new waitlist signup notifications.",
+    validate: validateEmail,
+  },
+  {
+    name: "LEAD_NOTIFY_FROM",
+    reason: "Verified sender address used by Resend for waitlist signup notifications.",
+  },
 ];
 
 const placeholderPatterns = [/^your-/i, /^whsec_your/i, /^the-/i, /^example$/i, /^changeme$/i, /replace[_-]?with/i];
@@ -116,4 +129,8 @@ function validateUrl(protocol, hostname) {
       return "expected a valid URL";
     }
   };
+}
+
+function validateEmail(value) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? null : "expected a valid email address";
 }

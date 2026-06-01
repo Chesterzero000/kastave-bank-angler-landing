@@ -21,6 +21,7 @@ import {
   trackPurchase,
   withUtm,
 } from "./tracking.js";
+import { notifyLeadSignup } from "./leadNotification.js";
 import {
   recordReservationIntent,
   recordWaitlistSignup,
@@ -435,6 +436,7 @@ function App() {
       continue_to_deposit: continueToDeposit,
     });
     recordWaitlistSignup(email, { source });
+    notifyLeadSignup(email, { source });
 
     if (continueToDeposit) {
       localStorage.setItem("kastave_last_signup_email", email);
