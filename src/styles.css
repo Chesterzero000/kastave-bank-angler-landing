@@ -612,7 +612,8 @@ h3 {
   position: relative;
   display: grid;
   place-items: start center;
-  height: clamp(560px, 76vh, 720px);
+  min-height: clamp(760px, 88svh, 900px);
+  padding-bottom: clamp(42px, 5vh, 72px);
   overflow: hidden;
   border-radius: 0 0 48px 48px;
   background: #d8e8f6;
@@ -644,7 +645,7 @@ h3 {
   display: grid;
   justify-items: center;
   width: min(920px, calc(100% - 32px));
-  margin-top: clamp(86px, 12vh, 130px);
+  margin-top: clamp(84px, 9vh, 108px);
   color: var(--ink);
   text-align: center;
 }
@@ -653,7 +654,7 @@ h3 {
   display: inline-flex;
   align-items: center;
   gap: 14px;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
   color: var(--ink);
   font-size: clamp(1rem, 1.7vw, 1.25rem);
   line-height: 1;
@@ -664,9 +665,9 @@ h3 {
 }
 
 .deposit-mondo-copy h1 {
-  margin: 0 0 24px;
+  margin: 0 0 14px;
   color: #060808;
-  font-size: clamp(2.05rem, 4.2vw, 3.55rem);
+  font-size: clamp(2.05rem, 4vw, 3.28rem);
   line-height: 1.08;
 }
 
@@ -678,7 +679,7 @@ h3 {
 .deposit-lock-label {
   margin: 0;
   color: #060808;
-  font-size: clamp(1.24rem, 2.4vw, 1.9rem);
+  font-size: clamp(1.18rem, 2vw, 1.55rem);
   font-weight: 950;
   line-height: 1.1;
 }
@@ -688,7 +689,7 @@ h3 {
   align-items: center;
   justify-content: center;
   min-height: 38px;
-  margin: -6px 0 16px;
+  margin: -2px 0 12px;
   border: 1px solid rgba(217, 91, 0, 0.32);
   border-radius: 999px;
   padding: 0 18px;
@@ -707,10 +708,10 @@ h3 {
   gap: 4px;
   align-items: center;
   justify-items: center;
-  margin: 8px 0 16px;
+  margin: 6px 0 12px;
   border: 1px solid rgba(217, 91, 0, 0.22);
   border-radius: 28px;
-  padding: 12px 28px 14px;
+  padding: 10px 26px 12px;
   background: rgba(255, 255, 255, 0.62);
   box-shadow: 0 14px 34px rgba(16, 19, 18, 0.1);
   backdrop-filter: blur(12px);
@@ -737,7 +738,7 @@ h3 {
 }
 
 .deposit-lock-price strong {
-  font-size: clamp(3.1rem, 6.2vw, 5.4rem);
+  font-size: clamp(3rem, 5.6vw, 4.8rem);
   font-weight: 950;
   line-height: 0.82;
 }
@@ -752,9 +753,9 @@ h3 {
 
 .deposit-price-note {
   width: min(560px, 100%);
-  margin: 0 0 30px;
+  margin: 0 0 20px;
   color: rgba(16, 19, 18, 0.78);
-  font-size: clamp(0.98rem, 1.45vw, 1.18rem);
+  font-size: clamp(0.95rem, 1.3vw, 1.08rem);
   font-weight: 800;
   line-height: 1.35;
 }
@@ -3813,7 +3814,8 @@ h3 {
   }
 
   .deposit-mondo-hero {
-    height: 640px;
+    min-height: 760px;
+    padding-bottom: 34px;
     border-radius: 0 0 36px 36px;
   }
 
