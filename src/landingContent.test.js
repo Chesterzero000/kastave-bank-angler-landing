@@ -36,21 +36,19 @@ test("landing page supports the three paid-ad hook variants", () => {
   assert.match(styles, /hero-hook-card/);
 });
 
-test("app mode section highlights auto mode and keeps other modes as text", () => {
-  assert.match(app, /const \[autoMode, \.\.\.supportModes\] = APP_MODES/);
-  assert.match(app, /Auto mode first\. Quiet or fast when you need it\./);
-  assert.match(app, /className="app-mode-card app-mode-card-auto"/);
-  assert.match(app, /className="app-mode-text-grid"/);
-  assert.match(app, /className="auto-mode-media" aria-label="Auto Mode media slot"/);
-  assert.match(app, /className="auto-mode-placeholder" aria-hidden="true"/);
-  assert.doesNotMatch(app, /activeModeKey/);
-  assert.doesNotMatch(app, /role="tab"/);
-  assert.doesNotMatch(app, /phone-shell/);
+test("landing page does not render the removed app mode section", () => {
+  assert.doesNotMatch(app, /APP_MODES/);
+  assert.doesNotMatch(app, /function AppExperienceSection/);
+  assert.doesNotMatch(app, /<AppExperienceSection \/>/);
+  assert.doesNotMatch(app, /Auto mode first\. Quiet or fast when you need it\./);
+  assert.doesNotMatch(app, /className="app-mode-card app-mode-card-auto"/);
+  assert.doesNotMatch(app, /className="auto-mode-media" aria-label="Auto Mode media slot"/);
+  assert.doesNotMatch(app, /id="app-ui"/);
 });
 
 test("hero uses simple launch language and Kickstarter status", () => {
   assert.match(content, /Coming soon on Kickstarter/);
-  assert.match(content, /Your shoreline fishing scout/);
+  assert.match(content, /A smart RC fish-finder boat for bank anglers/);
   assert.match(app, /hero-launch-row/);
   assert.match(app, /Kickstarter/);
   assert.match(app, /buttonLabel="Sign up"/);
@@ -63,20 +61,10 @@ test("hero signup continues to the deposit page before payment", () => {
   assert.match(app, /window\.location\.href = withUtm\("\/deposit"\)/);
 });
 
-test("v2 landing page adds app UI modes, specs, and media direction", () => {
+test("v2 landing page adds specs and removes internal material direction", () => {
   assert.doesNotMatch(app, /function LaunchOfferBar/);
   assert.doesNotMatch(app, /<LaunchOfferBar/);
   assert.doesNotMatch(app, /V2_PROOF_POINTS/);
-  assert.match(app, /function AppExperienceSection/);
-  assert.match(app, /APP_MODES/);
-  assert.match(app, /Auto Mode/);
-  assert.match(app, /Silent Mode/);
-  assert.match(app, /Performance Mode/);
-  assert.match(app, /Auto shoreline sweep/);
-  assert.match(app, /Quiet close-cover pass/);
-  assert.match(app, /Fast long-bank sweep/);
-  assert.match(app, /auto-mode-panel/);
-  assert.match(app, /auto-cast-row/);
   assert.match(app, /function ProductSpecsSection/);
   assert.match(app, /PRODUCT_SPECS/);
   assert.match(app, /function SpecIcon/);
@@ -88,21 +76,18 @@ test("v2 landing page adds app UI modes, specs, and media direction", () => {
   assert.match(app, /Beaufort 3/);
   assert.match(app, /Wi-Fi 6/);
   assert.match(app, /Bluetooth 5\.4/);
-  assert.match(app, /function MediaScriptSection/);
-  assert.match(app, /MEDIA_SCRIPT_CARDS/);
-  assert.match(app, /kastave-audience-castable-auto-scan-ui-v7\.jpg/);
+  assert.doesNotMatch(app, /function MediaScriptSection/);
+  assert.doesNotMatch(app, /MEDIA_SCRIPT_CARDS/);
+  assert.doesNotMatch(app, /<MediaScriptSection \/>/);
+  assert.doesNotMatch(app, /Material direction/);
+  assert.doesNotMatch(app, /The next video assets should prove the workflow in seconds/);
   assert.doesNotMatch(styles, /\.launch-offer-bar/);
-  assert.match(styles, /\.app-ui-section/);
-  assert.match(styles, /\.auto-mode-placeholder/);
-  assert.match(styles, /\.app-mode-text-grid/);
-  assert.match(styles, /\.auto-mode-panel/);
   assert.doesNotMatch(styles, /\.phone-shell/);
   assert.match(styles, /\.product-specs-section/);
   assert.match(styles, /\.specs-showcase/);
   assert.match(styles, /\.specs-product-image/);
   assert.match(styles, /\.specs-detail-row/);
   assert.match(styles, /\.spec-icon/);
-  assert.match(styles, /\.media-script-section/);
 });
 
 test("media scripts include four persona-specific image directions", () => {
@@ -135,82 +120,24 @@ test("highlights section follows the rounded bento reference geometry", () => {
   assert.match(app, /AI CAST CALLS/);
   assert.match(app, /KEEP YOUR HONEY HOLES/);
   assert.match(app, /highlight-bento-card-wide/);
+  assert.match(app, /highlight-bento-card-text/);
+  assert.match(app, /textOnly:\s*true/);
   assert.match(styles, /\.highlight-bento-card\s*\{[^}]*border-radius:\s*60px/s);
   assert.match(styles, /\.highlight-bento-grid\s*\{[^}]*gap:\s*12px/s);
   assert.match(styles, /aspect-ratio:\s*1068\s*\/\s*507/);
   assert.match(styles, /border-radius:\s*32px/);
 });
 
-test("landing page includes a Mondo-style target audience carousel", () => {
-  assert.match(app, /TARGET_AUDIENCES/);
-  assert.match(app, /Who is Kastave For/);
-  assert.match(app, /The Bank-Only Bass Angler/);
-  assert.match(app, /The After-Work Pond Hopper/);
-  assert.match(app, /The Snag-Weary Lure Saver/);
-  assert.match(app, /The Castable-Sonar Upgrade Seeker/);
-  assert.match(app, /kastave-audience-bank-angler\.jpg/);
-  assert.match(app, /kastave-audience-pond-hopper\.jpg/);
-  assert.match(app, /kastave-audience-hidden-snag-first-person-v4\.jpg/);
-  assert.match(app, /kastave-audience-castable-auto-scan-ui-v7\.jpg/);
-  assert.match(app, /Forty minutes after work/);
-  assert.match(app, /casting your fish finder feels like work/);
-  assert.match(app, /animation:\s*"bank"/);
-  assert.match(app, /animation:\s*"timer"/);
-  assert.match(app, /animation:\s*"snag"/);
-  assert.match(app, /animation:\s*"sonar"/);
-  assert.match(app, /function AudienceSection/);
-  assert.match(app, /function AudienceVisual/);
-  assert.doesNotMatch(app, /audience_carousel_scroll/);
-  assert.doesNotMatch(app, /audience-controls/);
-  assert.match(app, /audience-marquee/);
-  assert.match(app, /audience-card-set/);
-  assert.match(app, /aria-hidden="true"/);
-  assert.match(app, /audience-media/);
-  assert.match(app, /<AudienceSection \/>/);
-  assert.match(styles, /\.audience-card-row\s*\{[^}]*animation:\s*audienceScrollRight\s+34s\s+linear\s+infinite/s);
-  assert.match(styles, /\.audience-card-set\s*\{[^}]*grid-auto-flow:\s*column/s);
-  assert.match(styles, /\.audience-marquee:hover \.audience-card-row\s*\{[^}]*animation-play-state:\s*paused/s);
-  assert.match(styles, /\.audience-media\s*\{[^}]*aspect-ratio:\s*1\.22/s);
-  assert.match(styles, /\.audience-visual-layer\s*\{[^}]*pointer-events:\s*none/s);
-  assert.match(styles, /\.audience-card img\s*\{[^}]*border-radius:\s*32px/s);
-  assert.match(app, /audience-cast-arc/);
-  assert.match(app, /audience-bank-reach-edge/);
-  assert.match(app, /audience-time-window/);
-  assert.match(app, /audience-calm-surface/);
-  assert.match(app, /audience-snag-root/);
-  assert.match(app, /audience-snag-tension-line/);
-  assert.match(app, /audience-hook-point/);
-  assert.match(app, /audience-repeat-cast-arc/);
-  assert.match(app, /audience-kastave-scan-beam/);
-  assert.match(app, /audience-snag-lock/);
-  assert.match(app, /audience-forward-wake/);
-  assert.match(styles, /\.audience-media-bank \.audience-bank-reach-edge/);
-  assert.match(styles, /\.audience-media-bank \.audience-scan-fan/);
-  assert.match(styles, /\.audience-media-bank \.audience-cast-arc/);
-  assert.match(styles, /\.audience-media-timer \.audience-time-window/);
-  assert.match(styles, /\.audience-media-timer \.audience-clock-ring/);
-  assert.match(styles, /\.audience-media-snag \.audience-calm-surface/);
-  assert.match(styles, /\.audience-media-snag \.audience-snag-root/);
-  assert.match(styles, /\.audience-media-snag \.audience-hook-point/);
-  assert.match(styles, /\.audience-media-snag \.audience-warning-one/);
-  assert.match(styles, /\.audience-media-snag \.audience-snag-lock/);
-  assert.match(styles, /\.audience-media-sonar \.audience-repeat-cast-arc/);
-  assert.match(styles, /\.audience-media-sonar \.audience-kastave-scan-beam/);
-  assert.match(styles, /\.audience-media-sonar \.audience-scout-route/);
-  assert.match(styles, /\.audience-media-sonar \.audience-forward-wake/);
-  assert.match(styles, /@keyframes audienceCastArc/);
-  assert.match(styles, /@keyframes audienceReachEdge/);
-  assert.match(styles, /@keyframes audienceTimeWindow/);
-  assert.match(styles, /@keyframes audienceScanSweep/);
-  assert.match(styles, /@keyframes audienceSurfaceCalm/);
-  assert.match(styles, /@keyframes audienceLineTension/);
-  assert.match(styles, /@keyframes audienceHookJerk/);
-  assert.match(styles, /@keyframes audienceRepeatCast/);
-  assert.match(styles, /@keyframes audienceWakeForward/);
-  assert.match(styles, /@keyframes audienceSonarBall/);
-  assert.match(styles, /@keyframes audienceScrollRight/);
-  assert.match(styles, /@keyframes audienceScrollRight[\s\S]*?from\s*\{[^}]*translate3d\(-50%,\s*0,\s*0\)/);
-  assert.doesNotMatch(styles, /\.audience-controls/);
+test("landing page does not render the removed target audience carousel", () => {
+  assert.doesNotMatch(app, /TARGET_AUDIENCES/);
+  assert.doesNotMatch(app, /Who is Kastave For/);
+  assert.doesNotMatch(app, /The Bank-Only Bass Angler/);
+  assert.doesNotMatch(app, /function AudienceSection/);
+  assert.doesNotMatch(app, /function AudienceVisual/);
+  assert.doesNotMatch(app, /<AudienceSection \/>/);
+  assert.doesNotMatch(app, /id="audience"/);
+  assert.doesNotMatch(app, /kastave-audience-bank-angler\.jpg/);
+  assert.doesNotMatch(app, /kastave-audience-castable-auto-scan-ui-v7\.jpg/);
 });
 
 test("landing page does not render the removed castable workflow comparison", () => {
@@ -283,8 +210,10 @@ test("landing page does not render the removed bank angler problem section", () 
 });
 
 test("landing page imports every image referenced by highlight cards", () => {
-  assert.match(app, /import processImage from "\.\.\/assets\/kastave-new-process\.jpg"/);
-  assert.match(app, /image:\s*processImage/);
+  assert.match(app, /import reconstructionFeatureImage from "\.\.\/assets\/kastave-feature-3d-reconstruction-v2\.png"/);
+  assert.match(app, /image:\s*reconstructionFeatureImage/);
+  assert.doesNotMatch(app, /image:\s*processImage/);
+  assert.doesNotMatch(app, /image:\s*recognitionImage/);
 });
 
 test("landing page exposes Stripe and PayPal checkout options", () => {
@@ -359,7 +288,6 @@ test("image loading priorities favor fast landing-page rendering", () => {
   assert.match(app, /className="hero-image"[\s\S]*?fetchPriority="high"[\s\S]*?decoding="async"/);
   assert.match(app, /className="deposit-hero-image"[\s\S]*?fetchPriority="high"[\s\S]*?decoding="async"/);
   assert.match(app, /<img src=\{item\.image\} alt="" aria-hidden="true" loading="lazy" decoding="async" \/>/);
-  assert.match(app, /src=\{audience\.image\}[\s\S]*?loading="lazy"[\s\S]*?decoding="async"/);
   assert.match(app, /src=\{productDetailImage\}[\s\S]*?alt="Kastave scout boat product detail"[\s\S]*?loading="lazy"[\s\S]*?decoding="async"/);
 });
 
@@ -433,31 +361,17 @@ test("site includes privacy policy and terms pages", () => {
   assert.match(styles, /\.deposit-policy-footer/);
 });
 
-test("privacy section follows a simple icon-led privacy layout", () => {
-  assert.match(app, /const PRIVACY_STATEMENTS/);
-  assert.match(app, /function PrivacyIcon/);
-  assert.match(app, /function PrivacyAppVisual/);
-  assert.match(app, /Your Privacy Comes First/);
-  assert.match(app, /No public spot feed\. No spot burning/);
-  assert.match(app, /className="section-inner privacy-simple-layout"/);
-  assert.match(app, /className="privacy-statement-list"/);
-  assert.match(app, /className="privacy-icon"/);
-  assert.match(app, /className="privacy-app-visual"/);
-  assert.match(app, /className="privacy-device-shell"/);
-  assert.match(app, /Kastave app private waypoint preview/);
-  assert.match(app, /Waypoint saved/);
-  assert.match(app, /Only you can see this spot\./);
-  assert.match(app, /Public feed/);
-  assert.match(app, /Share location/);
-  assert.match(styles, /\.privacy-section\s*\{[^}]*background:\s*white/s);
-  assert.match(styles, /\.privacy-simple-layout\s*\{[^}]*text-align:\s*center/s);
-  assert.match(styles, /\.privacy-simple-layout h2\s*\{[^}]*color:\s*var\(--orange-dark\)/s);
-  assert.match(styles, /\.privacy-statement-list\s*\{/);
-  assert.match(styles, /\.privacy-icon\s*\{/);
-  assert.match(styles, /\.privacy-app-visual\s*\{/);
-  assert.match(styles, /\.privacy-device-shell\s*\{/);
-  assert.match(styles, /\.privacy-map-screen\s*\{/);
-  assert.match(styles, /\.privacy-waypoint\s*\{/);
+test("landing page does not render the removed privacy section", () => {
+  assert.doesNotMatch(app, /const PRIVACY_STATEMENTS/);
+  assert.doesNotMatch(app, /function PrivacyIcon/);
+  assert.doesNotMatch(app, /function PrivacyAppVisual/);
+  assert.doesNotMatch(app, /function PrivacySection/);
+  assert.doesNotMatch(app, /<PrivacySection \/>/);
+  assert.doesNotMatch(app, /id="privacy"/);
+  assert.doesNotMatch(app, /Your Privacy Comes First/);
+  assert.doesNotMatch(app, /No public spot feed\. No spot burning/);
+  assert.doesNotMatch(app, /Kastave app private waypoint preview/);
+  assert.doesNotMatch(app, /Waypoint saved/);
 });
 
 test("landing page explains the dual payment provider path", () => {
@@ -517,8 +431,8 @@ test("navigation and footer only point to live landing sections", () => {
   assert.match(app, /aria-controls="primary-navigation"/);
   assert.match(app, /id="primary-navigation"/);
   assert.match(app, /Highlights: "#cast-options"/);
-  assert.match(app, /"Who it's for": "#audience"/);
-  assert.match(app, /App: "#app-ui"/);
+  assert.doesNotMatch(app, /"Who it's for": "#audience"/);
+  assert.doesNotMatch(app, /App: "#app-ui"/);
   assert.match(app, /Specs: "#specs"/);
   assert.match(app, /className="footer-background"/);
   assert.match(app, /className="footer-social-links"/);
@@ -538,12 +452,9 @@ test("navigation and footer only point to live landing sections", () => {
   assert.match(styles, /\.footer-social-links a\s*\{[^}]*border-radius:\s*50%/s);
 });
 
-test("audience and highlight headings use the same display scale", () => {
+test("highlight heading keeps the display scale", () => {
   assert.match(styles, /\.highlight-bento-heading\s*\{[^}]*font-size:\s*48px/s);
-  assert.match(styles, /\.audience-heading\s*\{[^}]*font-size:\s*48px/s);
-  assert.match(styles, /\.audience-heading\s*\{[^}]*font-weight:\s*700/s);
   assert.match(styles, /@media \(max-width:\s*820px\)[\s\S]*?\.highlight-bento-heading\s*\{[^}]*font-size:\s*clamp\(2rem,\s*10vw,\s*3rem\)/);
-  assert.match(styles, /@media \(max-width:\s*820px\)[\s\S]*?\.audience-heading\s*\{[^}]*font-size:\s*clamp\(2rem,\s*10vw,\s*3rem\)/);
 });
 
 test("mobile breakpoints keep landing and deposit flows usable", () => {
@@ -554,7 +465,6 @@ test("mobile breakpoints keep landing and deposit flows usable", () => {
   assert.doesNotMatch(styles, /\.launch-proof-row/);
   assert.doesNotMatch(styles, /\.launch-offer-actions/);
   assert.match(styles, /@media \(max-width:\s*820px\)[\s\S]*?\.highlight-bento-grid,[\s\S]*?\.highlight-bento-main,[\s\S]*?\.highlight-bento-side\s*\{[^}]*grid-template-columns:\s*1fr/s);
-  assert.match(styles, /@media \(max-width:\s*820px\)[\s\S]*?\.audience-inner\s*\{[^}]*--audience-card-width:\s*min\(82vw,\s*320px\)/s);
   assert.match(styles, /@media \(max-width:\s*820px\)[\s\S]*?\.deposit-mondo-card-grid,[\s\S]*?\.deposit-mondo-payment-row,[\s\S]*?\.deposit-mondo-steps\s*\{[^}]*grid-template-columns:\s*1fr/s);
   assert.match(styles, /@media \(max-width:\s*620px\)[\s\S]*?\.hero-actions,[\s\S]*?\.primary-button,[\s\S]*?\.secondary-link\s*\{[^}]*width:\s*100%/s);
   assert.match(styles, /@media \(max-width:\s*620px\)[\s\S]*?\.email-form\s*\{[^}]*flex-direction:\s*column/s);

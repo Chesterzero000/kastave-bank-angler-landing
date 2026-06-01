@@ -65,10 +65,10 @@ export const SITE = {
 export const ANNOUNCEMENT = "Coming soon · Kickstarter";
 
 export const HERO = {
-  eyebrow: "meet",
+  eyebrow: "shoreline scout",
   title: "Kastave",
-  body: "Your shoreline fishing scout. Scan the water, see the bottom, and pick your first cast.",
-  note: "Coming soon on Kickstarter. 3-day founder offer: reserve $1 to lock $599.",
+  body: "A smart RC fish-finder boat for bank anglers. Send it out, read the water, and choose the cast before you waste the spot.",
+  note: "Coming soon on Kickstarter. Founder reservation: $1 to lock $599.",
 };
 
 export const HOOK_VARIANTS = {

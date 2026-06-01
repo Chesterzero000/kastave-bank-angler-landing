@@ -28,62 +28,9 @@ import {
 } from "./supabaseBackend.js";
 import heroImage from "../assets/kastave-new-hero.jpg";
 import logoImage from "../assets/kastave-logo-wordmark.png";
-import processImage from "../assets/kastave-new-process.jpg";
-import recognitionImage from "../assets/kastave-new-recognition.jpg";
 import depositHeroImage from "../assets/kastave-deposit-hand-carry-product-match.jpg";
 import productDetailImage from "../assets/kastave-product-detail.jpg";
-import terrainFeatureImage from "../assets/kastave-feature-3d-terrain.jpg";
-import waterFeatureImage from "../assets/kastave-feature-water-conditions.jpg";
-import strategyFeatureImage from "../assets/kastave-feature-ai-strategy.jpg";
-import audienceBankAnglerImage from "../assets/kastave-audience-bank-angler.jpg";
-import audiencePondHopperImage from "../assets/kastave-audience-pond-hopper.jpg";
-import audienceHiddenSnagImage from "../assets/kastave-audience-hidden-snag-first-person-v4.jpg";
-import audienceCastableVsKastaveImage from "../assets/kastave-audience-castable-auto-scan-ui-v7.jpg";
-
-const APP_MODES = [
-  {
-    key: "auto",
-    label: "Auto",
-    title: "Auto Mode",
-    body: "Kastave runs a shoreline scan path, builds the map, and keeps the route repeatable.",
-    metrics: ["Route lock", "Scan fan", "Cast calls"],
-    status: "Auto shoreline sweep",
-    action: "Scanning reachable bank water",
-    readouts: [
-      { label: "Coverage", value: "72%" },
-      { label: "Route", value: "Locked" },
-      { label: "Wake", value: "Normal" },
-    ],
-  },
-  {
-    key: "silent",
-    label: "Silent",
-    title: "Silent Mode",
-    body: "Slower movement and softer route changes for pressured ponds, shallow grass, and cautious fish.",
-    metrics: ["Low wake", "Soft turns", "Close cover"],
-    status: "Quiet close-cover pass",
-    action: "Reducing wake near grass",
-    readouts: [
-      { label: "Coverage", value: "41%" },
-      { label: "Route", value: "Soft turn" },
-      { label: "Wake", value: "Low" },
-    ],
-  },
-  {
-    key: "performance",
-    label: "Performance",
-    title: "Performance Mode",
-    body: "Faster coverage when you need to scan a longer bank, compare pockets, or move before sunset.",
-    metrics: ["Fast sweep", "Long bank", "Return path"],
-    status: "Fast long-bank sweep",
-    action: "Covering the next pocket",
-    readouts: [
-      { label: "Coverage", value: "88%" },
-      { label: "Route", value: "Wide" },
-      { label: "Wake", value: "High" },
-    ],
-  },
-];
+import reconstructionFeatureImage from "../assets/kastave-feature-3d-reconstruction-v2.png";
 
 const PRODUCT_SPECS = [
   { icon: "battery", label: "Battery Life", value: "6 hours", detail: "target runtime" },
@@ -92,63 +39,6 @@ const PRODUCT_SPECS = [
   { icon: "speed", label: "Cruise Speed", value: "1.5 m/s max", detail: "quiet scan at lower speed" },
   { icon: "wave", label: "Wind & Chop", value: "Beaufort 3", detail: "light chop, about 0.3 m" },
   { icon: "connectivity", label: "Connectivity", value: "Wi-Fi 6", detail: "Bluetooth 5.4 pairing" },
-];
-
-const MEDIA_SCRIPT_CARDS = [
-  {
-    title: "Castable sonar hassle",
-    body: "First-person shot: one hand holds the rod, one hand checks the app, one round sonar ball is on the line, while Kastave moves forward by itself.",
-  },
-  {
-    title: "Hidden snag reveal",
-    body: "First-person cast into calm water, then a clean over-under cutaway shows the crankbait caught on a hidden branch.",
-  },
-  {
-    title: "Auto-scan to 3 cast calls",
-    body: "Launch from shore, show a calm sweep path, then cut to the app UI revealing Safe, Structure, and Risk / Reward points.",
-  },
-];
-
-const PRIVACY_STATEMENTS = [
-  {
-    icon: "lock",
-    body: "Kastave saves your waypoints, notes, and scan history for you. Your fishing map stays private unless you choose to share it.",
-  },
-  {
-    icon: "shield",
-    body: "No public spot feed. No spot burning. We do not sell your saved fishing locations or turn your private water into someone else's map.",
-  },
-];
-
-const TARGET_AUDIENCES = [
-  {
-    title: "The Bank-Only Bass Angler",
-    body: "No boat electronics. No dock advantage. Just bank water you can actually reach.",
-    image: audienceBankAnglerImage,
-    imagePosition: "50% 50%",
-    animation: "bank",
-  },
-  {
-    title: "The After-Work Pond Hopper",
-    body: "Forty minutes after work is too short to spend half the session guessing.",
-    image: audiencePondHopperImage,
-    imagePosition: "50% 50%",
-    animation: "timer",
-  },
-  {
-    title: "The Snag-Weary Lure Saver",
-    body: "Grass, muck, brush, and hidden junk should not cost you your favorite bait.",
-    image: audienceHiddenSnagImage,
-    imagePosition: "50% 50%",
-    animation: "snag",
-  },
-  {
-    title: "The Castable-Sonar Upgrade Seeker",
-    body: "If casting your fish finder feels like work, let the scout scan first.",
-    image: audienceCastableVsKastaveImage,
-    imagePosition: "52% 50%",
-    animation: "sonar",
-  },
 ];
 
 const DEPOSIT_PERKS = [
@@ -501,11 +391,7 @@ function App() {
           message={signupMessage}
         />
         <CastOptionsSection />
-        <AudienceSection />
-        <AppExperienceSection />
         <ProductSpecsSection depositHref={withUtm("/deposit")} onReserve={(event) => openDepositPage("specs", event)} />
-        <MediaScriptSection />
-        <PrivacySection />
         <ReservationSection
           depositHref={withUtm("/deposit")}
           onSubscribe={(email) => subscribe(email, "reservation")}
@@ -527,7 +413,7 @@ function AnnouncementBar() {
 
 function SiteNav({ depositHref, onWaitlist, onReserve }) {
   const [open, setOpen] = useState(false);
-  const navItems = ["Highlights", "Who it's for", "App", "Specs", "FAQ"];
+  const navItems = ["Highlights", "Specs", "FAQ"];
 
   return (
     <header className="site-nav">
@@ -579,8 +465,6 @@ function SiteNav({ depositHref, onWaitlist, onReserve }) {
 function navHref(item) {
   const hrefs = {
     Highlights: "#cast-options",
-    "Who it's for": "#audience",
-    App: "#app-ui",
     Specs: "#specs",
     FAQ: "#faq",
   };
@@ -634,6 +518,11 @@ function Hero({ depositHref, hookVariant, onSubscribe, onReserve, message }) {
         <p className="hero-signup-copy">
           {RESERVATION_OFFER.discountLabel}: reserve to lock {RESERVATION_OFFER.productPrice}.
         </p>
+        <div className="hero-proof-row" aria-label="Kastave field specs">
+          <span>6 hr runtime</span>
+          <span>20 m scan radius</span>
+          <span>11 lb carry weight</span>
+        </div>
         <div className="hero-actions" id="reserve">
           <EmailForm id="hero-email" source="hero" onSubscribe={onSubscribe} buttonLabel="Sign up" />
           <a className="secondary-link hero-reserve-button" href={depositHref} onClick={onReserve}>
@@ -913,32 +802,32 @@ function CastOptionsSection() {
     {
       title: "3D UNDERWATER VIEW",
       subtitle: "See bottom, breaks, weeds, and drop-offs.",
-      image: terrainFeatureImage,
+      image: reconstructionFeatureImage,
       className: "highlight-bento-card-wide",
     },
     {
       title: "AUTO-SCAN THE BANK",
       subtitle: "Covers shoreline water without repeated casts.",
-      image: waterFeatureImage,
       className: "highlight-bento-card-square",
+      textOnly: true,
     },
     {
       title: "SENSE THE WATER",
       subtitle: "Multi-sensor clues before your first cast.",
-      image: processImage,
       className: "highlight-bento-card-square",
+      textOnly: true,
     },
     {
       title: "AI CAST CALLS",
       subtitle: "AI recommends 3 spots: safe, structure, swing-for-it.",
-      image: strategyFeatureImage,
       className: "highlight-bento-card-square",
+      textOnly: true,
     },
     {
       title: "KEEP YOUR HONEY HOLES",
       subtitle: "Auto-save spots. Only you see them.",
-      image: recognitionImage,
       className: "highlight-bento-card-square",
+      textOnly: true,
     },
   ];
 
@@ -949,16 +838,9 @@ function CastOptionsSection() {
           Get the Highlights
         </h2>
         <div className="highlight-bento-grid" aria-label="Kastave product highlights">
-          <div className="highlight-bento-main">
-            {highlights.slice(0, 3).map((item) => (
-              <HighlightBentoCard item={item} key={item.title} />
-            ))}
-          </div>
-          <div className="highlight-bento-side">
-            {highlights.slice(3).map((item) => (
-              <HighlightBentoCard item={item} key={item.title} />
-            ))}
-          </div>
+          {highlights.map((item) => (
+            <HighlightBentoCard item={item} key={item.title} />
+          ))}
         </div>
       </div>
     </section>
@@ -967,178 +849,13 @@ function CastOptionsSection() {
 
 function HighlightBentoCard({ item }) {
   return (
-    <article className={`highlight-bento-card ${item.className}`}>
-      <img src={item.image} alt="" aria-hidden="true" loading="lazy" decoding="async" />
+    <article className={`highlight-bento-card ${item.className}${item.textOnly ? " highlight-bento-card-text" : ""}`}>
+      {item.image ? <img src={item.image} alt="" aria-hidden="true" loading="lazy" decoding="async" /> : null}
       <div className="highlight-bento-card-copy">
         <h3>{item.title}</h3>
-        <p>{item.subtitle}</p>
+        {item.textOnly ? null : <p>{item.subtitle}</p>}
       </div>
     </article>
-  );
-}
-
-function AudienceVisual({ type }) {
-  if (type === "bank") {
-    return (
-      <div className="audience-visual-layer audience-visual-bank" aria-hidden="true">
-        <span className="audience-bank-reach-edge" />
-        <span className="audience-cast-arc" />
-        <span className="audience-cast-point" />
-        <span className="audience-shore-route" />
-        <span className="audience-scan-fan" />
-        <span className="audience-water-pin audience-pin-one" />
-        <span className="audience-water-pin audience-pin-two" />
-      </div>
-    );
-  }
-
-  if (type === "timer") {
-    return (
-      <div className="audience-visual-layer audience-visual-timer" aria-hidden="true">
-        <span className="audience-clock-ring" />
-        <span className="audience-clock-hand" />
-        <span className="audience-time-window" />
-        <span className="audience-sweep-line" />
-        <span className="audience-route-dot audience-dot-one" />
-        <span className="audience-route-dot audience-dot-two" />
-        <span className="audience-route-dot audience-dot-three" />
-      </div>
-    );
-  }
-
-  if (type === "snag") {
-    return (
-      <div className="audience-visual-layer audience-visual-snag" aria-hidden="true">
-        <span className="audience-calm-surface" />
-        <span className="audience-weed-bed" />
-        <span className="audience-snag-root" />
-        <span className="audience-snag-tension-line" />
-        <span className="audience-lure-path" />
-        <span className="audience-hook-point" />
-        <span className="audience-snag-lock" />
-        <span className="audience-warning-pin audience-warning-one" />
-        <span className="audience-warning-pin audience-warning-two" />
-        <span className="audience-safe-lane" />
-      </div>
-    );
-  }
-
-  return (
-    <div className="audience-visual-layer audience-visual-sonar" aria-hidden="true">
-      <span className="audience-castable-line" />
-      <span className="audience-repeat-cast-arc" />
-      <span className="audience-sonar-ball" />
-      <span className="audience-forward-wake" />
-      <span className="audience-scout-route" />
-      <span className="audience-kastave-scan-beam" />
-      <span className="audience-scan-pulse audience-pulse-one" />
-      <span className="audience-scan-pulse audience-pulse-two" />
-    </div>
-  );
-}
-
-function AudienceSection() {
-  const renderAudienceCard = (audience, keySuffix = "") => (
-    <article className={`audience-card audience-card-${audience.animation}`} key={`${audience.title}${keySuffix}`}>
-      <div className={`audience-media audience-media-${audience.animation}`}>
-        <img
-          src={audience.image}
-          alt={audience.title}
-          style={{ objectPosition: audience.imagePosition }}
-          loading="lazy"
-          decoding="async"
-        />
-        <AudienceVisual type={audience.animation} />
-      </div>
-      <h3>{audience.title}</h3>
-      <p>{audience.body}</p>
-    </article>
-  );
-
-  return (
-    <section className="audience-section" id="audience" aria-labelledby="audience-title">
-      <div className="audience-inner">
-        <h2 className="audience-heading" id="audience-title">
-          Who is Kastave For
-        </h2>
-        <div className="audience-marquee" aria-label="Kastave target anglers">
-          <div className="audience-card-row">
-            <div className="audience-card-set">
-              {TARGET_AUDIENCES.map((audience) => renderAudienceCard(audience))}
-            </div>
-            <div className="audience-card-set" aria-hidden="true">
-              {TARGET_AUDIENCES.map((audience) => renderAudienceCard(audience, "-duplicate"))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function AppExperienceSection() {
-  const [autoMode, ...supportModes] = APP_MODES;
-
-  return (
-    <section className="app-ui-section" id="app-ui" aria-labelledby="app-ui-title">
-      <div className="section-inner app-ui-layout">
-        <div className="app-ui-copy">
-          <p className="section-kicker">Kastave app UI</p>
-          <h2 id="app-ui-title">Auto mode first. Quiet or fast when you need it.</h2>
-          <p>
-            The app should feel like a fishing tool, not a raw sonar puzzle. Auto Mode is the main scan flow; Silent
-            and Performance are simple behavior choices for different water.
-          </p>
-          <div className="app-mode-stack" aria-label="Kastave boat modes">
-            <article className="app-mode-card app-mode-card-auto">
-              <span>{autoMode.title}</span>
-              <p>{autoMode.body}</p>
-              <div>
-                {autoMode.metrics.map((metric) => (
-                  <strong key={metric}>{metric}</strong>
-                ))}
-              </div>
-            </article>
-            <div className="app-mode-text-grid">
-              {supportModes.map((mode) => (
-                <article className={`app-mode-text app-mode-text-${mode.key}`} key={mode.key}>
-                  <span>{mode.title}</span>
-                  <p>{mode.body}</p>
-                  <small>{mode.metrics.join(" / ")}</small>
-                </article>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className="auto-mode-media" aria-label="Auto Mode media slot">
-          <div className="auto-mode-placeholder" aria-hidden="true">
-            <div className="auto-mode-map">
-              <span className="auto-contour auto-contour-one" />
-              <span className="auto-contour auto-contour-two" />
-              <span className="auto-route-path" />
-              <span className="auto-scan-beam" />
-              <span className="auto-boat-marker" />
-              <span className="auto-cast-pin auto-cast-pin-safe" />
-              <span className="auto-cast-pin auto-cast-pin-structure" />
-              <span className="auto-cast-pin auto-cast-pin-risk" />
-            </div>
-            <div className="auto-mode-panel">
-              {autoMode.readouts.map((readout) => (
-                <span key={readout.label}>
-                  {readout.label}
-                  <strong>{readout.value}</strong>
-                </span>
-              ))}
-            </div>
-            <div className="auto-cast-row">
-              <span>Safe</span>
-              <span>Structure</span>
-              <span>Risk / Reward</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
   );
 }
 
@@ -1235,97 +952,6 @@ function SpecIcon({ type }) {
     <svg className="spec-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
       {icons[type] || icons.sonar}
     </svg>
-  );
-}
-
-function MediaScriptSection() {
-  return (
-    <section className="media-script-section" aria-labelledby="media-script-title">
-      <div className="section-inner media-script-heading">
-        <p className="section-kicker">Material direction</p>
-        <h2 id="media-script-title">The next video assets should prove the workflow in seconds.</h2>
-      </div>
-      <div className="section-inner media-script-grid">
-        {MEDIA_SCRIPT_CARDS.map((item) => (
-          <article className="media-script-card" key={item.title}>
-            <h3>{item.title}</h3>
-            <p>{item.body}</p>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function PrivacyIcon({ type }) {
-  if (type === "lock") {
-    return (
-      <svg className="privacy-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-        <path d="M10 14v-3.5a6 6 0 0 1 12 0V14" />
-        <path d="M8 14h16v13H8z" />
-        <path d="M16 19v4" />
-      </svg>
-    );
-  }
-
-  return (
-    <svg className="privacy-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-      <path d="M16 4 25 8v7c0 6.1-3.5 10.4-9 13-5.5-2.6-9-6.9-9-13V8l9-4Z" />
-      <path d="m11.5 16 3 3 6-7" />
-    </svg>
-  );
-}
-
-function PrivacyAppVisual() {
-  return (
-    <div className="privacy-app-visual" aria-label="Kastave app private waypoint preview">
-      <div className="privacy-device-shell">
-        <div className="privacy-device-top">
-          <span>Kastave</span>
-          <strong>Private map</strong>
-        </div>
-        <div className="privacy-map-screen">
-          <span className="privacy-contour privacy-contour-one" />
-          <span className="privacy-contour privacy-contour-two" />
-          <span className="privacy-contour privacy-contour-three" />
-          <span className="privacy-private-route" />
-          <span className="privacy-waypoint privacy-waypoint-one">Drop-off</span>
-          <span className="privacy-waypoint privacy-waypoint-two">Brush</span>
-          <span className="privacy-boat-dot" />
-        </div>
-        <div className="privacy-map-card">
-          <strong>Waypoint saved</strong>
-          <span>Only you can see this spot.</span>
-        </div>
-        <div className="privacy-toggle-row">
-          <span>Public feed</span>
-          <strong>Off</strong>
-        </div>
-        <div className="privacy-toggle-row">
-          <span>Share location</span>
-          <strong>Off</strong>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function PrivacySection() {
-  return (
-    <section className="privacy-section" id="privacy" aria-labelledby="privacy-title">
-      <div className="section-inner privacy-simple-layout">
-        <h2 id="privacy-title">Your Privacy Comes First</h2>
-        <div className="privacy-statement-list">
-          {PRIVACY_STATEMENTS.map((item) => (
-            <article className="privacy-statement" key={item.icon}>
-              <PrivacyIcon type={item.icon} />
-              <p>{item.body}</p>
-            </article>
-          ))}
-        </div>
-        <PrivacyAppVisual />
-      </div>
-    </section>
   );
 }
 
