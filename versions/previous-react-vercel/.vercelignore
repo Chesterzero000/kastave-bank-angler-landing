@@ -1,0 +1,9 @@
+.codex/
+.git/
+.npm-cache/
+node_modules/
+dist/
+output/
+preview/
+coverage/
+*.log

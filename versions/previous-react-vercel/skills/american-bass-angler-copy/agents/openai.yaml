@@ -1,0 +1,4 @@
+interface:
+  display_name: "American Bass Angler Copy"
+  short_description: "Rewrite English for U.S. bass anglers."
+  default_prompt: "Use $american-bass-angler-copy to rewrite this product copy for U.S. bass anglers."
