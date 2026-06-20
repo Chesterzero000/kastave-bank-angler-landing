@@ -1,0 +1,8 @@
+name = "kastave-paypal-pages-proxy"
+main = "worker.js"
+compatibility_date = "2026-06-20"
+
+routes = [
+  { pattern = "kastave.com/*", zone_name = "kastave.com" },
+  { pattern = "www.kastave.com/*", zone_name = "kastave.com" }
+]
